@@ -1,0 +1,16 @@
+export default {
+  primaryBlue: '#253D7B',
+  primaryYellow: '#FFBC62',
+  // lightYellow: rgba(255, 188, 98, 0.41),
+  gray: '#E5E5E5',
+  darkGray: '#AFAFAF',
+  lightGray: '#8B8B8B',
+  lightestGray: '#DADADA',
+  inactiveGray: '#DBDBDB',
+  yellow: '#E6C300',
+  green: '#139A02',
+  red: '#E81B1B',
+  white: 'white',
+  black: 'black',
+  transparent: 'transparent', 
+}
