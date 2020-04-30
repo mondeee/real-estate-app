@@ -7,15 +7,19 @@ import {
 } from 'react-native';
 
 import BottomTabBar from '../components/BottomTabBar'
+import Header from '../components/Header';
 
 export default function FavoritesScreen() {
-  
+
   useEffect(() => {
   }, [])
 
   return (
-    <View style={styles.container}>
-      <Text>Favorites</Text>
+    <View style={{ flex: 1 }}>
+      <Header/>
+      <View style={styles.container}>
+        <Text>Favorites</Text>
+      </View>
     </View>
   );
 }

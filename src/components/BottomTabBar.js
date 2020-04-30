@@ -8,7 +8,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Colors from '../styles/Colors';
-import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
 
 
@@ -25,7 +25,6 @@ export default function BottomTabBar(props) {
   } = props
 
   useEffect(() => {
-    console.log(selectedTab)
     switch (selectedTab) {
       case 0:
         navigate('Home')
@@ -64,20 +63,22 @@ export default function BottomTabBar(props) {
       <Image source={require('../../assets/footer2x.png')} resizeMode={'cover'} style={styles.image} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => setSelectedTab(3)} style={styles.navButton}>
-          <FontAwesome color={tabColor(3)} size={30} name={'user'} />
+          {/* <FontAwesome color={tabColor(3)} size={25} name={'user'} /> */}
+          <Image source={require('../../assets/usericon.png')} resizeMode={'cover'} style={{ height: 20, width: 20, marginTop: 8, tintColor: tabColor(3) }} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(3) }}>{`يباسح`}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedTab(2)} style={styles.navButton}>
-          <FontAwesome color={tabColor(2)} size={30} name={'list'} />
+          {/* <FontAwesome color={tabColor(2)} size={25} name={'list-alt'} /> */}
+          <Image source={require('../../assets/messageicon.png')} resizeMode={'cover'} style={{ height: 20, width: 20, marginTop: 8, tintColor: tabColor(2) }} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(2) }}>{`ةثداحملا`}</Text>
         </TouchableOpacity>
-        <FontAwesome style={{ width: '20%' }} color={'transparent'} size={30} name={'user'} />
+        <FontAwesome style={{ width: '20%' }} color={'transparent'} size={25} name={'user'} />
         <TouchableOpacity onPress={() => setSelectedTab(1)} style={styles.navButton}>
-          <FontAwesome color={tabColor(1)} size={30} name={'heart'} />
+          <MaterialCommunityIcons color={tabColor(1)} size={25} name={'bell-outline'} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(1) }}>{`تاهيبنتلا`}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedTab(0)} style={styles.navButton}>
-          <FontAwesome color={tabColor(0)} size={30} name={'key'} />
+          <MaterialIcons color={tabColor(0)} size={25} name={'vpn-key'} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(0) }}>{`يكالمأ`}</Text>
         </TouchableOpacity>
       </View>
@@ -92,12 +93,14 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     position: 'absolute',
-    bottom: 0,
+    bottom: -3,
   },
   navButton: {
     // backgroundColor: 'black',
+    height: '100%',
     width: '20%',
     alignItems: 'center',
+    paddingTop: 8,
     // justifyContent: 'center',
   },
   navLabel: {
@@ -105,10 +108,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonContainer: {
-    padding: 8,
     // paddingHorizontal: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
     height: 80,
     position: 'absolute',

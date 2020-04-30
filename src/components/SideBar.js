@@ -16,7 +16,7 @@ const navList = [
   { label: 'الشروط والأحكام \n وسياسة الخصوصية', key: 2, route: '' },
   { label: 'ةعئاشلا ةلئسألا', key: 3, route: '' },
   { label: 'ﻖﻴﺒﻄﺘﻟا ﻦﻋ ﻚﻳأر انطعأﺃ', key: 4, route: '' },
-  { label: 'انعم لصاوت', key: 5, route: '' },
+  { label: 'انعم لصاوت', key: 5, route: 'Contact' },
 ]
 
 export default function SideBar(props) {

@@ -10,11 +10,13 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import SideBar from '../components/SideBar';
 import HomeBottomBar from './NavBarStack';
 import BottomTabBar from '../components/BottomTabBar';
+import ContactScreen from '../screens/ContactScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {
       HomeBottomBar,
+      Contact: ContactScreen,
       // Auth: AuthStack,
       // Main: HomeStack,
     },

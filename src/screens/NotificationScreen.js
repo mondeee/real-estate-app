@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import {
-  FlatList,
-  Image,
-  RefreshControl,
   StatusBar,
   StyleSheet,
+  RefreshControl,
+  FlatList,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
 
-import Header from '../components/Header'
+import BottomTabBar from '../components/BottomTabBar'
+import Header from '../components/Header';
 import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts'
 import { SAMPLE_LIST } from '../constants/data'
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 
-export default function MessagesScreen() {
+export default function NotificationScreen() {
   const [items, setItems] = useState(SAMPLE_LIST)
   const [loading, setLoading] = useState(false)
 
@@ -50,13 +50,12 @@ export default function MessagesScreen() {
             </View>
             <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.time || `الأن`}</Text>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
             <View>
-              <Text style={{ ...Fonts.fontRegular, }}>{item.username || `username`}</Text>
-              <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ` ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ `}</Text>
+              <Text style={{ ...Fonts.fontRegular, }}>{item.sublabel || `ﻗﺎﺮﺑﺏاﺷﺘﺮﺎﻜﻛﻙﻋﻠﻰ اﻻﻧﺘﻬﺎء`}</Text>
+              <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ` تﻮﻀﻴﺣ `}</Text>
             </View>
-            {/* <MaterialCommunityIcons style={{ paddingHorizontal: 8 }} color={Colors.primaryBlue} size={25} name={'bell-outline'} /> */}
-            <Image style={{ height: 46, width: 46, borderRadius: 100, backgroundColor: Colors.primaryBlue, marginLeft: 8 }} />
+            <MaterialCommunityIcons style={{ paddingHorizontal: 8 }} color={Colors.primaryBlue} size={25} name={'bell-outline'} />
           </View>
         </View>
       </TouchableOpacity>

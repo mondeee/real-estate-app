@@ -12,6 +12,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import SideBar from '../components/SideBar';
 import BottomTabBar from '../components/BottomTabBar';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const HomeBottomBar = createAppContainer(
   createBottomTabNavigator(
@@ -19,7 +20,7 @@ const HomeBottomBar = createAppContainer(
       Home: HomeScreen,
       Messages: MessagesScreen,
       Add: HomeScreen,
-      Favorites: FavoritesScreen,
+      Favorites: NotificationScreen,
       Profile: ProfileScreen,
     },
     {
