@@ -17,7 +17,9 @@ export default function Input(props) {
     onPress,
     password,
     placeholder,
-    onChange,
+    keyboardType,
+    onChangeText,
+    maxLength,
     rightIcon,
   } = props
 
@@ -29,6 +31,10 @@ export default function Input(props) {
         <MaterialIcons color={Colors.darkGray} size={18} name={'remove-red-eye'} />
       </TouchableOpacity>}
       <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
+        onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
+        maxLength={maxLength ? maxLength : 24}
+        autoCapitalize={false}
+        keyboardType={keyboardType || 'default'}
         style={{
           flex: 4,
           textAlign: 'right',

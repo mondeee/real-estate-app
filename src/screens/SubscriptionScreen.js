@@ -14,7 +14,7 @@ import Header from '../components/Header';
 import { REGISTER } from '../services/graphql/queries'
 import { useMutation } from '@apollo/react-hooks';
 
-export default function BaseScreen(props) {
+export default function SubscriptionScreen(props) {
   const { navigate, goBack } = props.navigation
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function BaseScreen(props) {
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => goBack()} />
       <View style={{ flex: 1 }}>
-        <Text>Base Empty Screen</Text>
+        <Text>{`طﺮﻴﻗة ﺎﻟإﺷﺘﺮﺎﻛ:`}</Text>
       </View>
     </SafeAreaView>
   );

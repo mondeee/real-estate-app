@@ -5,6 +5,10 @@ export default {
     width: '100%',
     height: '100%',
   },
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   shadow: {
     shadowRadius: 3,
     shadowOpacity: 0.2,

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
+  AppRegistry,
+  AsyncStorage,
   I18nManager,
   StatusBar,
   StyleSheet,
@@ -9,6 +11,7 @@ import {
 } from 'react-native';
 import { AppLoading } from "expo";
 import * as Font from 'expo-font';
+import { Asset } from 'expo-asset';
 import { Root } from 'native-base'
 import AppNavigator from './src/navigation';
 import { store, persistor } from './src/services/easy-peasy/'
@@ -16,28 +19,82 @@ import { PersistGate } from "redux-persist/integration/react"
 import { StoreProvider, createStore, action } from 'easy-peasy'
 import { AntDesign, FontAwesome5, Entypo, FontAwesome, MaterialCommunityIcons, MaterialIcons, Ionicons, Feather } from '@expo/vector-icons';
 
+//GRAPHQL
+import { ApolloClient } from 'apollo-client';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { persistCache } from 'apollo-cache-persist';
+import { HttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client'
+
+
 export default function App() {
   const [loading, setLoading] = useState(true)
-  // const theme = {
-  //   ...DefaultTheme,
-  //   colors: {
-  //     ...DefaultTheme.colors,
-  //     primary: 'tomato',
-  //     accent: 'yellow',
-  //   },
-  // };
+  const cache = new InMemoryCache()
+  const init = async () => {
+    await persistCache({
+      cache,
+      storage: AsyncStorage,
+    });
+  }
+  const client = new ApolloClient({
+    cache,
+    link: new createUploadLink(
+      {
+        uri: 'https://app.nozolsa.com/graphql',
+        fetch: async (uri, options) => {
+          const token = await AsyncStorage.getItem('token')
+          console.log('token', token)
+          options.headers.Authorization = (token) ? `Bearer ${token}` : ''
+          return fetch(uri, options)
+        }
+      }),
+  });
 
   useEffect(() => {
+    init()
     I18nManager.allowRTL(false)
     I18nManager.forceRTL(false)
     // StatusBar.setHidden(Platform.OS !== 'ios')
+    if (Platform.OS !== 'ios') {
+      StatusBar.setTranslucent(true)
+      StatusBar.setBackgroundColor('black')
+      StatusBar.setBarStyle('dark-content')
+    }
   }, [])
 
   _loadResourcesAsync = async () => {
     // _setupNotif()
     return await Promise.all([
-      // Asset.loadAsync([
-      // ]),
+      Asset.loadAsync([
+        require('./assets/additem.png'),
+        require('./assets/bellicon.png'),
+        require('./assets/bottombar.png'),
+        require('./assets/failed.png'),
+        require('./assets/footer.png'),
+        require('./assets/footer2x.png'),
+        require('./assets/footer4x.png'),
+        require('./assets/headericon.png'),
+        require('./assets/icon.png'),
+        require('./assets/imagedetailx2.png'),
+        require('./assets/inverted_curve_bg.png'),
+        require('./assets/keyicon.png'),
+        require('./assets/messageicon.png'),
+        require('./assets/options.png'),
+        require('./assets/sidebar_footer.png'),
+        require('./assets/sidebar_logo.png'),
+        require('./assets/splash.png'),
+        require('./assets/splashicon.png'),
+        require('./assets/subicon.png'),
+        require('./assets/success.png'),
+        require('./assets/uparrowicon.png'),
+        require('./assets/uploadicon.png'),
+        require('./assets/usericon.png'),
+        require('./assets/bedroomicon.png'),
+        require('./assets/faqicon.png'),
+        require('./assets/chevrondown.png'),
+        require('./assets/chevronup.png'),
+      ]),
       Font.loadAsync({
         tajawal: require('./assets/fonts/tajawal_regular.ttf'),
         tajawal_med: require("./assets/fonts/Tajawal-Medium.ttf"),
@@ -74,13 +131,15 @@ export default function App() {
   }
 
   return (
-    <StoreProvider store={store}>
-      <PersistGate persistor={persistor}>
-        <Root>
-          <AppNavigator />
-        </Root>
-      </PersistGate>
-    </StoreProvider>
+    <ApolloProvider client={client}>
+      <StoreProvider store={store}>
+        <PersistGate persistor={persistor}>
+          <Root>
+            <AppNavigator />
+          </Root>
+        </PersistGate>
+      </StoreProvider>
+    </ApolloProvider>
   );
 }
 

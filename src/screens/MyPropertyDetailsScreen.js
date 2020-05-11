@@ -1,0 +1,185 @@
+import React, { useEffect, useState } from 'react';
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  Image
+} from 'react-native';
+
+import Colors from '../styles/Colors';
+import { SafeAreaView } from 'react-navigation';
+import Fonts from '../styles/Fonts';
+import ViewPager from '@react-native-community/viewpager';
+import { SAMPLE_LIST } from '../constants/data';
+import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
+import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
+import Styles from '../styles/Styles';
+
+const FEATURES = [
+  {
+    type: 'bed',
+  },
+  {
+    type: 'toilet',
+  },
+  {
+    type: 'master bedroom',
+  },
+  {
+    type: 'kitchen',
+  }
+]
+
+export default function MyPropertyDetailsScreen(props) {
+  const { goBack, navigate } = props.navigation
+  const [page, setPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(SAMPLE_LIST)
+  const [isFavorite, setFavorite] = useState(false)
+  const [rating, setRating] = useState(5)
+
+  useEffect(() => {
+  }, [])
+
+  renderIndicator = () => {
+    return (
+      <View style={{ flexDirection: 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0 }}>
+        {totalPages && totalPages.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
+      </View>
+    )
+  }
+
+  renderTopButtons = () => {
+    return (
+      <View style={{ position: 'absolute', top: 0, padding: 12, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '100%', }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity>
+            <Image style={{ height: 27, resizeMode: 'contain', marginRight: 20, marginBottom: 10 }} source={require('../../assets/uploadicon.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setFavorite(!isFavorite)}>
+            <FontAwesome size={18} color={isFavorite ? 'red' : 'white'} name={isFavorite ? 'heart' : 'heart-o'} />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={{ alignSelf: 'center', marginBottom: 3 }} onPress={() => goBack()}>
+          <MaterialIcons size={30} color={'white'} name={'chevron-right'} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  renderStars = () => {
+    if (!rating) return null
+    const ratings = []
+    for (var i = 0; i < rating; i++) {
+      ratings.push(<FontAwesome key={i} name='star' style={{ margin: 2 }} color={Colors.primaryYellow} />)
+    }
+    console.log('@RATINGS', ratings)
+    return (
+      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: 'row-reverse' }}>
+        {/* {rating.forEach(i => <FontAwesome name='star' color={Colors.primaryYellow} />)} */}
+        {ratings}
+      </View>
+    )
+  }
+
+  renderFeatureItem = (item) => {
+    return (
+      <View key={item.type} style={{ margin: 12, minWidth: '23%', maxWidth: '33%' }}>
+        <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
+          <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{`غﺮﻓة خاﺪﻣة `}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
+          <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{`2`}</Text>
+          <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={require('../../assets/bedroomicon.png')} />
+        </View>
+      </View>
+    )
+  }
+
+  renderDetails = () => {
+    return (
+      <ScrollView style={{ flex: 1, }} contentContainerStyle={{ paddingBottom: 100 }}>
+        <View style={{ justifyContent: "flex-end", }}>
+          <View style={{ flexDirection: 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
+            <View style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
+              <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <View style={{ alignItems: 'flex-start', justifyContent: 'space-between', flexDirection: 'row', marginVertical: 8 }}>
+                {renderStars()}
+                <Text style={{ ...Fonts.FontMed, fontSize: 23 }}>{` اليف`}</Text>
+              </View>
+              <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text>
+              <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`ﺎﻠﺼﺣﺎﻓة، ﺎﻟﺮﻳﺎﺿ`}</Text>
+                <EvilIcons name='location' />
+              </View>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', margin: 24, justifyContent: 'space-between' }}>
+            <View />
+            <TouchableOpacity style={{ padding: 4, paddingHorizontal: 16, backgroundColor: Colors.primaryYellow, borderRadius: 5, }}>
+              <Text style={{ ...Fonts.fontRegular }}>{`ﺎﻟﺄﻳﺎﻣ و ﺎﻟﺄﺴﻋار`}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row', marginHorizontal: 24, justifyContent: 'space-between' }}>
+            <Text style={{ ...Fonts.FontMed, fontSize: 18, color: Colors.primaryYellow }}>
+              {`500,1 ر.س/ ﻞﻠﻴﻟة `}
+            </Text>
+            <TouchableOpacity style={{ flexDirection: 'row' }}>
+              <Text style={{ ...Fonts.fontRegular, marginRight: 8 }}>
+                {`21 ﺮﺠﺑ          24 ﺮﺠﺑ `}
+              </Text>
+              <FontAwesome name='calendar' color={Colors.primaryBlue} />
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+            {FEATURES.map(i => renderFeatureItem(i))}
+          </View>
+          <View style={{ alignItems: 'flex-end', margin: 24 }}>
+            <Text style={{ ...Fonts.FontMed, fontSize: 17, marginBottom: 12 }}>
+              {`الوصف`}
+            </Text>
+            <Text style={{ ...Fonts.fontLight, fontSize: 14 }}>
+              {` ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى  ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى`}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    )
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ViewPager style={{ height: '30%', }}
+        onPageSelected={e => setPage(e.nativeEvent.position)}
+      >
+        {totalPages && totalPages.map(i =>
+          <View key={i.name} style={{ backgroundColor: 'transparent', alignContent: 'flex-start', justifyContent: 'flex-start', }}>
+            <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: `https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80` }} />
+            {renderIndicator()}
+            {renderTopButtons()}
+          </View>
+        )}
+      </ViewPager>
+      {renderDetails()}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  indicatorStyle: {
+    width: 7,
+    height: 7,
+    borderRadius: 14,
+    margin: 2,
+    backgroundColor: Colors.gray,
+  }
+});

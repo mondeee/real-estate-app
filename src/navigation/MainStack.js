@@ -11,12 +11,20 @@ import SideBar from '../components/SideBar';
 import HomeBottomBar from './NavBarStack';
 import BottomTabBar from '../components/BottomTabBar';
 import ContactScreen from '../screens/ContactScreen';
+import MyPropertyDetailsScreen from '../screens/MyPropertyDetailsScreen';
+import FAQScreen from '../screens/FAQScreen';
+import TermsAndAgreementScreen from '../screens/TermsAndAgreementScreen';
+import SubscriptionScreen from '../screens/SubscriptionScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {
       HomeBottomBar,
       Contact: ContactScreen,
+      PropertyDetails: MyPropertyDetailsScreen,
+      FAQ: FAQScreen,
+      Terms: TermsAndAgreementScreen,
+      Subs: SubscriptionScreen,
       // Auth: AuthStack,
       // Main: HomeStack,
     },

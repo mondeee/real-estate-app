@@ -16,7 +16,21 @@ import { SAMPLE_LIST } from '../constants/data'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+import { SafeAreaView } from 'react-navigation';
+
+const GET_CITIES = gql(`
+{
+  allCities {
+    id,
+    en,
+    ar,
+  }
+}`)
+
 export default function HomeScreen(props) {
+  const { navigate, goBack } = props.navigation
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -24,6 +38,16 @@ export default function HomeScreen(props) {
   }, [])
 
   fetchNext = () => {
+  }
+
+
+  fetchCities = () => {
+    const { loading, error, data } = useQuery(GET_CITIES)
+
+    if (loading) console.log('LOADING')
+    if (error) console.log(`Error! ${error.message}`);
+
+    if (data) console.log('@data', data.allCities[0].ar)
   }
 
   renderItem = (item, index) => {
@@ -40,7 +64,9 @@ export default function HomeScreen(props) {
         shadowOpacity: 0.1,
         flexDirection: 'row',
         elevation: 3,
-      }}>
+      }}
+        onPress={() => navigate('PropertyDetails', { item: {} })}
+      >
         <View style={{ flex: 1, padding: 12, }}>
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`فيلا`}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{`  ﺮﻘﻣ ﺎﻟﺈﻌﻟﺎﻧ`}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
@@ -60,16 +86,16 @@ export default function HomeScreen(props) {
   renderEmpty = () => {
     return (
       <TouchableOpacity onPress={() => setItems(SAMPLE_LIST)} style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
-        <Image style={{ height: 34, width: 34 }} source={require('../../assets/additem.png')} />
-        <Text style={styles.text}>{`دعب لزن ﻚﻳﺪﻟﺩدجﻮﻳ ﻻ`}</Text>
-        <Text style={styles.text}>{`نألا كلزنﺇفضأ`}</Text>
+        <Image style={{ height: 34, width: 34, marginBottom: 20 }} source={require('../../assets/additem.png')} />
+        <Text style={styles.text}>{`ﻻ ﻳﻮجدﺩﻟﺪﻳﻚ نﺰﻟ ﺐﻋد`}</Text>
+        <Text style={styles.text}>{`ﺄﻀﻓﺇنﺰﻠﻛ ﺎﻟﺄﻧ`}</Text>
       </TouchableOpacity>
     )
   }
 
   renderList = () => <FlatList
     data={items}
-    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%'}}
+    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%' }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => item.name}
     renderItem={({ item }) => renderItem(item)}
@@ -88,12 +114,13 @@ export default function HomeScreen(props) {
   />
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
         {renderList()}
+        {fetchCities()}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

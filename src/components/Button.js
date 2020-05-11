@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingHorizontal: 16,
     paddingTop: 12,
-    minWidth: 177,
+    maxWidth: 177,
     maxHeight: 40,
     borderRadius: 21,
     alignItems: 'center',

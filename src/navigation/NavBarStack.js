@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
+import { AsyncStorage } from 'react-native'
 import {
   createAppContainer,
   createSwitchNavigator,
-  // createDrawerNavigator
 } from 'react-navigation';
 import HomeScreen from '../screens/HomeScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
@@ -30,7 +30,12 @@ const HomeBottomBar = createAppContainer(
       headerMode: 'none',
       initialRouteName: 'Home',
       drawerPosition: 'right',
-      contentComponent: ({ navigation }) => <SideBar {...navigation} />
+      contentComponent: async ({ navigation }) => {
+
+        const token = await AsyncStorage.getItem('token')
+        console.log('asldkajsdlk', token)
+        return <SideBar {...navigation} />
+      }
     }
   )
 );

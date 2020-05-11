@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
+  ActivityIndicator,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  AsyncStorage,
 } from 'react-native';
 import Header from '../components/Header';
 import { SafeAreaView } from 'react-navigation';
@@ -12,21 +15,68 @@ import Input from '../components/Input';
 import Fonts from '../styles/Fonts';
 import Colors from '../styles/Colors';
 import Button from '../components/Button'
+import { LOGIN, onError } from '../services/graphql/queries'
+import { useMutation } from '@apollo/react-hooks';
+
+import {
+  useStoreState,
+  useStoreActions,
+} from 'easy-peasy'
 
 export default function LoginScreen(props) {
   const { navigate, goBack } = props.navigation
+  const storeToken = useStoreActions(actions => actions.auth.setToken)
+
   const [agree, setAgree] = useState(false)
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const [loginViaPhone, { data, loading, error }] = useMutation(LOGIN)
+
+  if (data) {
+    AsyncStorage.setItem('token', data.loginViaPhone.token)
+    navigate('Home')
+  }
+
 
   useEffect(() => {
+
   }, [])
+
+  loginButton = () => {
+    // const [loginViaPhone, { data, loading, error }] = useMutation(LOGIN)
+
+    // if (loading) return <ActivityIndicator />
+
+    // if (error) error.graphQLErrors.map(({ message }, i) => console.log(message))
+
+    // if (data) {
+    //   storeToken(data.loginViaEmail.token)
+    // }
+
+    // return <Button onPress={() => {
+    //   if (!phone || !password) return
+    //   loginViaPhone({
+    //     variables: {
+    //       "input": {
+    //         "phone": phone,
+    //         "password": password
+    //       }
+    //     }
+    //   }).catch(e => {
+    //     onError(e)
+    //   })
+    // }} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} />
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       {/* <Text>Login</Text> */}
       <Header onPressBack={() => navigate('register')} />
       <View elevation={3} style={styles.loginBox}>
-        <Input placeholder={`ﺮﻘﻣ ﺎﻠﺟوﺎﻟ`} style={{ marginBottom: 25, marginTop: 40 }} rightIcon='phone' />
-        <Input placeholder={`ﻚﻠﻣة ﺎﻠﻣرور`} style={{ marginBottom: 25 }} password rightIcon='lock' />
+        <Input onChangeText={setPhone} placeholder={`ﺮﻘﻣ ﺎﻠﺟوﺎﻟ`} style={{ marginBottom: 25, marginTop: 40 }} rightIcon='phone' />
+        <Input onChangeText={setPassword} placeholder={`ﻚﻠﻣة ﺎﻠﻣرور`} style={{ marginBottom: 25 }} password rightIcon='lock' />
         <TouchableOpacity style={{ width: '75%', marginBottom: 10 }}>
           <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right', textDecorationLine: 'underline' }}>{`؟رورملا ةملك تيسن`}</Text>
         </TouchableOpacity>
@@ -45,7 +95,21 @@ export default function LoginScreen(props) {
             {agree && <View style={{ borderRadius: 30, height: 10, width: 10, backgroundColor: Colors.primaryBlue }} />}
           </View>
         </TouchableOpacity>
-        <Button onPress={() => navigate('Home')} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} />
+        {/* {loginButton()} */}
+        <Button onPress={() => {
+          if (!phone || !password) return
+          loginViaPhone({
+            variables: {
+              "input": {
+                "phone": phone,
+                "password": password
+              }
+            }
+          }).catch(e => {
+            onError(e)
+          })
+        }} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} />
+        {/* <Button onPress={() => navigate('Home')} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} /> */}
         <Text onPress={() => navigate('Register')} style={{ color: Colors.primaryBlue, ...Fonts.fontRegular, marginTop: 12 }}>
           {` لﺪﻴﻛ ﺢﺳﺎﺑ ﻢﺴﺒﻗا؟ `}
           <Text style={{ fontWeight: '500' }}>{`ﺲﺠﻟ ﻪﻧا`}</Text>

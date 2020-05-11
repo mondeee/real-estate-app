@@ -4,6 +4,7 @@ export default {
   // lightYellow: rgba(255, 188, 98, 0.41),
   gray: '#E5E5E5',
   darkGray: '#AFAFAF',
+  darkestGray: "#979797",
   lightGray: '#8B8B8B',
   lightestGray: '#DADADA',
   inactiveGray: '#DBDBDB',

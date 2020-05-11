@@ -24,7 +24,8 @@ const LIST = [
   },
 ]
 
-export default function ProfileScreen() {
+export default function ProfileScreen(props) {
+  const { navigate, goBack } = props.navigation
 
   useEffect(() => {
   }, [])
@@ -36,7 +37,7 @@ export default function ProfileScreen() {
           <Text style={styles.itemText}>{`ﺎﻠﻤﻠﻓ ﺎﻠﺸﺨﺼﻳ`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/usericon.png')} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemContainer}>
+        <TouchableOpacity onPress={() => navigate('Subs')} style={styles.itemContainer}>
           <Text style={styles.itemText}>{`الاشتراكات`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} />
         </TouchableOpacity>

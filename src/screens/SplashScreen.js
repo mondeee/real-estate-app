@@ -12,6 +12,7 @@ import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
 import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
+import Fonts from '../styles/Fonts';
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
   const [page, setPage] = useState(0)
@@ -22,8 +23,9 @@ export default function SplashScreen(props) {
   renderSkipButton = () => {
     return (
       <Button
-        onPress={() => navigate('Home')} 
-        text={`أدبا`}
+        onPress={() => navigate('Home')}
+        text={`ابدأ`}
+        style={{ width: 177 }}
         textStyle={{ fontFamily: 'tajawal_med' }}
       />
     )
@@ -48,21 +50,22 @@ export default function SplashScreen(props) {
       <SafeAreaView style={{ ...styles.container }} key="1">
         <Text style={styles.titleText}>{` لزن يف كب اًبحرم `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{` اهتازيم و اهعاونأ فلتخمب لزنلا حفصتﻚﺒﺳﺎﻨﻳ ﺎﻣ ﺮﺘﺧا و `}</Text>
+        <Text style={styles.textlabel}>{`ﺖﺼﻔﺣ ﺎﻠﻧﺰﻟ ﺐﻤﺨﺘﻠﻓ ﺄﻧوﺎﻌﻫا و ﻢﻳزﺎﺘﻫا 
+ و اﺧﺘﺮ ﻣﺎ ﻳﻨﺎﺳﺒﻚ`}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
       <SafeAreaView style={styles.container} key="2">
-        <Text style={styles.titleText}>{` لزن يف كب اًبحرم `}</Text>
+        <Text style={styles.titleText}>{` مﺮﺤﺑًا ﺐﻛ ﻒﻳ نﺰﻟ `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`  ﻦﻳﺮﺧﻷا هكرﺎﺷ و كلزن فضأ`}</Text>
+        <Text style={styles.textlabel}>{`ﺄﻀﻓ نﺰﻠﻛ و ﺷﺎﺮﻜﻫ اﻷﺧﺮﻳﻦ  `}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
       <SafeAreaView style={styles.container} key="3">
         <Text style={styles.titleText}>{` لزن يف كب اًبحرم `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`ﻊﺘﻤﺘﺳاﻭو`}</Text>
+        <Text style={styles.textlabel}>{`وﻭاﺳﺘﻤﺘﻊ`}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
@@ -85,12 +88,12 @@ const styles = StyleSheet.create({
     fontFamily: 'tajawal_bold'
   },
   textlabel: {
+    ...Fonts.fontLight,
     marginVertical: 24,
     color: Colors.primaryBlue,
     paddingHorizontal: '10%',
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'tajawal',
   },
   indicatorStyle: {
     width: 7,
