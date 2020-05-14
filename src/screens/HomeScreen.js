@@ -12,6 +12,7 @@ import {
 import Header from '../components/Header'
 import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts'
+import { getToken } from '../utils/functions'
 import { SAMPLE_LIST } from '../constants/data'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -19,35 +20,51 @@ import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-
-const GET_CITIES = gql(`
-{
-  allCities {
-    id,
-    en,
-    ar,
-  }
-}`)
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS } from '../services/graphql/queries';
+import { useStoreActions } from 'easy-peasy';
 
 export default function HomeScreen(props) {
   const { navigate, goBack } = props.navigation
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
+  const storeCity = useStoreActions(actions => actions.auth.setCities)
+  const storeGender = useStoreActions(actions => actions.auth.setGenders)
+  const storeUser = useStoreActions(actions => actions.auth.setUser)
+  const { loading: cityloading, error, data } = useQuery(GET_CITIES)
+  const { loading: genderLoading, error: genderError, data: genderData } = useQuery(GET_GENDER)
+  const { data: userdata } = useQuery(GET_USER_DETAILS)
+
+
+  if (loading || genderLoading) console.log('LOADING')
+  if (error || genderError) console.log(`Error! ${error.message}`, `Error! ${genderError.message}`);
 
   useEffect(() => {
-  }, [])
+    if (userdata && userdata.me) {
+      storeUser(userdata.me)
+    }
+  }, [userdata])
 
-  fetchNext = () => {
-  }
+  useEffect(() => {
+    if (data && data.allCities) {
+      const items = data.allCities
+      items.forEach(i => {
+        i.key = i.id
+        i.label = i.ar
+      })
+      storeCity(items)
+    }
+    if (genderData && genderData.allGenders) {
+      const items = genderData.allGenders
+      items.forEach(i => {
+        i.key = i.id
+        i.label = i.ar
+      })
+      storeGender(items)
+    }
+  }, [data, genderData])
 
-
-  fetchCities = () => {
-    const { loading, error, data } = useQuery(GET_CITIES)
-
-    if (loading) console.log('LOADING')
-    if (error) console.log(`Error! ${error.message}`);
-
-    if (data) console.log('@data', data.allCities[0].ar)
+  const fetchNext = () => {
+    
   }
 
   renderItem = (item, index) => {
@@ -87,8 +104,8 @@ export default function HomeScreen(props) {
     return (
       <TouchableOpacity onPress={() => setItems(SAMPLE_LIST)} style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34, marginBottom: 20 }} source={require('../../assets/additem.png')} />
-        <Text style={styles.text}>{`ﻻ ﻳﻮجدﺩﻟﺪﻳﻚ نﺰﻟ ﺐﻋد`}</Text>
-        <Text style={styles.text}>{`ﺄﻀﻓﺇنﺰﻠﻛ ﺎﻟﺄﻧ`}</Text>
+        <Text style={styles.text}>{`ﻻ ﻳﻮجدﺩﻟﺪﻳﻚ نزل بعد `}</Text>
+        <Text style={styles.text}>{`أضفﺇنزلك الأن`}</Text>
       </TouchableOpacity>
     )
   }
@@ -118,7 +135,6 @@ export default function HomeScreen(props) {
       <Header style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
         {renderList()}
-        {fetchCities()}
       </View>
     </SafeAreaView>
   );

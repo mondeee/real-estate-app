@@ -27,11 +27,10 @@ export default function Button(props) {
 
 const styles = StyleSheet.create({
   button: {
-    padding: 8,
-    paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingHorizontal: 20,
     maxWidth: 177,
-    maxHeight: 40,
+    paddingTop: 8,
+    maxHeight: 50,
     borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.primaryBlue,
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: 18,
     ...Fonts.fontRegular
   }
 })

@@ -5,9 +5,20 @@ export default {
   user: null,
   language: 'ar',
   token: null,
+  cities: null,
+  genders: null,
   notifToken: null,
+  setUser: action((state, payload) => {
+    state.user = payload;
+  }),
   setLanguage: action((state, payload) => {
     state.language = payload;
+  }),
+  setCities: action((state, payload) => {
+    state.cities = payload;
+  }),
+  setGenders: action((state, payload) => {
+    state.genders = payload;
   }),
   setToken: action((state, payload) => {
     state.token = payload;

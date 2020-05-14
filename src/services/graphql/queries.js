@@ -24,6 +24,46 @@ export const onError = (error, pass) => {
   ])
 }
 
+export const GET_USER_DETAILS = gql(`
+query{
+  me {
+     id
+     avatar
+     name
+     verified
+     phone
+     email
+     notifications{
+       message
+       created_at
+     }
+     favorites{
+       id
+       owner{
+           id
+           name
+           role{
+               en
+           }
+       }
+       created_at
+     }
+     role {
+       id
+       en
+     }
+     gender {
+       id
+       en
+     }
+     city {
+       id
+       en
+     }
+   }
+}
+`)
+
 
 export const GET_CITIES = gql(`
 {
@@ -34,6 +74,16 @@ export const GET_CITIES = gql(`
   }
 }`)
 
+export const GET_GENDER = gql(`
+query{
+  allGenders{
+    id
+    en
+    ar
+  }
+}
+`)
+
 export const GET_QUESTIONS = gql(`
 query{
   allQuestions{
@@ -43,7 +93,18 @@ query{
 }
 `)
 
-
+export const GET_SUBS = gql(`
+query{
+  allSubscriptions{
+    id
+    name
+    description
+    duration
+    limit
+    price
+    unli
+  }
+}`)
 
 
 
@@ -80,3 +141,13 @@ export const REGISTER = gql(
   }
   `
 )
+
+export const UPDATE_USER = gql(`
+mutation($input: UpdateUserInput!){
+  updateUser(input:$input){
+    name
+    email
+    avatar
+  }
+}
+`)

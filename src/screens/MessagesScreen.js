@@ -15,6 +15,7 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts'
 import { SAMPLE_LIST } from '../constants/data'
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-navigation';
 
 export default function MessagesScreen() {
   const [items, setItems] = useState(SAMPLE_LIST)
@@ -22,6 +23,8 @@ export default function MessagesScreen() {
 
   useEffect(() => {
   }, [])
+
+  const fetchNext = () => {}
 
   renderItem = (item, index) => {
     console.log('item', item)
@@ -40,7 +43,7 @@ export default function MessagesScreen() {
             <View style={{
               height: 24,
               width: 24,
-              paddingTop: 6,
+              paddingTop: 8,
               borderRadius: 58,
               alignItems: 'center',
               justifyContent: 'center',
@@ -95,12 +98,12 @@ export default function MessagesScreen() {
   />
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Header />
       <View style={styles.container}>
         {renderList()}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

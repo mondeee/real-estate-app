@@ -13,12 +13,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Button from './Button';
 
 const navList = [
-  { label: 'ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ', key: 0, route: 'Register' },
-  { label: ' ﻣﻦ ﻦﺤﻧ ', key: 1, route: '' },
+  { label: 'تسجيل الدخول', key: 0, route: 'Register' },
+  { label: ' ﻣﻦ نحن ', key: 1, route: '' },
   { label: 'الشروط والأحكام \n وسياسة الخصوصية', key: 2, route: '' },
-  { label: 'ةعئاشلا ةلئسألا', key: 3, route: 'FAQ' },
-  { label: 'ﻖﻴﺒﻄﺘﻟا ﻦﻋ ﻚﻳأر اﻧﻄﻌﺄﺃ', key: 4, route: 'Terms' },
-  { label: 'توﺎﺼﻟ ﻢﻌﻧا', key: 5, route: 'Contact' },
+  { label: 'الأسئلة الشائعة', key: 3, route: 'FAQ' },
+  { label: 'ﺃأعطنا رأﻳﻚ ﻋﻦ اﻟﺘﻄﺒﻴﻖ', key: 4, route: 'Terms' },
+  { label: 'تواصل معنا', key: 5, route: 'Contact' },
 ]
 
 export default function SideBar(props) {
@@ -45,7 +45,7 @@ export default function SideBar(props) {
   renderFooter = () => {
     return (
       <View style={{ alignSelf: 'flex-end', alignItems: 'center', width: '100%', flex: .5 }}>
-        <Text style={{ ...Fonts.FontMed, fontSize: 14, color: Colors.primaryBlue }}>{`ﺔﻄﺳاﻮﺑ ﺬﻔﻧ`}</Text>
+        <Text style={{ ...Fonts.FontMed, fontSize: 14, color: Colors.primaryBlue }}>{`ﻧﻔﺬ ﺑﻮاﺳﻄﺔ`}</Text>
         <Image style={{ height: 33, width: 83 }} resizeMode={'contain'} source={require('../../assets/sidebar_footer.png')} />
       </View>
     )
@@ -87,9 +87,9 @@ export default function SideBar(props) {
           color: Colors.primaryBlue,
           fontSize: 21,
           ...Fonts.fontBold,
-        }}>{`لزن قيبطت`}</Text>
+        }}>{`تطبيق نزل`}</Text>
         {renderNavList()}
-        {isLogin && <Button onPress={() => deleteToken()} text={`ﺖﺴﺠﻴﻟ خرﻮﺟ`} />}
+        {isLogin && <Button onPress={() => deleteToken()} text={`تسجيل خروج`} />}
       </View>
       <Image style={styles.logoContainer} source={require('../../assets/sidebar_logo.png')} />
       {renderFooter()}

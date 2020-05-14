@@ -15,10 +15,13 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts'
 import { SAMPLE_LIST } from '../constants/data'
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-navigation';
 
 export default function NotificationScreen() {
   const [items, setItems] = useState(SAMPLE_LIST)
   const [loading, setLoading] = useState(false)
+
+  const fetchNext = () => { }
 
   useEffect(() => {
   }, [])
@@ -40,7 +43,7 @@ export default function NotificationScreen() {
             <View style={{
               height: 24,
               width: 24,
-              paddingTop: 6,
+              paddingTop: 8,
               borderRadius: 58,
               alignItems: 'center',
               justifyContent: 'center',
@@ -52,8 +55,8 @@ export default function NotificationScreen() {
           </View>
           <View style={{ flexDirection: 'row' }}>
             <View>
-              <Text style={{ ...Fonts.fontRegular, }}>{item.sublabel || `ﻗﺎﺮﺑﺏاﺷﺘﺮﺎﻜﻛﻙﻋﻠﻰ اﻻﻧﺘﻬﺎء`}</Text>
-              <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ` تﻮﻀﻴﺣ `}</Text>
+              <Text style={{ ...Fonts.fontRegular, }}>{item.sublabel || `ﻗﺎربﺏاﺷﺘﺮاككﻙﻋﻠﻰ اﻻﻧﺘﻬﺎء`}</Text>
+              <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ` توضيح `}</Text>
             </View>
             <MaterialCommunityIcons style={{ paddingHorizontal: 8 }} color={Colors.primaryBlue} size={25} name={'bell-outline'} />
           </View>
@@ -94,12 +97,12 @@ export default function NotificationScreen() {
   />
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Header />
       <View style={styles.container}>
         {renderList()}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

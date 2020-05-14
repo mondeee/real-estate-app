@@ -65,21 +65,21 @@ export default function BottomTabBar(props) {
         <TouchableOpacity onPress={() => setSelectedTab(3)} style={styles.navButton}>
           {/* <FontAwesome color={tabColor(3)} size={25} name={'user'} /> */}
           <Image source={require('../../assets/usericon.png')} resizeMode={'cover'} style={{ height: 20, width: 20, marginTop: 8, tintColor: tabColor(3) }} />
-          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(3) }}>{`يباسح`}</Text>
+          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(3) }}>{`حسابي`}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedTab(2)} style={styles.navButton}>
           {/* <FontAwesome color={tabColor(2)} size={25} name={'list-alt'} /> */}
           <Image source={require('../../assets/messageicon.png')} resizeMode={'cover'} style={{ height: 20, width: 20, marginTop: 8, tintColor: tabColor(2) }} />
-          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(2) }}>{`ةثداحملا`}</Text>
+          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(2) }}>{`المحادثة`}</Text>
         </TouchableOpacity>
         <FontAwesome style={{ width: '20%' }} color={'transparent'} size={25} name={'user'} />
         <TouchableOpacity onPress={() => setSelectedTab(1)} style={styles.navButton}>
           <MaterialCommunityIcons color={tabColor(1)} size={25} name={'bell-outline'} />
-          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(1) }}>{`تاهيبنتلا`}</Text>
+          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(1) }}>{`التنبيهات`}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedTab(0)} style={styles.navButton}>
           <MaterialIcons color={tabColor(0)} size={25} name={'vpn-key'} />
-          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(0) }}>{`يكالمأ`}</Text>
+          <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(0) }}>{`أملاكي`}</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => console.log('onPress')} style={styles.middleButton}>

@@ -48,22 +48,21 @@ export default function SplashScreen(props) {
     // showPageIndicator={true} initialPage={0}
     >
       <SafeAreaView style={{ ...styles.container }} key="1">
-        <Text style={styles.titleText}>{` لزن يف كب اًبحرم `}</Text>
+        <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`ﺖﺼﻔﺣ ﺎﻠﻧﺰﻟ ﺐﻤﺨﺘﻠﻓ ﺄﻧوﺎﻌﻫا و ﻢﻳزﺎﺘﻫا 
- و اﺧﺘﺮ ﻣﺎ ﻳﻨﺎﺳﺒﻚ`}</Text>
+        <Text style={styles.textlabel}>{`تصفح النزل بمختلف أنواعها و ميزاتها   و اﺧﺘﺮ ﻣﺎ ﻳﻨﺎﺳﺒﻚ`}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
       <SafeAreaView style={styles.container} key="2">
-        <Text style={styles.titleText}>{` مﺮﺤﺑًا ﺐﻛ ﻒﻳ نﺰﻟ `}</Text>
+        <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`ﺄﻀﻓ نﺰﻠﻛ و ﺷﺎﺮﻜﻫ اﻷﺧﺮﻳﻦ  `}</Text>
+        <Text style={styles.textlabel}>{`أضف نزلك و ﺷﺎركه اﻷﺧﺮﻳﻦ `}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
       <SafeAreaView style={styles.container} key="3">
-        <Text style={styles.titleText}>{` لزن يف كب اًبحرم `}</Text>
+        <Text style={styles.titleText}>{` مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
         <Text style={styles.textlabel}>{`وﻭاﺳﺘﻤﺘﻊ`}</Text>
         {renderIndicator()}

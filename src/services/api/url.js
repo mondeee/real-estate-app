@@ -1,0 +1,1 @@
+export const IMAGE_URL = `https://app.nozolsa.com/storage/`

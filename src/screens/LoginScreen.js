@@ -75,13 +75,13 @@ export default function LoginScreen(props) {
       {/* <Text>Login</Text> */}
       <Header onPressBack={() => navigate('register')} />
       <View elevation={3} style={styles.loginBox}>
-        <Input onChangeText={setPhone} placeholder={`ﺮﻘﻣ ﺎﻠﺟوﺎﻟ`} style={{ marginBottom: 25, marginTop: 40 }} rightIcon='phone' />
-        <Input onChangeText={setPassword} placeholder={`ﻚﻠﻣة ﺎﻠﻣرور`} style={{ marginBottom: 25 }} password rightIcon='lock' />
+        <Input maxLength={10} onChangeText={setPhone} placeholder={`رقم الجوال`} style={{ marginBottom: 25, marginTop: 40 }} rightIcon='phone' />
+        <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 25 }} password rightIcon='lock' />
         <TouchableOpacity style={{ width: '75%', marginBottom: 10 }}>
-          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right', textDecorationLine: 'underline' }}>{`؟رورملا ةملك تيسن`}</Text>
+          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right', textDecorationLine: 'underline' }}>{`نسيت كلمة المرور؟`}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: 'row' }}>
-          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right' }}>{`أوﺎﻔﻗ ﻊﻟى ﺎﻠﺷرﻮﻃ و ﺎﻟﺄﺤﻛﺎﻣ`}</Text>
+          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right' }}>{`أوافق على الشروط و الأحكام`}</Text>
           <View style={{
             borderRadius: 30,
             height: 14,
@@ -108,11 +108,11 @@ export default function LoginScreen(props) {
           }).catch(e => {
             onError(e)
           })
-        }} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} />
+        }} text={`تسجيل الدخول`} style={{ marginTop: 24 }} />
         {/* <Button onPress={() => navigate('Home')} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} /> */}
         <Text onPress={() => navigate('Register')} style={{ color: Colors.primaryBlue, ...Fonts.fontRegular, marginTop: 12 }}>
-          {` لﺪﻴﻛ ﺢﺳﺎﺑ ﻢﺴﺒﻗا؟ `}
-          <Text style={{ fontWeight: '500' }}>{`ﺲﺠﻟ ﻪﻧا`}</Text>
+          {` تسجيل جديد `}
+          <Text style={{ fontWeight: '500' }}>{`ليس لديك حساب؟ `}</Text>
         </Text>
       </View>
     </SafeAreaView>

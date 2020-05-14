@@ -21,6 +21,7 @@ export default function Input(props) {
     onChangeText,
     maxLength,
     rightIcon,
+    value,
   } = props
 
   const [pass, setPass] = useState(password)
@@ -35,9 +36,11 @@ export default function Input(props) {
         maxLength={maxLength ? maxLength : 24}
         autoCapitalize={false}
         keyboardType={keyboardType || 'default'}
+        value={value}
         style={{
           flex: 4,
           textAlign: 'right',
+          paddingTop: 4,
           paddingRight: 8,
           fontSize: 14,
           ...Fonts.fontRegular,
@@ -48,7 +51,6 @@ export default function Input(props) {
         <FontAwesome color={Colors.primaryBlue} size={18} name={rightIcon} />
       </TouchableOpacity>}
     </View>
-
   )
 }
 
@@ -57,13 +59,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     paddingHorizontal: 12,
-    maxWidth: 282,
+    // maxWidth: 282,
     borderWidth: 1,
     borderColor: Colors.gray,
     borderRadius: 21,
     shadowOffset: { height: 2, width: 2 },
     shadowColor: 'black',
     shadowOpacity: 0.1,
+    backgroundColor: 'white',
   },
   iconContainer: {
     flex: .5,

@@ -97,7 +97,7 @@ export default function RegisterScreen(props) {
 
   renderVerify = () => {
     return (
-      <KeyboardAvoidingView keyboardVerticalOffset={20} behavior={"padding"} style={{ ...styles.container, marginTop: '15%' }}>
+      <KeyboardAvoidingView keyboardVerticalOffset={20} behavior={"padding"} style={{ ...styles.container, marginTop: '15%', paddingHorizontal: 24 }}>
         <FontAwesome size={50} color={Colors.primaryBlue} name={'lock'} />
         <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, fontSize: 20, margin: 12, }}>{`ﺮﻣز ﺎﻠﺘﻔﻌﻴﻟ`}</Text>
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 18 }} >{`ﺖﻣ إﺮﺳﺎﻟ ﺮﻣز ﺎﻠﺘﻔﻌﻴﻟ ﻞﺟوﺎﻠﻛ`}</Text>
@@ -110,7 +110,7 @@ export default function RegisterScreen(props) {
 
   renderRegister = () => {
     return (
-      <View keyboardVerticalOffset={10} behavior={"position"} style={{ ...styles.container, }}>
+      <View keyboardVerticalOffset={10} behavior={"position"} style={{ ...styles.container, paddingHorizontal: 24, }}>
         <Input onChangeText={setName} placeholder={`الاسم`} style={{ marginBottom: 30, marginTop: 50 }} rightIcon={'user'} />
         <Input onChangeText={setPhone} placeholder={`ﺮﻘﻣ ﺎﻠﺟوﺎﻟ`} style={{ marginBottom: 30 }} rightIcon={'phone'} maxLength={10} keyboardType={'numeric'} />
         <Input onChangeText={setPass} password placeholder={`ﻚﻠﻣة ﺎﻠﻣرور`} style={{ marginBottom: 30 }} rightIcon={'lock'} />
@@ -162,7 +162,7 @@ export default function RegisterScreen(props) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView keyboardVerticalOffset={40} style={{ flex: 1 }} behavior={"padding"}>
+      <KeyboardAvoidingView keyboardVerticalOffset={100} style={{ flex: 1}} behavior={"padding"}>
         <Header onPressBack={onPressBack} />
         <ActionComponent success={true} isVisible={alerVisible} onClose={() => navigate('Home')} />
         {!verify && renderRegister()}

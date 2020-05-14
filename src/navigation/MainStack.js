@@ -15,6 +15,7 @@ import MyPropertyDetailsScreen from '../screens/MyPropertyDetailsScreen';
 import FAQScreen from '../screens/FAQScreen';
 import TermsAndAgreementScreen from '../screens/TermsAndAgreementScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
@@ -25,6 +26,7 @@ const AppNavigator = createAppContainer(
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,
       Subs: SubscriptionScreen,
+      EditProfile: EditProfileScreen,
       // Auth: AuthStack,
       // Main: HomeStack,
     },

@@ -11,33 +11,36 @@ import {
 import Colors from '../styles/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
+import Fonts from '../styles/Fonts';
+import { SafeAreaView } from 'react-navigation';
 
 export default function Header(props) {
   const {
     onPressBack,
     search,
+    profile,
     style,
     openDrawer,
   } = props
 
   renderMainHeader = () => {
     return (
-      <View elevation={5} style={{ ...styles.headerContainer }}>
+      <SafeAreaView elevation={5} style={{ ...styles.headerContainer }}>
         <Image style={{ height: 99, width: 68, alignSelf: 'center', }} source={require(`../../assets/headericon.png`)} />
         {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
           <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
         </TouchableOpacity>}
-      </View>
+      </SafeAreaView>
     )
   }
 
   renderHeaderSearch = () => {
     return (
-      <View elevation={5} style={{ ...styles.headerContainer, justifyContent: "space-between", paddingVertical: 20, ...style }}>
+      <SafeAreaView elevation={5} style={{ ...styles.headerContainer, justifyContent: "space-between", paddingVertical: 20, ...style }}>
         <Image style={{ height: 59, width: 41, alignSelf: 'center', marginTop: 8 }} source={require(`../../assets/headericon.png`)} />
-        <View style={{ flexDirection: 'row', width: '90%', margin: 12, marginBottom: 0, padding: 8, borderRadius: 5, backgroundColor: "#F7F7F7", alignSelf: 'center' }}>
+        <View style={{ flexDirection: 'row', width: '90%', margin: 12, marginBottom: 8, padding: 6, borderRadius: 30, backgroundColor: "#F7F7F7", alignSelf: 'center' }}>
           <TextInput style={{ flex: 1, textAlign: 'right', paddingLeft: 12, }} placeholder={'Search'} />
-          <TouchableOpacity style={{ paddingLeft: 12 }}>
+          <TouchableOpacity style={{ paddingLeft: 12, }}>
             <MaterialIcons size={30} color={Colors.gray} name={'search'} />
           </TouchableOpacity>
         </View>
@@ -45,9 +48,23 @@ export default function Header(props) {
           {/* <MaterialIcons size={40} color={Colors.primaryBlue} name={'view-headline'} /> */}
           <Image style={{ height: 36, width: 49, alignSelf: 'center', }} source={require(`../../assets/options.png`)} />
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     )
   }
+
+  renderProfileHeader = () => {
+    return (
+      <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: Colors.primaryBlue }}>
+        <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryYellow }} source={require(`../../assets/usericon.png`)} />
+        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
+          <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
+        </TouchableOpacity>}
+        <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`ﺎﻠﻤﻠﻓ ﺎﻠﺸﺨﺼﻳ`}</Text>
+      </SafeAreaView>
+    )
+  }
+
+  if (profile) return renderProfileHeader()
 
   if (search) return renderHeaderSearch()
 
@@ -59,7 +76,7 @@ export default function Header(props) {
 const styles = StyleSheet.create({
   headerContainer: {
     marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    height: '20%',
+    height: '21%',
     width: '100%',
     marginBottom: 5,
     justifyContent: 'center',
