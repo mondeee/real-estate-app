@@ -20,7 +20,7 @@ import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-import { GET_CITIES, GET_GENDER, GET_USER_DETAILS } from '../services/graphql/queries';
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES } from '../services/graphql/queries';
 import { useStoreActions } from 'easy-peasy';
 
 export default function HomeScreen(props) {
@@ -30,9 +30,16 @@ export default function HomeScreen(props) {
   const storeCity = useStoreActions(actions => actions.auth.setCities)
   const storeGender = useStoreActions(actions => actions.auth.setGenders)
   const storeUser = useStoreActions(actions => actions.auth.setUser)
+  const storeCat = useStoreActions(actions => actions.auth.setCategories)
+  const storeType_ = useStoreActions(actions => actions.auth.setCommercialTypes)
+  const storeType__ = useStoreActions(actions => actions.auth.setPivateTypes)
   const { loading: cityloading, error, data } = useQuery(GET_CITIES)
   const { loading: genderLoading, error: genderError, data: genderData } = useQuery(GET_GENDER)
   const { data: userdata } = useQuery(GET_USER_DETAILS)
+  const { data: commercialTypes } = useQuery(GET_TYPE(1))
+  const { data: privateTypes } = useQuery(GET_TYPE(2))
+  const { data: dataCat } = useQuery(GET_CATEGORIES)
+
 
 
   if (loading || genderLoading) console.log('LOADING')
@@ -43,6 +50,37 @@ export default function HomeScreen(props) {
       storeUser(userdata.me)
     }
   }, [userdata])
+
+  useEffect(() => {
+    
+    if (dataCat && dataCat.allCategories) {
+      const items = dataCat.allCategories
+      items.forEach(i => {
+        i.key = i.id
+        i.label = i.ar
+      })
+      storeCat(items)
+    }
+
+    if (commercialTypes && commercialTypes.allTypes) {
+      const items = commercialTypes.allTypes
+      items.forEach(i => {
+        i.key = i.id
+        i.label = i.ar
+      })
+      storeType_(items)
+    }
+
+    if (privateTypes && privateTypes.allTypes) {
+      const items = privateTypes.allTypes
+      items.forEach(i => {
+        i.key = i.id
+        i.label = i.ar
+      })
+      storeType__(items)
+    }
+
+  }, [dataCat, privateTypes, commercialTypes])
 
   useEffect(() => {
     if (data && data.allCities) {
@@ -64,7 +102,7 @@ export default function HomeScreen(props) {
   }, [data, genderData])
 
   const fetchNext = () => {
-    
+
   }
 
   renderItem = (item, index) => {

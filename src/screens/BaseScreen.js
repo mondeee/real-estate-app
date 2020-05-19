@@ -12,7 +12,8 @@ import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
 import { REGISTER } from '../services/graphql/queries'
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 export default function BaseScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -21,12 +22,12 @@ export default function BaseScreen(props) {
   }, [])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header onPressBack={() => goBack()} />
       <View style={{ flex: 1 }}>
         <Text>Base Empty Screen</Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
@@ -12,6 +13,7 @@ import Fonts from '../styles/Fonts';
 
 export default function Input(props) {
   const {
+    clickable,
     style,
     textStyle,
     onPress,
@@ -22,9 +24,25 @@ export default function Input(props) {
     maxLength,
     rightIcon,
     value,
+    multiline,
   } = props
 
   const [pass, setPass] = useState(password)
+
+  if (clickable)
+    return (
+      <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
+        <Image style={{ height: 16, width: 16 }} source={require('../../assets/addlocation.png')} />
+        <Text style={{
+          paddingTop: 4,
+          paddingRight: 8,
+          fontSize: 14,
+          flex: 1,
+          ...Fonts.fontRegular,
+          color: value ?  Colors.primaryBlue : Colors.gray,
+        }}>{value || placeholder}</Text>
+      </TouchableOpacity>
+    )
 
   return (
     <View style={{ ...style, ...styles.buttonContainer }}>
@@ -35,6 +53,7 @@ export default function Input(props) {
         onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
         maxLength={maxLength ? maxLength : 24}
         autoCapitalize={false}
+        multiline={multiline}
         keyboardType={keyboardType || 'default'}
         value={value}
         style={{
@@ -63,10 +82,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.gray,
     borderRadius: 21,
-    shadowOffset: { height: 2, width: 2 },
-    shadowColor: 'black',
-    shadowOpacity: 0.1,
-    backgroundColor: 'white',
+    // shadowOffset: { height: 2, width: 2 },
+    // shadowColor: 'black',
+    // shadowOpacity: 0.1,
+    // backgroundColor: 'white',
   },
   iconContainer: {
     flex: .5,

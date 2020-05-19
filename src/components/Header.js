@@ -16,11 +16,14 @@ import { SafeAreaView } from 'react-navigation';
 
 export default function Header(props) {
   const {
+    Add,
     onPressBack,
     search,
     profile,
+    leftButton,
     style,
     openDrawer,
+    MapHeader,
   } = props
 
   renderMainHeader = () => {
@@ -64,6 +67,35 @@ export default function Header(props) {
     )
   }
 
+  renderAddPropertyHeader = () => {
+    return (
+      <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: Colors.primaryBlue }}>
+        <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryYellow }} source={require(`../../assets/subicon.png`)} />
+        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
+          <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
+        </TouchableOpacity>}
+        <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`إضافة إعلان`}</Text>
+      </SafeAreaView>
+    )
+  }
+
+  const renderMap = () => {
+    return (
+      <SafeAreaView elevation={5} style={{ ...styles.headerContainer, height: '13%' }}>
+        <TouchableOpacity onPress={() => leftButton()} style={styles.leftButton}>
+          <MaterialIcons size={30} color={Colors.primaryBlue} name={'search'} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
+          <MaterialIcons size={30} color={Colors.primaryBlue} name={'close'} />
+        </TouchableOpacity>
+      </SafeAreaView>
+    )
+  }
+
+  if (MapHeader) return renderMap()
+
+  if (Add) return renderAddPropertyHeader()
+
   if (profile) return renderProfileHeader()
 
   if (search) return renderHeaderSearch()
@@ -89,7 +121,12 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 30,
+    top: 50,
     right: 15,
+  },
+  leftButton: {
+    position: 'absolute',
+    top: 50,
+    left: 15,
   }
 })

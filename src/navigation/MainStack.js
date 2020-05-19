@@ -16,12 +16,14 @@ import FAQScreen from '../screens/FAQScreen';
 import TermsAndAgreementScreen from '../screens/TermsAndAgreementScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import AddPropertyScreen from '../screens/AddPropertyScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {
       HomeBottomBar,
       Contact: ContactScreen,
+      AddProperty: AddPropertyScreen,
       PropertyDetails: MyPropertyDetailsScreen,
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,

@@ -8,6 +8,9 @@ export default {
   cities: null,
   genders: null,
   notifToken: null,
+  categories: null,
+  commercial_types: null,
+  private_types: null,
   setUser: action((state, payload) => {
     state.user = payload;
   }),
@@ -19,6 +22,15 @@ export default {
   }),
   setGenders: action((state, payload) => {
     state.genders = payload;
+  }),
+  setCategories: action((state, payload) => {
+    state.categories = payload;
+  }),
+  setCommercialTypes: action((state, payload) => {
+    state.commercial_types = payload;
+  }),
+  setPivateTypes: action((state, payload) => {
+    state.private_types = payload;
   }),
   setToken: action((state, payload) => {
     state.token = payload;

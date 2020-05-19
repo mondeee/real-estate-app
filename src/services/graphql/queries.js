@@ -64,6 +64,25 @@ query{
 }
 `)
 
+export const GET_CATEGORIES = gql(`
+query{
+  allCategories{
+    id
+    en
+    ar
+  }
+}
+`)
+
+export const GET_TYPE = id => gql(
+  `query{
+    allTypes(category_id:${id}){
+      id
+      en
+      ar
+    }
+  }`
+)
 
 export const GET_CITIES = gql(`
 {

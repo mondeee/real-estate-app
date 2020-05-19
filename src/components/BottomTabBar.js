@@ -82,7 +82,7 @@ export default function BottomTabBar(props) {
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(0) }}>{`أملاكي`}</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => console.log('onPress')} style={styles.middleButton}>
+      <TouchableOpacity onPress={() => navigate('AddProperty')} style={styles.middleButton}>
         <MaterialIcons color={"white"} name="add" size={25} />
       </TouchableOpacity>
     </View>

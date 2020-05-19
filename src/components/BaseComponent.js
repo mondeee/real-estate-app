@@ -5,7 +5,15 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
+
 import Colors from '../styles/Colors';
+import { SafeAreaView } from 'react-navigation';
+import Fonts from '../styles/Fonts';
+import Styles from '../styles/Styles';
+import Header from '../components/Header';
+import { REGISTER } from '../services/graphql/queries'
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 
 export default function Base(props) {
