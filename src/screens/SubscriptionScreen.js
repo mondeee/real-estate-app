@@ -7,15 +7,18 @@ import {
   View
 } from 'react-native';
 
+import { Toast} from 'native-base'
+
 import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { GET_SUBS } from '../services/graphql/queries'
+import { GET_SUBS, ADD_SUBSCRIPTION } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
+import { onError } from 'apollo-link-error';
 
 const SAMPLE_LIST = [
   {
@@ -43,6 +46,36 @@ export default function SubscriptionScreen(props) {
   const [page, setPage] = useState(0)
   const [subs, setSubs] = useState(SAMPLE_LIST)
   const { loading, error, data } = useQuery(GET_SUBS)
+  const [ addSubscription, { data: subData, error: subError}] = useMutation(ADD_SUBSCRIPTION, {
+    onCompleted: e => {
+      console.log('@results', e)
+      Toast.show({
+        text: 'Subscription Added',
+        type: 'success'
+      })
+    }
+  })
+
+  useState(() => {
+    console.log(subError, subData)
+  },[subError, subData])
+
+  const onAddSubsciption = id => {
+    const payload = {
+      variables: {
+        "input": {
+          "subscription_id": id
+        }
+      }
+    }
+
+    console.log('@PAYLOAD', payload)
+    addSubscription(payload).catch(e => {
+      onError(e)
+      // onError(subError)
+    })
+  }
+
 
 
   useEffect(() => {
@@ -95,7 +128,7 @@ export default function SubscriptionScreen(props) {
         <Text style={styles.textlabel}>{`ًايونس /س.ر ${i.price}`}</Text>
         <Text style={{ ...styles.textlabel, fontSize: 19, marginVertical: 8, marginHorizontal: '10%', textAlign: 'center' }}>{i.description}</Text>
         {renderIndicator()}
-        <Button style={{ marginVertical: 12 }} text={`ﺎﺸﺗﺮﻛ ﺎﻟﺄﻧ`} />
+        <Button onPress={() => onAddSubsciption(i.id)} style={{ marginVertical: 12 }} text={`اشترك الأن`} />
       </View>
     )
   }

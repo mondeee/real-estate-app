@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  AsyncStorage,
   StyleSheet,
   Text,
   Image,
@@ -10,12 +11,14 @@ import {
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
+import { Toast } from 'native-base';
 
 
 
 export default function BottomTabBar(props) {
   const { navigate } = props.navigation
   const [selectedTab, setSelectedTab] = useState(0)
+  const [token, setToken] = useState(null)
   const {
     style,
     textStyle,
@@ -23,6 +26,15 @@ export default function BottomTabBar(props) {
     child,
     text,
   } = props
+
+  useEffect(() => {
+    fetchToken()
+  }, [])
+
+  const fetchToken = async () => {
+    const token = await AsyncStorage.getItem('token')
+    setToken(token)
+  }
 
   useEffect(() => {
     switch (selectedTab) {
@@ -67,13 +79,19 @@ export default function BottomTabBar(props) {
           <Image source={require('../../assets/usericon.png')} resizeMode={'cover'} style={{ height: 20, width: 20, marginTop: 8, tintColor: tabColor(3) }} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(3) }}>{`حسابي`}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSelectedTab(2)} style={styles.navButton}>
+        <TouchableOpacity onPress={() => {
+          if (!token) return
+          setSelectedTab(2)
+        }} style={styles.navButton}>
           {/* <FontAwesome color={tabColor(2)} size={25} name={'list-alt'} /> */}
           <Image source={require('../../assets/messageicon.png')} resizeMode={'cover'} style={{ height: 20, width: 20, marginTop: 8, tintColor: tabColor(2) }} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(2) }}>{`المحادثة`}</Text>
         </TouchableOpacity>
         <FontAwesome style={{ width: '20%' }} color={'transparent'} size={25} name={'user'} />
-        <TouchableOpacity onPress={() => setSelectedTab(1)} style={styles.navButton}>
+        <TouchableOpacity onPress={() => {
+          if (!token) return
+          setSelectedTab(1)
+        }} style={styles.navButton}>
           <MaterialCommunityIcons color={tabColor(1)} size={25} name={'bell-outline'} />
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(1) }}>{`التنبيهات`}</Text>
         </TouchableOpacity>
@@ -82,7 +100,16 @@ export default function BottomTabBar(props) {
           <Text style={{ ...Fonts.fontRegular, ...styles.navLabel, color: tabColor(0) }}>{`أملاكي`}</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigate('AddProperty')} style={styles.middleButton}>
+      <TouchableOpacity onPress={() => {
+        if (!token) {
+          Toast.show({
+            text: 'User is not Logged In',
+            type: 'danger'
+          })
+          return
+        }
+        navigate('Add')
+      }} style={styles.middleButton}>
         <MaterialIcons color={"white"} name="add" size={25} />
       </TouchableOpacity>
     </View>

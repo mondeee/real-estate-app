@@ -24,6 +24,94 @@ export const onError = (error, pass) => {
   ])
 }
 
+
+
+export const ADD_PRIVATE_PROPERY = gql(`
+mutation($input: AddPrivatePropertyInput!){
+  addPrivatePropety(input:$input){
+    property_id
+    status
+  }
+}
+`)
+
+export const ADD_SUBSCRIPTION = gql(`
+mutation($input: AddSubscriptionInput!){
+  addSubscription(input:$input){
+    limit
+    expired_at
+    package{
+      id
+      name
+      description
+      duration
+      limit
+      price
+      unli
+    }
+  }
+}
+`)
+
+
+export const VERIFY_USER = gql(`
+mutation{
+  verifyUser{
+    status
+    message
+  }
+}`)
+
+
+export const GET_ALL_PROPERTIES = gql(`
+query{
+  allProperties(first:10, category_id:2){
+    data{
+      name,
+      type {
+        id,
+        en,
+        ar,
+      }
+      owner{
+        name
+        avatar
+      }
+      images{
+        avatar
+      }
+      category{
+        en
+      }
+      facilities{
+        avatar
+      }
+      district
+      general_price{
+        monday
+        tuesday
+        friday
+        sunday
+      }
+      proof_of_ownership
+      seasonal_price{
+        to
+        from
+        monday
+        tuesday
+        friday
+        sunday
+      }
+      availablities{
+        to
+        from
+      }
+    }
+  }
+}
+`)
+
+
 export const GET_USER_DETAILS = gql(`
 query{
   me {

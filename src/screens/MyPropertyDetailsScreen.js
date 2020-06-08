@@ -16,6 +16,8 @@ import { SAMPLE_LIST } from '../constants/data';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import Styles from '../styles/Styles';
+import { GET_ALL_PROPERTIES } from '../services/graphql/queries'
+import { useQuery } from '@apollo/react-hooks';
 
 const FEATURES = [
   {
@@ -38,9 +40,6 @@ export default function MyPropertyDetailsScreen(props) {
   const [totalPages, setTotalPages] = useState(SAMPLE_LIST)
   const [isFavorite, setFavorite] = useState(false)
   const [rating, setRating] = useState(5)
-
-  useEffect(() => {
-  }, [])
 
   renderIndicator = () => {
     return (

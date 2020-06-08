@@ -4,10 +4,9 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Modal,
 } from 'react-native';
 
-// import Modal from 'react-native-modal';
+import Modal from 'react-native-modal';
 
 import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
@@ -19,6 +18,7 @@ import { REGISTER } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import MapView from 'react-native-maps';
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
 
 export default function MapComponent(props) {
@@ -31,18 +31,20 @@ export default function MapComponent(props) {
     isVisible,
     onClose,
   } = props
+  const [region, setRegion] = useState(null)
 
   return (
     <Modal style={styles.container} isVisible={isVisible}>
-      <Header MapHeader />
       <View style={styles.viewContainer}>
-        <Text>sample text</Text>
-        <TouchableOpacity onPress={() => onClose()}>
-          <Text>Close</Text>
-        </TouchableOpacity>
-        <MapView onRegionChange={e => console.log('regison', e)} style={{ flex: 1 }} />
+        <MapView onRegionChange={e => setRegion(e)} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-          <Button style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
+          <Button onPress={() => onPress(region)} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
+        </View>
+        <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => onClose()}>
+          <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
+        </TouchableOpacity>
+        <View style={{ position: 'absolute', top: '47%', alignSelf: 'center' , alignItems: 'center', justifyContent: 'center'}}>
+          <MaterialIcons name={'location-on'} size={35} color={Colors.primaryBlue} />
         </View>
       </View>
     </Modal>
@@ -55,8 +57,10 @@ const styles = StyleSheet.create({
     height: '60%',
   },
   viewContainer: {
-    flex: 1,
-    backgroundColor: 'white'
+    width: '90%',
+    height: '50%',
+    backgroundColor: 'white',
+    borderRadius: 15,
   },
   button: {
     padding: 8,

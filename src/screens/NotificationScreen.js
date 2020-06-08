@@ -9,6 +9,9 @@ import {
   View
 } from 'react-native';
 
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+
 import BottomTabBar from '../components/BottomTabBar'
 import Header from '../components/Header';
 import Colors from '../styles/Colors';
@@ -16,6 +19,7 @@ import Fonts from '../styles/Fonts'
 import { SAMPLE_LIST } from '../constants/data'
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
+import { useStoreActions } from 'easy-peasy';
 
 export default function NotificationScreen() {
   const [items, setItems] = useState(SAMPLE_LIST)
@@ -23,7 +27,12 @@ export default function NotificationScreen() {
 
   const fetchNext = () => { }
 
+  const fetchData = () => {
+
+  }
+
   useEffect(() => {
+    
   }, [])
 
   renderItem = (item, index) => {

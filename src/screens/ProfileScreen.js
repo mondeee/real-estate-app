@@ -13,6 +13,7 @@ import Header from '../components/Header';
 import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
 import { SafeAreaView } from 'react-navigation';
+import { CONFIG } from '../services/config';
 
 export default function ProfileScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -36,6 +37,10 @@ export default function ProfileScreen(props) {
           <Text style={styles.itemText}>{`Login`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/usericon.png')} />
         </TouchableOpacity>
+        <TouchableOpacity style={styles.itemContainer}>
+          <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
+          {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
+        </TouchableOpacity>
       </View>
     )
   }
@@ -50,6 +55,10 @@ export default function ProfileScreen(props) {
         <TouchableOpacity onPress={() => navigate('Subs')} style={styles.itemContainer}>
           <Text style={styles.itemText}>{`الاشتراكات`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.itemContainer}>
+          <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
+          {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
         </TouchableOpacity>
       </View>
     )

@@ -98,6 +98,9 @@ export default function App() {
         require('./assets/bankimage.png'),
         require('./assets/gendericon.png'),
         require('./assets/subiconlarge.png'),
+        require('./assets/uploadfileicon.png'),
+        require('./assets/bedicon.png'),
+        require('./assets/uploadfileicon.png'),
       ]),
       Font.loadAsync({
         tajawal: require('./assets/fonts/tajawal_regular.ttf'),

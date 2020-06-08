@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-navigation';
 export default function Header(props) {
   const {
     Add,
+    Section,
     onPressBack,
     search,
     profile,
@@ -75,6 +76,7 @@ export default function Header(props) {
           <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
         </TouchableOpacity>}
         <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`إضافة إعلان`}</Text>
+        {Section && <Text style={{ ...Fonts.fontRegular, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`إضافة قسم للنزل`}</Text>}
       </SafeAreaView>
     )
   }

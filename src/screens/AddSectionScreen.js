@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
-  Image,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
+  Image,
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -42,12 +42,11 @@ const TYPES = [
   },
 ]
 
-const COMMERCIAL_DATA = [
+const COMMERCAL_DATA = [
   {
     id: 1,
     name: 'غرفة خادمة ',
     value: 0,
-
   },
   {
     id: 2,
@@ -106,58 +105,11 @@ const COMMERCIAL_DATA = [
   },
 ]
 
-const PRIVATE_DATA = [
-  {
-    id: 1,
-    name: 'موقف سيارة  ',
-    value: 0,
-  },
-  {
-    id: 2,
-    name: 'مسبح ',
-    value: 0,
-  },
-  {
-    id: 3,
-    name: 'مؤثثة ',
-    value: 0,
-  },
-  {
-    id: 4,
-    name: 'ساحة خارجية ',
-    value: 0,
-  },
-  {
-    id: 5,
-    name: 'الفلل ',
-    value: 0,
-  },
-  {
-    id: 6,
-    name: ' الأجنحة ',
-    value: 0,
-  },
-  {
-    id: 7,
-    name: ' الشقق/ الغرف ',
-    value: 0,
-  },
-  {
-    id: 8,
-    name: ' الأدوار ',
-    value: 0,
-  },
-  {
-    id: 9,
-    name: ' الشالهيات ',
-    value: 0,
-  }
-]
-
-export default function AddPropertyScreen(props) {
+export default function AddSectionScreen(props) {
   const { navigate, goBack } = props.navigation
-  const COMMERCAL = COMMERCIAL_DATA
-  const PRIVATE = PRIVATE_DATA
+
+  const COMMERCIAL = COMMERCAL_DATA
+
   const [types, setTypes] = useState(TYPES)
   const [location, setLocation] = useState(null)
   const [selectedType, setType] = useState(null)
@@ -169,17 +121,15 @@ export default function AddPropertyScreen(props) {
   const [showLicense, setShowLicense] = useState(false)
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
-
-  //FACI
-  const [isFaciVisible, setFaciVisible] = useState(false)
-  const [selectedFac, setSeelectedFac] = useState(null)
-  const [facilities, setFacilities] = useState(COMMERCAL)
-
-  //
   const [photos, setSelectedPhotos] = useState(false)
 
   //CALENDARS
   const [general, setGeneral] = useState(false)
+
+  //FACI
+  const [isFaciVisible, setFaciVisible] = useState(false)
+  const [selectedFac, setSeelectedFac] = useState(null)
+  const [facilities, setFacilities] = useState(COMMERCIAL)
 
   const categories = useStoreState(state => state.auth.categories)
   const commercial_types = useStoreState(state => state.auth.commercial_types)
@@ -214,16 +164,6 @@ export default function AddPropertyScreen(props) {
     items[0].selected = true
     setTypes(items)
   }, [categories])
-
-
-  useEffect(() => {
-    if (types[0].selected) {
-      setFacilities(COMMERCAL)
-    } else {
-      setFacilities(PRIVATE)
-    }
-  }, [types])
-
 
   const renderMapSelection = () => {
     return (
@@ -296,17 +236,18 @@ export default function AddPropertyScreen(props) {
     )
   }
 
+
   const renderFooterButton = () => {
 
-    if (types[0].selected == true) {
-      return (
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => navigate('AddSection')} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
-          <View style={{ width: 30 }} />
-          <Button style={{ alignSelf: 'center', width: 88, marginVertical: 12, paddingTop: 12 }} onPress={() => console.log('button')} text={`حفظ`} />
-        </View>
-      )
-    }
+    // if (types[0].selected == true) {
+    //   return (
+    //     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+    //       <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => console.log('button')} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
+    //       <View style={{ width: 30 }} />
+    //       <Button style={{ alignSelf: 'center', width: 88, marginVertical: 12, paddingTop: 12 }} onPress={() => console.log('button')} text={`حفظ`} />
+    //     </View>
+    //   )
+    // }
 
     return (
       <Button style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} onPress={() => console.log('button')} text={`إضافة`} />
@@ -345,9 +286,9 @@ export default function AddPropertyScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد القسم`}</Text>
         <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} />
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
-        {types[0].selected && <Input style={{ marginTop: 12 }} upload clickable={() => setShowImages(true)} placeholder={'السجل التجاري)اختياري('} />}
-        <Input style={{ marginTop: 12 }} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} />
-        <Input style={{ marginVertical: 12 }} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
+        {/* {types[0].selected && <Input style={{ marginTop: 12 }} upload clickable={() => setShowImages(true)} placeholder={'السجل التجاري)اختياري('} />} */}
+        {/* <Input style={{ marginTop: 12 }} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
+        <Input style={{ marginVertical: 12 }} upload clickable={() => setShowImages(true)} placeholder={`صور النزل`} />
         {renderFooterButton()}
       </View >
     )
@@ -355,21 +296,21 @@ export default function AddPropertyScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Header Add onPressBack={() => navigate('Home')} />
+      <Header Add Section onPressBack={() => goBack()} />
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
-          {/* {renderSelection()} */}
-          {types.map((i, index) => renderSelection(i, index))}
-        </View>
+        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}> */}
+        {/* {renderSelection()} */}
+        {/* {types.map((i, index) => renderSelection(i, index))} */}
+        {/* </View> */}
         <Dropdown onChangeText={setType} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} />
         <Input style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
+        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
           <Input style={{ width: 140 }} placeholder={`الحي`} />
           <Dropdown onChangeText={setCity} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
         </View>
-        <Input clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />
+        <Input clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} /> */}
         {renderDetails()}
         {renderDescription()}
         <View style={{ height: 400 }} />
@@ -379,8 +320,8 @@ export default function AddPropertyScreen(props) {
         setGeneral(false)
         setShowCalendar(false)
       }} isVisible={showCalendar} />
-      <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} />
-      <ImageBrowser onClose={() => setShowLicense(false)} setPhotos={license} key={'Operating License'} isVisible={showLicense} />
+      {/* <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} /> */}
+      {/* <ImageBrowser onClose={() => setShowLicense(false)} setPhotos={license} key={'Operating License'} isVisible={showLicense} /> */}
       <ImageBrowser requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
       <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} isVisible={isFaciVisible} />

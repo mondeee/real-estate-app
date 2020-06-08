@@ -33,7 +33,7 @@ export default function SideBar(props) {
   }
 
   const deleteToken = async () => {
-    // await AsyncStorage.removeItem('token')
+    await AsyncStorage.removeItem('token')
     setLogin(false)
   }
 

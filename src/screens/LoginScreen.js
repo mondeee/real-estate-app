@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Alert,
   ActivityIndicator,
@@ -33,6 +33,8 @@ export default function LoginScreen(props) {
   const [password, setPassword] = useState('')
 
   const [loginViaPhone, { data, loading, error }] = useMutation(LOGIN)
+
+
 
   if (data) {
     AsyncStorage.setItem('token', data.loginViaPhone.token)

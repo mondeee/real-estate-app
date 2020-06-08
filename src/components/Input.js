@@ -25,11 +25,30 @@ export default function Input(props) {
     rightIcon,
     value,
     multiline,
+    upload,
   } = props
 
   const [pass, setPass] = useState(password)
 
-  if (clickable)
+  if (clickable) {
+    if (upload)
+      return (
+        <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image style={{ height: 20, width: 16, alignSelf: 'center' }} source={require('../../assets/uploadfileicon.png')} />
+            <Text style={{ ...Fonts.fontRegular, color: Colors.darkGray, marginLeft: 24, }}>{`PDF ,JPG ,PNG`}</Text>
+          </View>
+          <Text style={{
+            paddingTop: 4,
+            paddingRight: 8,
+            fontSize: 14,
+            flex: 1,
+            ...Fonts.fontRegular,
+            color: value ? Colors.primaryBlue : Colors.darkGray,
+          }}>{value || placeholder}</Text>
+        </TouchableOpacity>
+      )
+
     return (
       <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
         <Image style={{ height: 16, width: 16 }} source={require('../../assets/addlocation.png')} />
@@ -39,10 +58,12 @@ export default function Input(props) {
           fontSize: 14,
           flex: 1,
           ...Fonts.fontRegular,
-          color: value ?  Colors.primaryBlue : Colors.gray,
+          color: value ? Colors.primaryBlue : Colors.darkGray,
         }}>{value || placeholder}</Text>
       </TouchableOpacity>
     )
+
+  }
 
   return (
     <View style={{ ...style, ...styles.buttonContainer }}>

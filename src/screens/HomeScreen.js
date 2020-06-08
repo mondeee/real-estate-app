@@ -20,7 +20,7 @@ import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES } from '../services/graphql/queries';
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
 import { useStoreActions } from 'easy-peasy';
 
 export default function HomeScreen(props) {
@@ -41,6 +41,14 @@ export default function HomeScreen(props) {
   const { data: dataCat } = useQuery(GET_CATEGORIES)
 
 
+  const { loading: properyloading, error: properyError, data: propertiesdata } = useQuery(GET_ALL_PROPERTIES)
+
+  useEffect(() => {
+    console.log('properties', propertiesdata, properyError, properyloading)
+    if (propertiesdata) {
+      setItems(propertiesdata.allProperties.data)
+    }
+  }, [propertiesdata, properyError, properyloading])
 
   if (loading || genderLoading) console.log('LOADING')
   if (error || genderError) console.log(`Error! ${error.message}`, `Error! ${genderError.message}`);
@@ -52,7 +60,7 @@ export default function HomeScreen(props) {
   }, [userdata])
 
   useEffect(() => {
-    
+
     if (dataCat && dataCat.allCategories) {
       const items = dataCat.allCategories
       items.forEach(i => {
@@ -120,14 +128,14 @@ export default function HomeScreen(props) {
         flexDirection: 'row',
         elevation: 3,
       }}
-        onPress={() => navigate('PropertyDetails', { item: {} })}
+        onPress={() => navigate('PropertyDetails', { item, })}
       >
         <View style={{ flex: 1, padding: 12, }}>
-          <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`فيلا`}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{`  ﺮﻘﻣ ﺎﻟﺈﻌﻟﺎﻧ`}</Text></Text>
+          <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
-            <Text style={{ ...Fonts.fontRegular }}>{`${item.price} `}<FontAwesome name={'money'} /></Text>
+            <Text style={{ ...Fonts.fontRegular }}>{`${item.general_price.monday} `}<FontAwesome name={'money'} /></Text>
           </View>
         </View>
         <Image

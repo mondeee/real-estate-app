@@ -11,8 +11,12 @@ export default {
   categories: null,
   commercial_types: null,
   private_types: null,
+  isMediaAllowed: false,
   setUser: action((state, payload) => {
     state.user = payload;
+  }),
+  setAllowMedia: action((state, payload) => {
+    state.isMediaAllowed = payload;
   }),
   setLanguage: action((state, payload) => {
     state.language = payload;

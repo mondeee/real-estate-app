@@ -47,7 +47,6 @@ export default function Dropdown(props) {
 
   return (
     <View style={{ ...style, ...styles.buttonContainer }}>
-      <Image style={{ height: 10, width: 15, alignSelf: 'center' }} source={require('../../assets/chevrondown.png')} />
       <ModalSelector
         style={{ flex: 4, height: 20, borderWidth: 0, borderColor: 'white', justifyContent: 'center' }}
         data={data || sample_data}
@@ -58,20 +57,23 @@ export default function Dropdown(props) {
           setValue(option.label)
         }}
       >
-        <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
-          // onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
-          editable={false}
-          value={value}
-          maxLength={maxLength ? maxLength : 24}
-          keyboardType={keyboardType || 'default'}
-          style={{
-            textAlign: 'right',
-            paddingTop: 4,
-            paddingRight: 8,
-            ...Fonts.fontRegular,
-            ...textStyle,
-          }}
-        />
+        <View style={{flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between'}}>
+          <Image style={{ height: 10, width: 15, alignSelf: 'center' }} source={require('../../assets/chevrondown.png')} />
+          <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
+            // onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
+            editable={false}
+            value={value}
+            maxLength={maxLength ? maxLength : 24}
+            keyboardType={keyboardType || 'default'}
+            style={{
+              textAlign: 'right',
+              paddingTop: 4,
+              paddingRight: 8,
+              ...Fonts.fontRegular,
+              ...textStyle,
+            }}
+          />
+        </View>
       </ModalSelector>
       {rightIcon && <Image style={{ height: 15, width: 15, alignSelf: 'center', resizeMode: 'contain' }} source={rightIcon} />}
     </View>

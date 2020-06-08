@@ -5,8 +5,9 @@ import {
   // createDrawerNavigator
 } from 'react-navigation';
 import HomeScreen from '../screens/HomeScreen';
-
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator, } from 'react-navigation-drawer';
+import { fromRight } from 'react-navigation-transitions';
 import SideBar from '../components/SideBar';
 import HomeBottomBar from './NavBarStack';
 import BottomTabBar from '../components/BottomTabBar';
@@ -17,20 +18,19 @@ import TermsAndAgreementScreen from '../screens/TermsAndAgreementScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import AddPropertyScreen from '../screens/AddPropertyScreen';
+import AddSectionScreen from '../screens/AddSectionScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {
       HomeBottomBar,
       Contact: ContactScreen,
-      AddProperty: AddPropertyScreen,
       PropertyDetails: MyPropertyDetailsScreen,
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,
       Subs: SubscriptionScreen,
-      EditProfile: EditProfileScreen,
+      // EditProfile: EditProfileScreen,
       // Auth: AuthStack,
-      // Main: HomeStack,
     },
     {
       headerMode: 'none',
