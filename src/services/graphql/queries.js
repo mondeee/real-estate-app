@@ -35,6 +35,24 @@ mutation($input: AddPrivatePropertyInput!){
 }
 `)
 
+export const ADD_COMMERCIAL_PROPERTY = gql(`
+mutation($input: AddCommercialPropertyInput!){
+  addCommercialPropety(input:$input){
+    property_id
+    status
+  }
+}
+`)
+
+export const ADD_SECTION_PROPERTY = gql(`
+mutation($input: AddSectionPropertyInput!){
+  addSectionProperty(input:$input){
+    section_id
+    status
+  }
+}
+`)
+
 export const ADD_SUBSCRIPTION = gql(`
 mutation($input: AddSubscriptionInput!){
   addSubscription(input:$input){
@@ -65,15 +83,57 @@ mutation{
 
 export const GET_ALL_PROPERTIES = gql(`
 query{
-  allProperties(first:10, category_id:2){
+  allProperties(first:30){
     data{
+      id,
       name,
+      sections {
+        id,
+        name,
+        description
+        facilities {
+          en
+          avatar
+        }
+        type {
+          id
+          en
+          ar
+        }
+        images{
+          avatar
+        }
+        general_price {
+          monday
+          tuesday
+          wednesday
+          thursday
+          friday
+          saturday
+          sunday
+        }
+        seasonal_price {
+          from
+          to
+          monday
+        }
+        availablities {
+          from
+          to
+        }
+      }
+      description,
+      city {
+        ar,
+        en
+      }
       type {
         id,
         en,
         ar,
       }
       owner{
+        id
         name
         avatar
       }
@@ -118,7 +178,7 @@ query{
      id
      avatar
      name
-     verified
+     is_verified
      phone
      email
      notifications{

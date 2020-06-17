@@ -38,12 +38,16 @@ export default function Dropdown(props) {
     onChangeText,
     maxLength,
     rightIcon,
+    // value,
     data,
   } = props
 
   // console.log('val', props.value)
   const [pass, setPass] = useState(password)
-  const [value, setValue] = useState(props.value ? props.value.en : '')
+  const [value, setValue] = useState(props.value ? props.value : '')
+  useEffect(() => {
+    setValue(data[0])
+  }, [data])
 
   return (
     <View style={{ ...style, ...styles.buttonContainer }}>
@@ -57,7 +61,7 @@ export default function Dropdown(props) {
           setValue(option.label)
         }}
       >
-        <View style={{flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
           <Image style={{ height: 10, width: 15, alignSelf: 'center' }} source={require('../../assets/chevrondown.png')} />
           <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
             // onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}

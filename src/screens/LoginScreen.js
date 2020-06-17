@@ -36,15 +36,23 @@ export default function LoginScreen(props) {
 
 
 
-  if (data) {
-    AsyncStorage.setItem('token', data.loginViaPhone.token)
-    navigate('Home')
-  }
+  // if (data) {
+  //   AsyncStorage.setItem('token', data.loginViaPhone.token)
+  //   navigate('Home')
+  // }
 
 
   useEffect(() => {
+    console.log('@DATA', data)
+    if (data) {
+      saveToken()
+    }
+  }, [data])
 
-  }, [])
+  const saveToken = async () => {
+    const save = await AsyncStorage.setItem('token', data.loginViaPhone.token)
+    navigate('Home')
+  }
 
   loginButton = () => {
     // const [loginViaPhone, { data, loading, error }] = useMutation(LOGIN)

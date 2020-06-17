@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Platform,
   Text,
-  View
+  View,
+  AsyncStorage
 } from 'react-native';
 
 import Header from '../components/Header'
@@ -16,12 +17,13 @@ import { getToken } from '../utils/functions'
 import { SAMPLE_LIST } from '../constants/data'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-
+import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
 import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
 import { useStoreActions } from 'easy-peasy';
+
 
 export default function HomeScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -35,13 +37,13 @@ export default function HomeScreen(props) {
   const storeType__ = useStoreActions(actions => actions.auth.setPivateTypes)
   const { loading: cityloading, error, data } = useQuery(GET_CITIES)
   const { loading: genderLoading, error: genderError, data: genderData } = useQuery(GET_GENDER)
-  const { data: userdata } = useQuery(GET_USER_DETAILS)
+  const { data: userdata, error: userError } = useQuery(GET_USER_DETAILS)
   const { data: commercialTypes } = useQuery(GET_TYPE(1))
   const { data: privateTypes } = useQuery(GET_TYPE(2))
   const { data: dataCat } = useQuery(GET_CATEGORIES)
 
 
-  const { loading: properyloading, error: properyError, data: propertiesdata } = useQuery(GET_ALL_PROPERTIES)
+  const { loading: properyloading, error: properyError, data: propertiesdata, refetch } = useQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
     console.log('properties', propertiesdata, properyError, properyloading)
@@ -54,10 +56,38 @@ export default function HomeScreen(props) {
   if (error || genderError) console.log(`Error! ${error.message}`, `Error! ${genderError.message}`);
 
   useEffect(() => {
+    // fetchAllProperties()
+    const { navigation } = props
+    const navFocusListener = navigation.addListener('didFocus', () => {
+      // API_CALL();
+      // fetchAllProperties()
+      refetch()
+      console.log('hooooks');
+    });
+
+    return () => {
+      navFocusListener.remove();
+    };
+  }, [])
+
+  useEffect(() => {
+    console.log('@userdata', userdata, userError)
     if (userdata && userdata.me) {
       storeUser(userdata.me)
+      if (!userdata.me.is_verified) {
+        navigate('Register', { varify_user: true, phone: userdata.me.phone })
+        return
+      }
     }
-  }, [userdata])
+
+    if (userError) {
+      deleteToken()
+    }
+  }, [userdata, userError])
+
+  const deleteToken = async () => {
+    await AsyncStorage.removeItem('token')
+  }
 
   useEffect(() => {
 
@@ -115,7 +145,7 @@ export default function HomeScreen(props) {
 
   renderItem = (item, index) => {
     return (
-      <TouchableOpacity style={{
+      <TouchableOpacity key={item.id} style={{
         height: 125,
         marginVertical: 8,
         width: '98%',
@@ -135,20 +165,28 @@ export default function HomeScreen(props) {
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
-            <Text style={{ ...Fonts.fontRegular }}>{`${item.general_price.monday} `}<FontAwesome name={'money'} /></Text>
+            {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.general_price.monday} `}<FontAwesome name={'money'} /></Text>}
           </View>
         </View>
-        <Image
-          style={{ alignSelf: 'flex-end', height: '100%', width: '30%' }}
-          source={require('../../assets/itemimage.png')}
-        />
-      </TouchableOpacity>
+        {
+          item.images && item.images.length > 0 ?
+            <Image
+              style={{ alignSelf: 'flex-end', height: '100%', width: '30%' }}
+              source={{ uri: IMAGE_URL + item.images[0].avatar }}
+            />
+            :
+            <Image
+              style={{ alignSelf: 'flex-end', height: '100%', width: '30%' }}
+              source={require('../../assets/itemimage.png')}
+            />
+        }
+      </TouchableOpacity >
     )
   }
 
   renderEmpty = () => {
     return (
-      <TouchableOpacity onPress={() => setItems(SAMPLE_LIST)} style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
+      <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34, marginBottom: 20 }} source={require('../../assets/additem.png')} />
         <Text style={styles.text}>{`ﻻ ﻳﻮجدﺩﻟﺪﻳﻚ نزل بعد `}</Text>
         <Text style={styles.text}>{`أضفﺇنزلك الأن`}</Text>
@@ -158,9 +196,10 @@ export default function HomeScreen(props) {
 
   renderList = () => <FlatList
     data={items}
+    extraData={items}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%' }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
-    keyExtractor={item => item.name}
+    keyExtractor={item => `${item.id}${item.name}`}
     renderItem={({ item }) => renderItem(item)}
     ListEmptyComponent={() => renderEmpty()}
     onEndReached={() => fetchNext()}

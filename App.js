@@ -44,7 +44,7 @@ export default function App() {
         uri: 'https://app.nozolsa.com/graphql',
         fetch: async (uri, options) => {
           const token = await AsyncStorage.getItem('token')
-          console.log('token', token)
+          console.log('token from Appjs', token)
           options.headers.Authorization = (token) ? `Bearer ${token}` : ''
           return fetch(uri, options)
         }
@@ -101,6 +101,18 @@ export default function App() {
         require('./assets/uploadfileicon.png'),
         require('./assets/bedicon.png'),
         require('./assets/uploadfileicon.png'),
+        require('./assets/garage.png'),
+        require('./assets/apartment.png'),
+        require('./assets/house.png'),
+        require('./assets/plant.png'),
+        require('./assets/stairs.png'),
+        require('./assets/yard.png'),
+        require('./assets/swim.png'),
+        require('./assets/queenbed.png'),
+        require('./assets/room.png'),
+        require('./assets/bathub.png'),
+        require('./assets/sofa.png'),
+        require('./assets/dining.png'),
       ]),
       Font.loadAsync({
         tajawal: require('./assets/fonts/tajawal_regular.ttf'),

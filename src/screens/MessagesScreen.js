@@ -27,7 +27,6 @@ export default function MessagesScreen() {
   const fetchNext = () => {}
 
   renderItem = (item, index) => {
-    console.log('item', item)
     return (
       <TouchableOpacity style={{
         height: 60,

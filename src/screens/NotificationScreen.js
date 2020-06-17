@@ -36,7 +36,6 @@ export default function NotificationScreen() {
   }, [])
 
   renderItem = (item, index) => {
-    console.log('item', item)
     return (
       <TouchableOpacity style={{
         height: 60,

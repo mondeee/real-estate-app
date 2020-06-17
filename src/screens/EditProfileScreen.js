@@ -163,15 +163,15 @@ export default function EditProfileScreen(props) {
               <MaterialIcons size={35} color={Colors.primaryBlue} name='add-circle-outline' />}
           </TouchableOpacity>
           <Input value={name} onChangeText={setName} placeholder={`خالد`} style={{ marginTop: 20, marginBottom: 12 }} rightIcon={'user'} />
-          <Input value={email} onChangeText={setEmail} placeholder={`خالد`} style={{ marginBottom: 12 }} rightIcon={'envelope'} />
-          <Input value={phone} maxLength={10} onChangeText={setPhone} placeholder={`خالد`} style={{ marginBottom: 12 }} rightIcon={'phone'} />
+          <Input value={email} onChangeText={setEmail} placeholder={`الإيميل الإلكتروني `} style={{ marginBottom: 12 }} rightIcon={'envelope'} />
+          <Input value={phone} maxLength={10} onChangeText={setPhone} placeholder={`0555555555`} style={{ marginBottom: 12 }} rightIcon={'phone'} />
           <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', }}>
-            <Dropdown value={location} data={cities} onChangeText={setLocation} placeholder={`خالد`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/locationicon.png')} />
+            <Dropdown value={location} data={cities} onChangeText={setLocation} placeholder={`المدينة`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/locationicon.png')} />
             <View style={{ width: 12 }} />
-            <Dropdown value={gender} data={genderchoices} onChangeText={setGender} placeholder={`خالد`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/gendericon.png')} />
+            <Dropdown value={gender} data={genderchoices} onChangeText={setGender} placeholder={`الجنس`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/gendericon.png')} />
           </View>
-          <Input onChangeText={setPassword} placeholder={`خالد`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
-          <Input onChangeText={setConfirmPass} placeholder={`خالد`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
+          <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
+          <Input onChangeText={setConfirmPass} placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           {!loading ? <Button onPress={() => _onUpdateUser()} style={{ width: '80%', alignSelf: 'center', marginTop: 12 }} text={`حفظ`} /> : <ActivityIndicator size={'large'} color={Colors.primaryBlue}/>}
         </KeyboardAvoidingView>
       </ScrollView>

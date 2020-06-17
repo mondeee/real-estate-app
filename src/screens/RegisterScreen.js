@@ -34,9 +34,10 @@ import { Toast } from 'native-base';
 
 
 export default function RegisterScreen(props) {
-  const { navigation: { navigate, goBack, } } = props
+  const { navigation: { navigate, goBack, state: { params } } } = props
 
   const storeToken = useStoreActions(actions => actions.auth.setToken)
+  const userData = useStoreState(state => state.auth.user)
 
   const [alerVisible, setAlertVisible] = useState(false)
   const [verify, setVerify] = useState(false)
@@ -63,6 +64,14 @@ export default function RegisterScreen(props) {
       setAlertVisible(true)
     }
   })
+
+  useEffect(() => {
+    if (params && params.varify_user) {
+      setPhone(params.phone)
+      setVerify(true)
+      onSendVerification()
+    }
+  }, [])
 
   useEffect(() => {
     if (verError) console.log('@Err', verError)
@@ -117,12 +126,15 @@ export default function RegisterScreen(props) {
   }
 
   const onSendVerification = async () => {
+    const phoneNum = phone && phone.length > 0 ? `+966${phone.slice(1)}` : `+966${userData.phone.slice(1)}`
+    console.log('@PHONE', phoneNum)
     try {
       const phoneProvider = new firebase.auth.PhoneAuthProvider();
       const verificationId = await phoneProvider.verifyPhoneNumber(
-        `+966${phone.slice(1)}`,
+        phoneNum,
         recaptchaVerifier.current
       );
+      console.log('@CODE', phoneProvider, verificationId)
       setVerificationId(verificationId);
       Toast.show({
         text: 'Verification code has been sent to your phone',
@@ -131,7 +143,7 @@ export default function RegisterScreen(props) {
     } catch (err) {
       console.log('error on send verification code', err.message)
       Toast.show({
-        text: `Error ${err.message}`,
+        text: `Error: ${err.message}`,
         type: 'danger'
       })
     }
@@ -239,6 +251,10 @@ export default function RegisterScreen(props) {
   }
 
   onPressBack = () => {
+    if (verify && params) {
+      navigate('Login')
+      return
+    }
     if (verify) {
       setVerify(false)
       return

@@ -4,7 +4,8 @@ import {
   Text,
   View,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -13,11 +14,13 @@ import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Header from '../components/Header';
 import { REGISTER } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import Input from './Input';
+import moment from 'moment';
 
 
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
@@ -26,22 +29,27 @@ import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 const WEEK_DAYS = [
   {
     value: null,
-    label: `الأحد`
+    label: `الأحد`,
+    en: 'sunday',
   },
   {
     value: null,
-    label: `الأثنين`
+    en: 'monday',
+    label: `الأثنين`,
   },
   {
     value: null,
+    en: 'tuesday',
     label: `الثلاثاء`
   },
   {
     value: null,
+    en: 'wednesday',
     label: `الإربعاء`
   },
   {
     value: null,
+    en: 'thursday',
     label: `الخميس`
   },
 ]
@@ -49,10 +57,12 @@ const WEEK_DAYS = [
 const WEEK_ENDS = [
   {
     value: null,
+    en: 'friday',
     label: `الجمعة`
   },
   {
     value: null,
+    en: 'saturday',
     label: `السبت`
   },
 ]
@@ -67,18 +77,22 @@ export default function CalendarComponent(props) {
     general,
     isVisible,
     onClose,
+    calendar,
   } = props
 
-  const [showCalendar, setShowCalendar] = useState(false)
+  const [showCalendar, setShowCalendar] = useState(calendar)
   const [toDate, setToDate] = useState(`2020/5/11`)
   const [fromDate, setFromDate] = useState(`2020/5/1`)
   const [weekdaysData, setWeekDaysData] = useState(WEEK_DAYS)
   const [weekendData, setWeekendData] = useState(WEEK_ENDS)
 
   useEffect(() => {
-    if (!isVisible) setShowCalendar(false)
+    if (!isVisible && !calendar) setShowCalendar(false)
   }, [isVisible])
 
+  useEffect(() => {
+    setShowCalendar(calendar)
+  }, [])
 
   const _onChangeInput = (value, index, type = 1) => {
     if (type == 1) {
@@ -92,10 +106,29 @@ export default function CalendarComponent(props) {
     }
   }
 
+  const onFinalizeData = () => {
+    const data = {}
+
+    weekendData.forEach(i => {
+      data[i.en] = i.value
+    })
+
+    weekdaysData.forEach(i => {
+      data[i.en] = i.value
+    })
+
+    if (!general) {
+      //ADD DATE
+    }
+
+    console.log('@pricedata', data)
+    props.setPrice(data)
+    onClose()
+  }
+
   // useEffect(() => {
   //   console.log('@values', weekdaysData, weekendData)
   // }, [weekendData, weekdaysData])
-
 
 
   const renderInput = (item, index, type) => {
@@ -147,18 +180,28 @@ export default function CalendarComponent(props) {
     return (
       <Modal isVisible={isVisible} style={{ alignItems: 'flex-end' }}>
         <View style={{ width: '100%', height: '80%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, padding: 12, paddingHorizontal: 24, }}>
-          <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`ﺗﺤﺪaﻳﺪ أﺳﻌﺎر أيام المواسم `}</Text>
-          {/* DATE SECTION */}
-          {!general && renderDateSection()}
-          <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
-          {renderWeekDays()}
-          {renderWeekEnds()}
-          <TouchableOpacity onPress={() => onClose()} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
-            <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`حفظ` || `Close`}</Text>
-          </TouchableOpacity >
+          <ScrollView>
+            <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`ﺗﺤﺪaﻳﺪ أﺳﻌﺎر أيام المواسم `}</Text>
+            {/* DATE SECTION */}
+
+            {!general && renderDateSection()}
+            <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
+            {renderWeekDays()}
+            {renderWeekEnds()}
+            <TouchableOpacity onPress={() => onFinalizeData()} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
+              <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`حفظ` || `Close`}</Text>
+            </TouchableOpacity >
+            <TouchableOpacity onPress={() => onClose()} style={{ position: 'absolute', top: 10, right: 10 }}>
+              <MaterialIcons size={25} color={Colors.primaryBlue} name={'close'} />
+            </TouchableOpacity >
+          </ScrollView>
         </View>
       </Modal>
     )
+  }
+
+  const onSelectDate = () => {
+
   }
 
   const renderCalendar = () => {
@@ -167,11 +210,14 @@ export default function CalendarComponent(props) {
         <View style={{ width: '100%', height: '80%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, paddingTop: 40, justifyContent: 'space-between' }}>
           <Calendar
             // Collection of dates that have to be marked. Default = {}
+            onDayPress={(day) => {
+              console.log('selected day', moment(day.dateString).format())
+            }}
             markedDates={{
-              '2020-05-20': { textColor: Colors.primaryBlue },
-              '2020-05-22': { startingDay: true, color: Colors.primaryBlue },
-              '2020-05-23': { selected: true, endingDay: true, color: Colors.primaryBlue, textColor: 'gray' },
-              '2020-05-04': { disabled: true, startingDay: true, color: Colors.primaryBlue, endingDay: true }
+              '2020-06-20': { textColor: Colors.primaryBlue },
+              '2020-06-22': { startingDay: true, color: Colors.primaryBlue, textColor: 'white' },
+              '2020-06-23': { selected: true, endingDay: true, color: Colors.primaryBlue, textColor: 'white' },
+              '2020-06-04': { disabled: true, startingDay: true, color: Colors.primaryBlue, endingDay: true }
             }}
             markingType={'period'}
           />
@@ -189,7 +235,7 @@ export default function CalendarComponent(props) {
     )
   }
 
-  if (showCalendar) return renderCalendar()
+  if (showCalendar || calendar) return renderCalendar()
 
   return renderMain()
 }

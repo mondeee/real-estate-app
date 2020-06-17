@@ -31,12 +31,13 @@ export default function Input(props) {
   const [pass, setPass] = useState(password)
 
   if (clickable) {
-    if (upload)
+    console.log('/@value', value)
+    if (upload) {
       return (
         <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image style={{ height: 20, width: 16, alignSelf: 'center' }} source={require('../../assets/uploadfileicon.png')} />
-            <Text style={{ ...Fonts.fontRegular, color: Colors.darkGray, marginLeft: 24, }}>{`PDF ,JPG ,PNG`}</Text>
+            {!value && <Text style={{ ...Fonts.fontRegular, color: Colors.darkGray, marginLeft: 24, }}>{`PDF ,JPG ,PNG`}</Text>}
           </View>
           <Text style={{
             paddingTop: 4,
@@ -45,9 +46,10 @@ export default function Input(props) {
             flex: 1,
             ...Fonts.fontRegular,
             color: value ? Colors.primaryBlue : Colors.darkGray,
-          }}>{value || placeholder}</Text>
+          }}>{value ? `${value.length} images` : placeholder}</Text>
         </TouchableOpacity>
       )
+    }
 
     return (
       <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
@@ -59,7 +61,7 @@ export default function Input(props) {
           flex: 1,
           ...Fonts.fontRegular,
           color: value ? Colors.primaryBlue : Colors.darkGray,
-        }}>{value || placeholder}</Text>
+        }}>{value && value.length > 0 || placeholder}</Text>
       </TouchableOpacity>
     )
 

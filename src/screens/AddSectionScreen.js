@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER } from '../services/graphql/queries'
+import { REGISTER, ADD_SECTION_PROPERTY } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -42,73 +42,86 @@ const TYPES = [
   },
 ]
 
-const COMMERCAL_DATA = [
+
+const COMMERCIAL_DATA = [
   {
     id: 1,
-    name: 'غرفة خادمة ',
+    name: 'غرفة خادمة',
     value: 0,
+    image: require('../../assets/bedicon.png'),
   },
   {
     id: 2,
     name: 'غرفة سائق ',
     value: 0,
+    image: require('../../assets/garage.png'),
   },
   {
     id: 3,
     name: 'مسبح ',
     value: 0,
+    image: require('../../assets/swim.png'),
   },
   {
     id: 4,
     name: 'مؤثثة ',
     value: 0,
+    type: 'boolean',
   },
   {
     id: 5,
     name: 'ملحق ',
     value: 0,
+    image: require('../../assets/room.png'),
   },
   {
     id: 6,
     name: 'موقف سيارة  ',
     value: 0,
+    image: require('../../assets/garage.png'),
   },
   {
     id: 7,
     name: 'غرفة المعيشة ',
     value: 0,
+    image: require('../../assets/sofa.png'),
   },
   {
     id: 8,
     name: 'دورة مياه ',
     value: 0,
+    image: require('../../assets/bathub.png'),
   },
   {
     id: 9,
     name: 'غرفة نوم ',
     value: 0,
+    image: require('../../assets/queenbed.png'),
   },
   {
     id: 10,
     name: 'ةيجراخ ةحاس ',
     value: 0,
+    image: require('../../assets/yard.png'),
   },
   {
     id: 11,
     name: 'طابق ',
     value: 0,
+    image: require('../../assets/stairs.png'),
   },
   {
     id: 12,
     name: 'مطبخ ',
     value: 0,
+    image: require('../../assets/dining.png'),
   },
 ]
 
 export default function AddSectionScreen(props) {
   const { navigate, goBack } = props.navigation
 
-  const COMMERCIAL = COMMERCAL_DATA
+  const COMMERCIAL = COMMERCIAL_DATA
 
   const [types, setTypes] = useState(TYPES)
   const [location, setLocation] = useState(null)
@@ -135,6 +148,12 @@ export default function AddSectionScreen(props) {
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
+
+  const [ addSectionProperty, { data, error, loading }] = useMutation(ADD_SECTION_PROPERTY, {
+    onCompleted: e => {
+
+    }
+  })
 
 
   useEffect(() => {
@@ -186,6 +205,125 @@ export default function AddSectionScreen(props) {
     )
   }
 
+  const validateData = () => {
+    let validate = false
+    // console.log('@PAYlOAD', payload)
+    if (!payload) {
+      validate = false
+      Toast.show({
+        text: 'Please check all the fields',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!location) {
+      Toast.show({
+        text: 'Location is unknown',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (!photos) {
+      Toast.show({
+        text: 'Please upload some photos',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    // if (!registration) {
+    //   Toast.show({
+    //     text: 'Please provide some Registration info.',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
+
+    // if (!facilities) {
+    //   Toast.show({
+    //     text: 'Please add some facilities and details.',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
+
+    if (!license) {
+      Toast.show({
+        text: 'Please provide some License info.',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (!generalPrice) {
+      Toast.show({
+        text: 'Please add some general prices.',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    return true
+  }
+
+  const onCreateSection = async () => {
+    // const imageFile = new ReactNativeFile({
+    //   uri: image,
+    //   type: 'image/png',
+    //   name: 'image.png'
+    // })
+    // console.log('regisration', registration)
+    // console.log('license', license)
+    // console.log('photos', photos)
+    const item = types.filter(i => i.selected)
+    const data = { ...payload }
+    data.facilities = [1, 2]
+    data.category_id = 1
+    data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
+    data.images = photos && photos.length > 0 ? photos : []
+    data.latitude = location.latitude
+    data.longitude = location.longitude
+    data.general_price = generalPrice
+    data.seasonal_price = {
+      "to": "2020-06-01 00:00:00",
+      "from": "2020-06-10 00:00:00",
+      "monday": 101,
+      "tuesday": 102,
+      "wednesday": 103,
+      "thursday": 104,
+      "friday": 105,
+      "saturday": 106,
+      "sunday": 107
+    }
+    data.availablities = [
+      {
+        "to": "2020-06-11 00:00:00",
+        "from": "2020-06-15 00:00:00"
+      },
+      {
+        "to": "2020-06-19 00:00:00",
+        "from": "2020-06-19 00:00:00"
+      }
+    ]
+    const fpayload = {
+      variables: {
+        "input": data
+      }
+    }
+    console.log('@finalPayload', fpayload)
+    // addSectionProperty(fpayload).catch(e => {
+    //   onError(e)
+    // })
+  }
+
   const renderSelection = (item, index) => {
     return (
       <TouchableOpacity key={index} onPress={() => {
@@ -203,6 +341,19 @@ export default function AddSectionScreen(props) {
   }
 
   const renderFaci = item => {
+    if (item.type == 'boolean') {
+      return (
+        <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
+          <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
+            <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25}/>
+          </View>
+        </View>
+      )
+    }
+
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>

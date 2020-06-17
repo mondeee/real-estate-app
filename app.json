@@ -9,9 +9,9 @@
       "android",
       "web"
     ],
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
-    "icon": "./assets/nozolicon.png",
+    "icon": "./assets/images/nozolicon.png",
     "splash": {
       "image": "./assets/splashscreen.png",
       "resizeMode": "contain",
@@ -25,7 +25,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1",
+      "buildNumber": "3",
       "bundleIdentifier": "alwashim.nozol.app"
     },
     "android": {

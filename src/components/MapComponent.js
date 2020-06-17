@@ -38,7 +38,10 @@ export default function MapComponent(props) {
       <View style={styles.viewContainer}>
         <MapView onRegionChange={e => setRegion(e)} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-          <Button onPress={() => onPress(region)} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
+          <Button onPress={() => {
+            onPress(region)
+            onClose()
+          }} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
         </View>
         <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => onClose()}>
           <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />

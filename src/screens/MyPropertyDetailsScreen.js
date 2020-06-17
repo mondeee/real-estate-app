@@ -18,6 +18,7 @@ import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vecto
 import Styles from '../styles/Styles';
 import { GET_ALL_PROPERTIES } from '../services/graphql/queries'
 import { useQuery } from '@apollo/react-hooks';
+import { IMAGE_URL } from '../services/api/url';
 
 const FEATURES = [
   {
@@ -35,16 +36,21 @@ const FEATURES = [
 ]
 
 export default function MyPropertyDetailsScreen(props) {
-  const { goBack, navigate } = props.navigation
+  const { goBack, navigate, state: { params: { item } } } = props.navigation
   const [page, setPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(SAMPLE_LIST)
+  const [totalPages, setTotalPages] = useState(item.images)
   const [isFavorite, setFavorite] = useState(false)
   const [rating, setRating] = useState(5)
+
+  useEffect(() => {
+    console.log('@ITEM', props.navigation.state.params)
+    setTotalPages(item.images)
+  }, [])
 
   renderIndicator = () => {
     return (
       <View style={{ flexDirection: 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0 }}>
-        {totalPages && totalPages.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
+        {item.images && item.images.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
       </View>
     )
   }
@@ -73,9 +79,9 @@ export default function MyPropertyDetailsScreen(props) {
     for (var i = 0; i < rating; i++) {
       ratings.push(<FontAwesome key={i} name='star' style={{ margin: 2 }} color={Colors.primaryYellow} />)
     }
-    console.log('@RATINGS', ratings)
+    // console.log('@RATINGS', ratings)
     return (
-      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: 'row-reverse' }}>
+      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: 'row-reverse', }}>
         {/* {rating.forEach(i => <FontAwesome name='star' color={Colors.primaryYellow} />)} */}
         {ratings}
       </View>
@@ -104,14 +110,14 @@ export default function MyPropertyDetailsScreen(props) {
             <View style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
               <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <View style={{ alignItems: 'flex-start', justifyContent: 'space-between', flexDirection: 'row', marginVertical: 8 }}>
+            <View style={{ alignItems: 'flex-end', }}>
+              <View style={{ alignItems: 'center', justifyContent: '', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
                 {renderStars()}
-                <Text style={{ ...Fonts.FontMed, fontSize: 23 }}>{` اليف`}</Text>
+                <Text style={{ ...Fonts.FontMed, fontSize: 23, flexWrap: 'wrap', paddingTop: 8 }}>{item.name}</Text>
               </View>
-              <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text>
+              {/* <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text> */}
               <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`ﺎﻠﺼﺣﺎﻓة، ﺎﻟﺮﻳﺎﺿ`}</Text>
+                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district}`}</Text>
                 <EvilIcons name='location' />
               </View>
             </View>
@@ -141,7 +147,7 @@ export default function MyPropertyDetailsScreen(props) {
               {`الوصف`}
             </Text>
             <Text style={{ ...Fonts.fontLight, fontSize: 14 }}>
-              {` ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى  ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى ﺖﻓﺎﺼﻴﻟ ﺄﺧرى`}
+              {`${item.description}`}
             </Text>
           </View>
         </View>
@@ -154,13 +160,19 @@ export default function MyPropertyDetailsScreen(props) {
       <ViewPager style={{ height: '30%', }}
         onPageSelected={e => setPage(e.nativeEvent.position)}
       >
-        {totalPages && totalPages.map(i =>
-          <View key={i.name} style={{ backgroundColor: 'transparent', alignContent: 'flex-start', justifyContent: 'flex-start', }}>
+        {item.images && item.images.length > 0 ? item.images.map(i =>
+          <View key={i.avatar} style={{ backgroundColor: 'transparent', alignContent: 'flex-start', justifyContent: 'flex-start', }}>
+            <Image style={{ width: '100%', height: '100%', resizeMode: 'cover', backgroundColor: Colors.primaryBlue }} source={{ uri: IMAGE_URL + i.avatar }} />
+            {renderIndicator()}
+            {renderTopButtons()}
+          </View>)
+          :
+          <View key={'asdasd'} style={{ backgroundColor: 'transparent', alignContent: 'flex-start', justifyContent: 'flex-start', }}>
             <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: `https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80` }} />
             {renderIndicator()}
             {renderTopButtons()}
           </View>
-        )}
+        }
       </ViewPager>
       {renderDetails()}
     </SafeAreaView>

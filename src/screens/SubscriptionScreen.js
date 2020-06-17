@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 
-import { Toast} from 'native-base'
+import { Toast } from 'native-base'
 
 import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
@@ -19,6 +19,8 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
 import { onError } from 'apollo-link-error';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ImageBrowser from '../components/ImageBrowserComponent'
 
 const SAMPLE_LIST = [
   {
@@ -45,8 +47,13 @@ export default function SubscriptionScreen(props) {
   const { navigate, goBack } = props.navigation
   const [page, setPage] = useState(0)
   const [subs, setSubs] = useState(SAMPLE_LIST)
+  const [upload, setUpload] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(null)
   const { loading, error, data } = useQuery(GET_SUBS)
-  const [ addSubscription, { data: subData, error: subError}] = useMutation(ADD_SUBSCRIPTION, {
+  const [receipt, setReceipt] = useState(null)
+  const [isGalleryVisible, setGalleryVisible] = useState(false)
+
+  const [addSubscription, { data: subData, error: subError }] = useMutation(ADD_SUBSCRIPTION, {
     onCompleted: e => {
       console.log('@results', e)
       Toast.show({
@@ -58,7 +65,7 @@ export default function SubscriptionScreen(props) {
 
   useState(() => {
     console.log(subError, subData)
-  },[subError, subData])
+  }, [subError, subData])
 
   const onAddSubsciption = id => {
     const payload = {
@@ -113,6 +120,9 @@ export default function SubscriptionScreen(props) {
         </View>
         <Text style={{ ...Fonts.fontLight, fontSize: 16 }}>{`-2 رﻓﻊ ﺻﻮرة ﻢﻧ اﻟﺘﺤﻮﻳﻞ ﻢﻧ ﺦﻟﺎﻟ `}</Text>
         <Text style={{ ...Fonts.fontLight, fontSize: 16 }}>{`ﺖﺤﻤﻴﻟ ﺎﻠﺻورة( <--`}<Text>{`ﺮﻔﻋ حوﺎﻟة <-- `}</Text><Text>{`)ﺢﺳﺎﺒﻳ     <-- `}</Text></Text>
+        <TouchableOpacity onPress={() => setGalleryVisible(true)} style={{ marginTop: 20 }}>
+          <Text style={{ ...Fonts.fontLight, fontSize: 16 }}>Upload Here</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -128,7 +138,10 @@ export default function SubscriptionScreen(props) {
         <Text style={styles.textlabel}>{`ًايونس /س.ر ${i.price}`}</Text>
         <Text style={{ ...styles.textlabel, fontSize: 19, marginVertical: 8, marginHorizontal: '10%', textAlign: 'center' }}>{i.description}</Text>
         {renderIndicator()}
-        <Button onPress={() => onAddSubsciption(i.id)} style={{ marginVertical: 12 }} text={`اشترك الأن`} />
+        <Button onPress={() => {
+          setSelectedItem(i)
+          setUpload(true)
+        }} style={{ marginVertical: 12 }} text={`اشترك الأن`} />
       </View>
     )
   }
@@ -147,8 +160,13 @@ export default function SubscriptionScreen(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header onPressBack={() => goBack()} />
-      {renderChoices()}
+      <Header onPressBack={() => {
+        setUpload(false)
+        goBack()
+      }} />
+      {!upload && renderChoices()}
+      {upload && renderInitial()}
+      <ImageBrowser onClose={() => setGalleryVisible(false)} photos={receipt} setPhotos={setReceipt} key={`Upload Receipt `} isVisible={isGalleryVisible} />
     </SafeAreaView>
   );
 }

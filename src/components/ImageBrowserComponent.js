@@ -27,7 +27,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 import * as Permissions from "expo-permissions";
 import { FlatList } from 'react-native-gesture-handler';
-
+import { ReactNativeFile } from 'apollo-upload-client'
 const width = Dimensions.get('window').width * 0.9;
 
 
@@ -41,6 +41,7 @@ export default function ImageBrowser(props) {
     onClose,
     multiple,
     isVisible,
+    photos: propPhotos,
     requestPermission,
   } = props
 
@@ -54,6 +55,8 @@ export default function ImageBrowser(props) {
   const [isEmpty, setEmpty] = useState(false)
   const [after, setAfter] = useState(null)
   const [hasNextPage, setHasNextPage] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [finalPhotos, setFinalPhotos] = useState([])
 
   useEffect(() => {
     if (requestPermission) _requestPermission()
@@ -74,7 +77,7 @@ export default function ImageBrowser(props) {
   const _requestPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
     if (status === 'granted') {
-      console.log('@GRANED call fetch')
+      // console.log('@GRANED call fetch')
       setAllowMedia(true)
     } else {
       setAllowMedia(false)
@@ -82,7 +85,7 @@ export default function ImageBrowser(props) {
   }
 
   const _fetchGallery = () => {
-    console.log('@fetching gallery')
+    // console.log('@fetching gallery')
     const params = {
       first: 50,
       mediaType: [MediaLibrary.MediaType.photo],
@@ -134,30 +137,40 @@ export default function ImageBrowser(props) {
 
   const processSelectedPhotos = async () => {
     const items = []
-    const resizedPhotos = []
+    const resizedPhotos = finalPhotos
     selected.forEach(i => items.push(photos[i]))
-    items.forEach(async i => {
-      resizedPhoto = await ImageManipulator.manipulateAsync(
+    await items.forEach(async i => {
+      const resizedPhoto = await ImageManipulator.manipulateAsync(
         i.uri,
         [{ resize: { width: 300 } }], // resize to width of 300 and preserve aspect ratio 
         { compress: 0.7, format: 'jpeg' },
       )
-      await resizedPhotos.push(resizedPhoto)
+      // console.log(i, resizedPhotos)
+      const imageFile = await new ReactNativeFile({
+        uri: resizedPhoto.uri,
+        type: 'image/png',
+        name: i.filename,
+      })
+      resizedPhotos.push(imageFile)
+      setFinalPhotos(resizedPhotos)
     })
-    return resizedPhotos
   }
 
   const onSubmitPhotos = async () => {
-    const images = await processSelectedPhotos()
-    setTimeout(() => {
-      if (storedPhotos && storedPhotos.length > 0) {
-        props.setPhotos(storedPhotos.concat(images))
-      } else {
-        props.setPhotos(images)
-      }
-
-      props.navigation.goBack()
-    }, 1000)
+    if (selected) {
+      setLoading(true)
+      await processSelectedPhotos()
+      // console.log('@IMAGES', finalPhotos)
+      await props.setPhotos(finalPhotos)
+      setLoading(false)
+      onClose()
+      // setTimeout(() => {
+      //   props.setPhotos(finalPhotos)
+      //   onClose()
+      //   // props.navigation.goBack()
+      //   setLoading(false)
+      // }, 3000)
+    }
   }
 
   const renderImageTile = ({ item, index }) => {
@@ -210,7 +223,7 @@ export default function ImageBrowser(props) {
           </TouchableOpacity>
         </View>
         {_renderGallery()}
-        <Button onPress={() => closeModal()} style={{ alignSelf: 'center', marginVertical: 10 }} text={`Next`} />
+        {!loading ? <Button onPress={() => onSubmitPhotos()} style={{ alignSelf: 'center', marginVertical: 10 }} text={`Next`} /> : <ActivityIndicator />}
       </View>
     </Modal>
   )
