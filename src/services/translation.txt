@@ -1,0 +1,22 @@
+#PERMISSIONS
+Please allow nozol app to access the gallery to add mediafiles,
+Please allow nozol app to access location for map component.
+
+#SUCESS MESSAGES
+Verification code has been sent to your phone
+Phone authentication successful 👍
+Successfully Added Private Property
+Successfully Added Commercial Property
+Section Successfully Added
+
+#VALIDATIONS
+Phone Number must be 10 characters
+password does not match
+Some field are empty, Please check all the fields
+Location is unknown
+Please upload some photos
+Please provide some License info
+Please provide some Registration info
+Please add some general prices
+Please add some facilities and details
+You need to add the property first before adding section

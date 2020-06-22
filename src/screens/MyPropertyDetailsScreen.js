@@ -19,6 +19,7 @@ import Styles from '../styles/Styles';
 import { GET_ALL_PROPERTIES } from '../services/graphql/queries'
 import { useQuery } from '@apollo/react-hooks';
 import { IMAGE_URL } from '../services/api/url';
+import Button from '../components/Button';
 
 const FEATURES = [
   {
@@ -175,6 +176,7 @@ export default function MyPropertyDetailsScreen(props) {
         }
       </ViewPager>
       {renderDetails()}
+      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item, })} style={{ alignSelf: 'center', width: '50%', marginBottom: 20 }} text={`الأقسام`} />}
     </SafeAreaView>
   );
 }

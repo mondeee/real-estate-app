@@ -227,7 +227,7 @@ export default function AddPropertyScreen(props) {
       setAllowMedia(true)
     } else {
       Toast.show({
-        text: `Please allow the app to access the gallery`,
+        text: `يرجى السماح لتطبيق نزل بالوصول إلى المعرض لإضافة الصور حتى تتمكن من إضافة صورة نزلك`,
         buttonText: 'OK',
         type: "danger",
         duration: 50000,
@@ -240,16 +240,16 @@ export default function AddPropertyScreen(props) {
     onCompleted: e => {
       console.log('@Complete ADD PRIVATE', e)
       Toast.show({
-        text: 'Successfully Added Private Property',
+        text: 'تم اضافة النزل الخاص بنجاح',
         type: 'success'
       })
     }
   })
   const [addCommercialPropety, { data: commercial_data, error: commercial_error, loading: commercial_loading }] = useMutation(ADD_COMMERCIAL_PROPERTY, {
     onCompleted: e => {
-      console.log('@Complete ADD COMMERCIAL', e)
+      console.log('@Complete ADD COMMERCIAL', commercial_data)
       Toast.show({
-        text: 'Successfully Added Commercial Property',
+        text: 'تم اضافة النزل التجاري بنجاح',
         type: 'success'
       })
     }
@@ -269,7 +269,7 @@ export default function AddPropertyScreen(props) {
     if (!payload) {
       validate = false
       Toast.show({
-        text: 'Please check all the fields',
+        text: 'يرجى ادخال جميع البيانات المطلوبة',
         type: 'danger'
       })
       return validate
@@ -277,7 +277,7 @@ export default function AddPropertyScreen(props) {
 
     if (!location) {
       Toast.show({
-        text: 'Location is unknown',
+        text: 'الموقع غير معروف',
         type: 'danger'
       })
       validate = false
@@ -286,7 +286,7 @@ export default function AddPropertyScreen(props) {
 
     if (!photos) {
       Toast.show({
-        text: 'Please upload some photos',
+        text: 'يرجى رفع الصور ',
         type: 'danger'
       })
       validate = false
@@ -313,7 +313,7 @@ export default function AddPropertyScreen(props) {
 
     if (!license) {
       Toast.show({
-        text: 'Please provide some License info.',
+        text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
         type: 'danger'
       })
       validate = false
@@ -322,7 +322,7 @@ export default function AddPropertyScreen(props) {
 
     if (!generalPrice) {
       Toast.show({
-        text: 'Please add some general prices.',
+        text: 'يرجى ادخال الأسعار العامة ',
         type: 'danger'
       })
       validate = false
@@ -338,7 +338,7 @@ export default function AddPropertyScreen(props) {
     if (!payload) {
       validate = false
       Toast.show({
-        text: 'Please check all the fields',
+        text: 'يرجى ادخال جميع البيانات المطلوبة ',
         type: 'danger'
       })
       return validate
@@ -346,7 +346,7 @@ export default function AddPropertyScreen(props) {
 
     if (!location) {
       Toast.show({
-        text: 'Location is unknown',
+        text: 'الموقع غير معروفn',
         type: 'danger'
       })
       validate = false
@@ -355,7 +355,7 @@ export default function AddPropertyScreen(props) {
 
     if (!photos) {
       Toast.show({
-        text: 'Please upload some photos',
+        text: 'يرجى رفع الصور',
         type: 'danger'
       })
       validate = false
@@ -364,7 +364,7 @@ export default function AddPropertyScreen(props) {
 
     if (!registration) {
       Toast.show({
-        text: 'Please provide some Registration info.',
+        text: 'يرجي رفع صورة رخصة التشيل',
         type: 'danger'
       })
       validate = false
@@ -382,7 +382,7 @@ export default function AddPropertyScreen(props) {
 
     if (!license) {
       Toast.show({
-        text: 'Please provide some License info.',
+        text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
         type: 'danger'
       })
       validate = false
@@ -599,7 +599,17 @@ export default function AddPropertyScreen(props) {
     if (types[0].selected == true) {
       return (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => navigate('AddSection')} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
+          <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => {
+            if (commercial_data) {
+              // console.log(commercial_data.addCommercialPropety.property_id)
+              navigate('AddSection', { id: commercial_data.addCommercialPropety.property_id })
+            } else {
+              Toast.show({
+                text: 'يرجى حفظ معلومات النزل قبل اضافة الاقسام',
+                type: 'danger'
+              })
+            }
+          }} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
           <View style={{ width: 30 }} />
           <Button onPress={() => {
             console.log('@VALIDATE', validateCommercial())
@@ -706,7 +716,7 @@ export default function AddPropertyScreen(props) {
             setPayload(item)
           }} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
         </View>
-        <Input clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />
+        <Input value={location} clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />
         {renderDetails()}
         {renderDescription()}
         <View style={{ height: 400 }} />

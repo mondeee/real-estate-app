@@ -23,6 +23,7 @@ export default function Header(props) {
     profile,
     leftButton,
     style,
+    section,
     openDrawer,
     MapHeader,
   } = props
@@ -39,6 +40,19 @@ export default function Header(props) {
   }
 
   renderHeaderSearch = () => {
+    if (section) {
+      return (
+        <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: 'white' }}>
+          {/* <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryBlue }} source={require(`../../assets/usericon.png`)} /> */}
+          <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`الغرف`}</Text>
+          {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
+            <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
+          </TouchableOpacity>}
+          <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, textAlign: 'center', marginTop: 12, fontSize: 19 }}>{section.name}</Text>
+        </SafeAreaView>
+      )
+    }
+
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer, justifyContent: "space-between", paddingVertical: 20, ...style }}>
         <Image style={{ height: 59, width: 41, alignSelf: 'center', marginTop: 8 }} source={require(`../../assets/headericon.png`)} />
@@ -49,7 +63,6 @@ export default function Header(props) {
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={() => openDrawer()} style={styles.backButton}>
-          {/* <MaterialIcons size={40} color={Colors.primaryBlue} name={'view-headline'} /> */}
           <Image style={{ height: 36, width: 49, alignSelf: 'center', }} source={require(`../../assets/options.png`)} />
         </TouchableOpacity>
       </SafeAreaView>

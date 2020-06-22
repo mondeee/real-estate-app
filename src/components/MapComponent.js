@@ -33,10 +33,15 @@ export default function MapComponent(props) {
   } = props
   const [region, setRegion] = useState(null)
 
+  //يرجى السماح لتطبيق نزل بالوصول إلى الموقع حتى تتمكن من إضافة موقع نزلك.
+
   return (
     <Modal style={styles.container} isVisible={isVisible}>
       <View style={styles.viewContainer}>
-        <MapView onRegionChange={e => setRegion(e)} style={{ flex: 1, borderRadius: 15 }} />
+        <MapView onRegionChange={e => {
+          console.log('onchangeRegion', e)
+          setRegion(e)
+        }} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
           <Button onPress={() => {
             onPress(region)
@@ -46,7 +51,7 @@ export default function MapComponent(props) {
         <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => onClose()}>
           <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
         </TouchableOpacity>
-        <View style={{ position: 'absolute', top: '47%', alignSelf: 'center' , alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ position: 'absolute', top: '47%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name={'location-on'} size={35} color={Colors.primaryBlue} />
         </View>
       </View>

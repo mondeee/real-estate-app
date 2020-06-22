@@ -19,11 +19,13 @@ import Fonts from '../styles/Fonts'
 import { SAMPLE_LIST } from '../constants/data'
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import moment from 'moment';
 
 export default function NotificationScreen() {
   const [items, setItems] = useState(SAMPLE_LIST)
   const [loading, setLoading] = useState(false)
+  const userData = useStoreState(state => state.auth.user)
 
   const fetchNext = () => { }
 
@@ -32,7 +34,8 @@ export default function NotificationScreen() {
   }
 
   useEffect(() => {
-    
+    console.log('@userData', userData)
+    setItems(userData.notifications)
   }, [])
 
   renderItem = (item, index) => {
@@ -59,12 +62,12 @@ export default function NotificationScreen() {
             }}>
               <Text style={{ ...Fonts.fontRegular, height: '100%', width: '100%', textAlign: 'center' }}>{item.count || `1`}</Text>
             </View>
-            <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.time || `الأن`}</Text>
+            <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.created_at || `الأن`}</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <View>
-              <Text style={{ ...Fonts.fontRegular, }}>{item.sublabel || `ﻗﺎربﺏاﺷﺘﺮاككﻙﻋﻠﻰ اﻻﻧﺘﻬﺎء`}</Text>
-              <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ` توضيح `}</Text>
+              <Text style={{ ...Fonts.fontRegular, }}>{item.message || `ﻗﺎربﺏاﺷﺘﺮاككﻙﻋﻠﻰ اﻻﻧﺘﻬﺎء`}</Text>
+              <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ``}</Text>
             </View>
             <MaterialCommunityIcons style={{ paddingHorizontal: 8 }} color={Colors.primaryBlue} size={25} name={'bell-outline'} />
           </View>
@@ -88,7 +91,7 @@ export default function NotificationScreen() {
     data={items}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingBottom: 100 }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
-    keyExtractor={item => item.name}
+    keyExtractor={item => item.id}
     renderItem={({ item }) => renderItem(item)}
     ListEmptyComponent={() => renderEmpty()}
     onEndReached={() => fetchNext()}

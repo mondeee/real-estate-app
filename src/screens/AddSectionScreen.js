@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_SECTION_PROPERTY } from '../services/graphql/queries'
+import { REGISTER, ADD_SECTION_PROPERTY, onError } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -131,6 +131,8 @@ export default function AddSectionScreen(props) {
   const [showImages, setShowImages] = useState(false)
   const [showRegistration, setShowRegistration] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
+  const [showSeasonal, setShowSeasonal] = useState(false)
+  const [showAvailability, setShowAvailability] = useState(false)
   const [showLicense, setShowLicense] = useState(false)
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
@@ -138,6 +140,10 @@ export default function AddSectionScreen(props) {
 
   //CALENDARS
   const [general, setGeneral] = useState(false)
+  const [generalPrice, setGeneralPrice] = useState(null)
+  const [sesaonalPrice, setSeasonalPrice] = useState(null)
+  const [seasonalDates, setSeasonalDates] = useState(null)
+  const [availabilityDates, setAvailabilityDates] = useState(null)
 
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
@@ -149,9 +155,14 @@ export default function AddSectionScreen(props) {
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
 
-  const [ addSectionProperty, { data, error, loading }] = useMutation(ADD_SECTION_PROPERTY, {
+  const [addSectionProperty, { data, error, loading }] = useMutation(ADD_SECTION_PROPERTY, {
     onCompleted: e => {
-
+      console.log('@onComplete', e)
+      Toast.show({
+        text: 'تم اضافة القسم بنجاح',
+        type: 'success'
+      })
+      goBack()
     }
   })
 
@@ -161,6 +172,7 @@ export default function AddSectionScreen(props) {
   }, [])
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
+  const [payload, setPayload] = useState(null)
   const _requestPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
     if (status === 'granted') {
@@ -168,7 +180,7 @@ export default function AddSectionScreen(props) {
       setAllowMedia(true)
     } else {
       Toast.show({
-        text: `Please allow the app to access the gallery`,
+        text: `يرجى السماح لتطبيق نزل بالوصول إلى المعرض لإضافة الصور حتى تتمكن من إضافة صورة نزلك`,
         buttonText: 'OK',
         type: "danger",
         duration: 50000,
@@ -217,14 +229,14 @@ export default function AddSectionScreen(props) {
       return validate
     }
 
-    if (!location) {
-      Toast.show({
-        text: 'Location is unknown',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!location) {
+    //   Toast.show({
+    //     text: 'Location is unknown',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     if (!photos) {
       Toast.show({
@@ -253,14 +265,14 @@ export default function AddSectionScreen(props) {
     //   return validate
     // }
 
-    if (!license) {
-      Toast.show({
-        text: 'Please provide some License info.',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!license) {
+    //   Toast.show({
+    //     text: 'Please provide some License info.',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     if (!generalPrice) {
       Toast.show({
@@ -275,6 +287,7 @@ export default function AddSectionScreen(props) {
   }
 
   const onCreateSection = async () => {
+    const { params } = props.navigation.state
     // const imageFile = new ReactNativeFile({
     //   uri: image,
     //   type: 'image/png',
@@ -285,12 +298,13 @@ export default function AddSectionScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
+    data.property_id = params.id
+    data.type_id = 2
     data.facilities = [1, 2]
-    data.category_id = 1
-    data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
+    // data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
-    data.latitude = location.latitude
-    data.longitude = location.longitude
+    // data.latitude = location.latitude
+    // data.longitude = location.longitude
     data.general_price = generalPrice
     data.seasonal_price = {
       "to": "2020-06-01 00:00:00",
@@ -319,9 +333,9 @@ export default function AddSectionScreen(props) {
       }
     }
     console.log('@finalPayload', fpayload)
-    // addSectionProperty(fpayload).catch(e => {
-    //   onError(e)
-    // })
+    addSectionProperty(fpayload).catch(e => {
+      onError(e)
+    })
   }
 
   const renderSelection = (item, index) => {
@@ -348,7 +362,7 @@ export default function AddSectionScreen(props) {
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-            <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25}/>
+            <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25} />
           </View>
         </View>
       )
@@ -401,7 +415,11 @@ export default function AddSectionScreen(props) {
     // }
 
     return (
-      <Button style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} onPress={() => console.log('button')} text={`إضافة`} />
+      <Button style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} onPress={() => {
+        if (validateData()) {
+          onCreateSection()
+        }
+      }} text={`إضافة`} />
     )
   }
 
@@ -409,14 +427,18 @@ export default function AddSectionScreen(props) {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input style={{ height: 120 }} multiline placeholder={'وصف'} />
-        <Input style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />
-        <Input style={{ marginBottom: 12, }} placeholder={'رقم التواصل'} />
+        <Input onChangeText={e => {
+          const item = { ...payload }
+          item.description = e
+          setPayload(item)
+        }}
+          style={{ height: 120 }} multiline placeholder={'وصف'} />
+        {/* <Input style={{ marginVertical: 12 }} placeholder={'اسم المالك'} /> */}
+        {/* <Input style={{ marginBottom: 12, }} placeholder={'رقم التواصل'} /> */}
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
-              setGeneral(false)
               setShowCalendar(true)
             }}
             style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12 }}>
@@ -424,14 +446,13 @@ export default function AddSectionScreen(props) {
           </TouchableOpacity>
           <View style={{ width: 50 }} />
           <TouchableOpacity onPress={() => {
-            setGeneral(true)
-            setShowCalendar(true)
+            setShowSeasonal(true)
           }} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12 }}>
             <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  اﻷﺳﻌﺎر العامة `}</Text>
           </TouchableOpacity>
         </View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷيام `}</Text>
-        <TouchableOpacity style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
+        <TouchableOpacity onPress={() => setShowAvailability(true)} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
           <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  اﻷﺳﻌﺎر العامة `}</Text>
         </TouchableOpacity>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد القسم`}</Text>
@@ -455,8 +476,17 @@ export default function AddSectionScreen(props) {
         {/* {renderSelection()} */}
         {/* {types.map((i, index) => renderSelection(i, index))} */}
         {/* </View> */}
-        <Dropdown onChangeText={setType} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} />
-        <Input style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
+        <Dropdown onChangeText={e => {
+          const item = { ...payload }
+          item.type_id = e.id
+          setPayload(item)
+        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} />
+        <Input onChangeText={e => {
+          const item = { ...payload }
+          item.name = e
+          setPayload(item)
+        }}
+          style={{ marginVertical: 12 }} placeholder={`اسم القسم`} />
         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
           <Input style={{ width: 140 }} placeholder={`الحي`} />
           <Dropdown onChangeText={setCity} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
@@ -467,10 +497,15 @@ export default function AddSectionScreen(props) {
         <View style={{ height: 400 }} />
         {/* </KeyboardAvoidingView> */}
       </ScrollView>
-      <CalendarComponent general={general} onClose={() => {
-        setGeneral(false)
+      <CalendarComponent setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
         setShowCalendar(false)
       }} isVisible={showCalendar} />
+      <CalendarComponent setPrice={setGeneralPrice} general={true} onClose={() => {
+        setShowSeasonal(false)
+      }} isVisible={showSeasonal} />
+      <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {
+        setShowAvailability(false)
+      }} isVisible={showAvailability} />
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} /> */}
       {/* <ImageBrowser onClose={() => setShowLicense(false)} setPhotos={license} key={'Operating License'} isVisible={showLicense} /> */}
       <ImageBrowser requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />

@@ -158,7 +158,7 @@ export default function RegisterScreen(props) {
       );
       await firebase.auth().signInWithCredential(credential);
       Toast.show({
-        text: 'Phone authentication successful 👍',
+        text: 'تم التحقق من كود التفعيل بنجاح  👍',
         type: 'success'
       })
       verifyUser()
@@ -185,14 +185,14 @@ export default function RegisterScreen(props) {
 
     if (phone && phone.length != 10) {
       Toast.show({
-        text: 'Phone Number must be 10 characters',
+        text: 'رقم الجوال يجب ان يكون 10 ارقام',
         type: 'danger'
       })
       return
     }
 
     if (password != confirmPassword) {
-      Alert.alert('password does not match')
+      Alert.alert('كلمة المرور غير متطابقة ')
       return
     }
     registerUser({

@@ -19,6 +19,7 @@ import SubscriptionScreen from '../screens/SubscriptionScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import AddPropertyScreen from '../screens/AddPropertyScreen';
 import AddSectionScreen from '../screens/AddSectionScreen';
+import SectionListScreen from '../screens/SectionListScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
@@ -26,6 +27,7 @@ const AppNavigator = createAppContainer(
       HomeBottomBar,
       Contact: ContactScreen,
       PropertyDetails: MyPropertyDetailsScreen,
+      SectionList: SectionListScreen,
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,
       Subs: SubscriptionScreen,

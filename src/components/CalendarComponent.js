@@ -110,11 +110,11 @@ export default function CalendarComponent(props) {
     const data = {}
 
     weekendData.forEach(i => {
-      data[i.en] = i.value
+      data[i.en] = i.value || "0"
     })
 
     weekdaysData.forEach(i => {
-      data[i.en] = i.value
+      data[i.en] = i.value || "0"
     })
 
     if (!general) {

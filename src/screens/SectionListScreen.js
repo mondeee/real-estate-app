@@ -25,9 +25,9 @@ import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET
 import { useStoreActions } from 'easy-peasy';
 
 
-export default function HomeScreen(props) {
-  const { navigate, goBack } = props.navigation
-  const [items, setItems] = useState([])
+export default function SectionListScreen(props) {
+  const { navigate, goBack, state: { params } } = props.navigation
+  const [items, setItems] = useState(params.items ? params.items : [])
   const [loading, setLoading] = useState(false)
   const [selected, setSelected] = useState(false)
   const storeCity = useStoreActions(actions => actions.auth.setCities)
@@ -50,7 +50,7 @@ export default function HomeScreen(props) {
   useEffect(() => {
     console.log('properties', propertiesdata, properyError, properyloading)
     if (propertiesdata) {
-      setItems(propertiesdata.allProperties.data)
+      // setItems(propertiesdata.allProperties.data)
     }
   }, [propertiesdata, properyError, properyloading])
 
@@ -167,21 +167,12 @@ export default function HomeScreen(props) {
         elevation: 3,
       }}
         onPress={() => {
-          // if (item.sections && item.sections.length > 0) {
-          //   // console.log('@section', item.sections)
-          //   setSelected(item)
-          //   setItems(item.sections)
-          //   return
-          // }
-          // if (selected) {
-          //   const newitem = { ...item }
-          //   newitem.city = selected.city
-          //   newitem.district = selected.district
-          //   // console.log(newitem)
-          //   navigate('PropertyDetails', { item: newitem, })
-          //   return
-          // }
-          navigate('PropertyDetails', { item, })
+          const newitem = { ...item }
+          newitem.city = params.item.city
+          newitem.district = params.item.district
+          // console.log(newitem)
+          navigate('PropertyDetails', { item: newitem, })
+          return
         }}
       >
         <View style={{ flex: 1, padding: 12, }}>
@@ -242,9 +233,8 @@ export default function HomeScreen(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => {
-        setItems(propertiesdata.allProperties.data)
-        setSelected(false)
-      }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={selected} />
+        goBack()
+      }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={params.item} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
         {renderList()}
       </View>

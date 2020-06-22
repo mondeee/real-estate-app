@@ -31,7 +31,7 @@ export default function Input(props) {
   const [pass, setPass] = useState(password)
 
   if (clickable) {
-    console.log('/@value', value)
+    console.log('@value', value)
     if (upload) {
       return (
         <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
@@ -61,7 +61,7 @@ export default function Input(props) {
           flex: 1,
           ...Fonts.fontRegular,
           color: value ? Colors.primaryBlue : Colors.darkGray,
-        }}>{value && value.length > 0 || placeholder}</Text>
+        }}>{value ? `${value.latitude}, ${value.longitude}`: placeholder}</Text>
       </TouchableOpacity>
     )
 
