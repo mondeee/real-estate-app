@@ -77,8 +77,12 @@ export default function FacilitiesSelectionComponent(props) {
           <Button onPress={() => {
             const items = [...selection]
             const filtered = items.filter(i => i.value != 0)
-            console.log('@FILTERED', filtered)
+            filtered.forEach(i => {
+              delete i.name
+              delete i.image
+            })
             setSelected(filtered)
+            console.log('filter', filtered)
             setSubmittted(true)
             onClose()
           }} style={{ alignSelf: 'center', }} />

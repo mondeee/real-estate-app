@@ -20,6 +20,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import AddPropertyScreen from '../screens/AddPropertyScreen';
 import AddSectionScreen from '../screens/AddSectionScreen';
 import SectionListScreen from '../screens/SectionListScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
@@ -42,6 +43,8 @@ const AppNavigator = createAppContainer(
     }
   )
 );
+
+
 
 
 

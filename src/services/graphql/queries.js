@@ -81,9 +81,41 @@ mutation{
 }`)
 
 
+export const GET_PROPERTY_DETAILS = gql(`
+query($id:ID!){
+  viewProperty(id: $id){
+    id
+    name
+    facilities {
+      id
+    }
+    sections {
+      id
+      name
+      images {
+        avatar
+      }
+      facilities {
+        id
+        value
+        facility {
+          id
+          en
+        }
+      }
+    }
+  }
+}
+`)
+
+
+
 export const GET_ALL_PROPERTIES = gql(`
-query{
-  allProperties(first:30){
+query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
+  allProperties(first:$first, page: $page, orderBy: $orderBy){
+    paginatorInfo{
+      hasMorePages
+    }
     data{
       id,
       name,
@@ -91,35 +123,29 @@ query{
         id,
         name,
         description
+        images {
+          avatar
+        }
         facilities {
-          en
-          avatar
-        }
-        type {
-          id
-          en
-          ar
-        }
-        images{
-          avatar
-        }
-        general_price {
-          monday
-          tuesday
-          wednesday
-          thursday
-          friday
-          saturday
-          sunday
-        }
-        seasonal_price {
-          from
-          to
-          monday
+        	id,
+          value
+          facility {
+            id
+          }
         }
         availablities {
           from
           to
+        }
+        type {
+          id
+          category {
+            id
+            en
+          }
+        }
+        images {
+          avatar
         }
       }
       description,
@@ -132,39 +158,54 @@ query{
         en,
         ar,
       }
-      owner{
-        id
-        name
-        avatar
-      }
       images{
         avatar
       }
       category{
+        id
+        ar
         en
       }
       facilities{
-        avatar
+        id,
+        value,
+        facility {
+          id
+        }
       }
       district
       general_price{
         monday
         tuesday
+        wednesday
+        thursday
+        saturday
         friday
         sunday
       }
       proof_of_ownership
-      seasonal_price{
+      seasonal_prices{
         to
         from
-        monday
-        tuesday
-        friday
-        sunday
       }
       availablities{
         to
         from
+      },
+      reviews {
+        star,
+        comment,
+        user {
+          name
+        }
+      },
+      review_average
+      owner {
+        id
+        avatar
+        name
+        phone
+        email
       }
     }
   }

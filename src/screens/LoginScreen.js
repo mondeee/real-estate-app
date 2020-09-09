@@ -112,7 +112,8 @@ export default function LoginScreen(props) {
             variables: {
               "input": {
                 "phone": phone,
-                "password": password
+                "password": password,
+                "role_id": 2,
               }
             }
           }).catch(e => {

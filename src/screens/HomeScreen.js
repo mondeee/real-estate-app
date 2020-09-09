@@ -42,9 +42,19 @@ export default function HomeScreen(props) {
   const { data: commercialTypes } = useQuery(GET_TYPE(1))
   const { data: privateTypes } = useQuery(GET_TYPE(2))
   const { data: dataCat } = useQuery(GET_CATEGORIES)
+  const [page, setpage] = useState(1)
 
 
-  const { loading: properyloading, error: properyError, data: propertiesdata, refetch } = useQuery(GET_ALL_PROPERTIES)
+  const { loading: properyloading, error: properyError, data: propertiesdata, refetch } = useQuery(GET_ALL_PROPERTIES, {
+    variables: {
+      page: page,
+      first: 30,
+      orderBy: [{
+        field: "id",
+        order: "DESC"
+      }]
+    }
+  })
   // const [fetchAllProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
@@ -75,7 +85,7 @@ export default function HomeScreen(props) {
   }, [])
 
   useEffect(() => {
-    console.log('@userdata', userdata, userError)
+    // console.log('@userdata', userdata, userError)
     if (userdata && userdata.me) {
       storeUser(userdata.me)
       if (!userdata.me.is_verified) {
@@ -148,7 +158,9 @@ export default function HomeScreen(props) {
   }, [data, genderData])
 
   const fetchNext = () => {
-
+    if (propertiesdata.paginatorInfohasMorePages) {
+      setPage(page + 1)
+    }
   }
 
   renderItem = (item, index) => {

@@ -205,7 +205,7 @@ export default function AddPropertyScreen(props) {
   //CALENDARS
   const [general, setGeneral] = useState(true)
   const [generalPrice, setGeneralPrice] = useState(null)
-  const [sesaonalPrice, setSeasonalPrice] = useState(null)
+  const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)
 
@@ -218,6 +218,10 @@ export default function AddPropertyScreen(props) {
   useEffect(() => {
     // _requestPermission()
   }, [])
+
+  useEffect(() => {
+    console.log('@SEASONAL', seasonalPrice)
+  }, [seasonalPrice])
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
   const _requestPermission = async () => {
@@ -412,32 +416,22 @@ export default function AddPropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    data.facilities = [1, 2]
+    data.facilities = selectedFac
     data.category_id = 1
     data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
     data.general_price = generalPrice
-    data.seasonal_price = {
-      "to": "2020-06-01 00:00:00",
-      "from": "2020-06-10 00:00:00",
-      "monday": 101,
-      "tuesday": 102,
-      "wednesday": 103,
-      "thursday": 104,
-      "friday": 105,
-      "saturday": 106,
-      "sunday": 107
-    }
+    data.seasonal_prices = seasonalPrice
     data.availablities = [
       {
-        "to": "2020-06-11 00:00:00",
-        "from": "2020-06-15 00:00:00"
+        "to": "2020-06-11",
+        "from": "2020-06-15"
       },
       {
-        "to": "2020-06-19 00:00:00",
-        "from": "2020-06-19 00:00:00"
+        "to": "2020-06-19",
+        "from": "2020-06-19"
       }
     ]
     const fpayload = {
@@ -445,7 +439,6 @@ export default function AddPropertyScreen(props) {
         "input": data
       }
     }
-    console.log('@payload', fpayload)
     addPrivateProperty(fpayload).catch(e => {
       onError(e)
     })
@@ -462,10 +455,10 @@ export default function AddPropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    data.facilities = [1, 2]
+    data.facilities = selectedFac
     data.category_id = 1
-    data.proof_of_commercial_license = registration && registration.lengh > 0 ? registration[0] : null
-    data.proof_of_operation_license = license && license.lengh > 0 ? license[0] : null
+    data.proof_of_commercial_license = registration[0]
+    data.proof_of_operation_license = license[0]
     data.images = photos && photos.length > 0 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
@@ -475,6 +468,7 @@ export default function AddPropertyScreen(props) {
       }
     }
     console.log('@payload', fpayload)
+    // return
     addCommercialPropety(fpayload).catch(e => {
       onError(e)
     })
@@ -547,7 +541,7 @@ export default function AddPropertyScreen(props) {
     )
   }
 
-  const renderFaci = item => {
+  const renderFaci = (item, index) => {
     if (item.type == 'boolean') {
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
@@ -569,6 +563,12 @@ export default function AddPropertyScreen(props) {
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
+            value={item.value.toString()}
+            onChangeText={e => {
+              var facis = selectedFac
+              facis[index].value = e
+              setSeelectedFac(facis)
+            }}
             keyboardType={'numeric'}
             style={{ borderColor: 'gray', borderBottomWidth: 1, width: 17, marginRight: 4, fontSize: 12, }}
           />
@@ -588,7 +588,7 @@ export default function AddPropertyScreen(props) {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-          {selectedFac && selectedFac.map(i => renderFaci(i))}
+          {selectedFac && selectedFac.map((i, index) => renderFaci(i, index))}
         </View>
       </View>
     )
@@ -612,7 +612,7 @@ export default function AddPropertyScreen(props) {
           }} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
           <View style={{ width: 30 }} />
           <Button onPress={() => {
-            console.log('@VALIDATE', validateCommercial())
+            console.log('@facis', selectedFac)
             if (!commercial_data) {
               if (validateCommercial()) {
                 onCreateCommercial()
@@ -626,7 +626,6 @@ export default function AddPropertyScreen(props) {
 
     return (
       <Button onPress={() => {
-        console.log('@VALIDATE', validatePrivate())
         if (validatePrivate()) {
           onCreatePrivate()
         }
@@ -717,14 +716,14 @@ export default function AddPropertyScreen(props) {
           }} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
         </View>
         <Input value={location} clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />
-        {renderDetails()}
+        {types[1].selected == true && renderDetails()}
         {renderDescription()}
         <View style={{ height: 400 }} />
         {/* </KeyboardAvoidingView> */}
       </ScrollView>
-      <CalendarComponent setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
+      {showCalendar && <CalendarComponent seasonal={seasonalPrice} setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
         setShowCalendar(false)
-      }} isVisible={showCalendar} />
+      }} isVisible={showCalendar} />}
       <CalendarComponent setPrice={setGeneralPrice} general={general} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />

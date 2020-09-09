@@ -18,6 +18,7 @@ import NotificationScreen from '../screens/NotificationScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import AddPropertyScreen from '../screens/AddPropertyScreen';
 import AddSectionScreen from '../screens/AddSectionScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 const AddStack = createStackNavigator(
   {
@@ -41,11 +42,29 @@ const ProfileStack = createStackNavigator(
   }
 )
 
+const ChatStack = createStackNavigator(
+  {
+    ChatList: MessagesScreen,
+    Chat: {
+      screen: ChatScreen,
+      navigationOptions: () => {
+        return {
+          tabBarVisible: false,
+        };
+      }
+    },
+  },
+  {
+    headerMode: 'none',
+  }
+)
+
+
 const HomeBottomBar = createAppContainer(
   createBottomTabNavigator(
     {
       Home: HomeScreen,
-      Messages: MessagesScreen,
+      Messages: ChatStack,
       Add:
       {
         screen: AddStack,
@@ -57,31 +76,39 @@ const HomeBottomBar = createAppContainer(
       },
       Favorites: NotificationScreen,
       Profile: ProfileStack,
-      // EditProfile: {
-      //   screen: EditProfileScreen,
-      //   navigationOptions: () => {
-      //     return {
-      //       tabBarVisible: false,
-      //     };
-      //   }
-      // }
     },
     {
       tabBarComponent: BottomTabBar,
     },
     {
       headerMode: 'none',
-      initialRouteName: 'Home',
+      backBehavior: 'none',
+      // initialRouteName: 'Home',
       drawerPosition: 'right',
       contentComponent: async ({ navigation }) => {
-
         const token = await AsyncStorage.getItem('token')
         console.log('asldkajsdlk', token)
         return <SideBar {...navigation} />
-      }
+      },
     }
   )
 );
+
+// HomeBottomBar.navigationOptions = ({ navigation }) => {
+//   let tabBarVisible = true
+//   if (navigation.state.routes.length > 1) {
+//     navigation.state.routes.map(route => {
+//       console.log('@ROUTE', route.routeName)
+//       if (route.routeName === "Chat") {
+//         tabBarVisible = false;
+//       }
+//     });
+//   }
+
+//   return {
+//     tabBarVisible
+//   }
+// }
 
 
 

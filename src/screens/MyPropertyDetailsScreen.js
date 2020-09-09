@@ -12,7 +12,7 @@ import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import ViewPager from '@react-native-community/viewpager';
-import { SAMPLE_LIST } from '../constants/data';
+import { SAMPLE_LIST, COMMERCIAL_FACILITIES } from '../constants/data';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import Styles from '../styles/Styles';
@@ -89,15 +89,17 @@ export default function MyPropertyDetailsScreen(props) {
     )
   }
 
-  renderFeatureItem = (item) => {
+  renderFeatureItem = (i) => {
+    const arr = COMMERCIAL_FACILITIES.filter(f => f.id == i.facility.id)
+    const item = arr[0]
     return (
       <View key={item.type} style={{ margin: 12, minWidth: '23%', maxWidth: '33%' }}>
         <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
-          <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{`غﺮﻓة خاﺪﻣة `}</Text>
+          <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{item.name}</Text>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
-          <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{`2`}</Text>
-          <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={require('../../assets/bedroomicon.png')} />
+          <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{i.value}</Text>
+          <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={item.image} />
         </View>
       </View>
     )
@@ -141,7 +143,7 @@ export default function MyPropertyDetailsScreen(props) {
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-            {FEATURES.map(i => renderFeatureItem(i))}
+            {item.facilities.map(i => renderFeatureItem(i))}
           </View>
           <View style={{ alignItems: 'flex-end', margin: 24 }}>
             <Text style={{ ...Fonts.FontMed, fontSize: 17, marginBottom: 12 }}>

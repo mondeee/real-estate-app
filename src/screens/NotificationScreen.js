@@ -34,7 +34,7 @@ export default function NotificationScreen() {
   }
 
   useEffect(() => {
-    console.log('@userData', userData)
+    // console.log('@userData', userData)
     setItems(userData.notifications)
   }, [])
 

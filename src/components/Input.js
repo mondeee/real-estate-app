@@ -31,7 +31,7 @@ export default function Input(props) {
   const [pass, setPass] = useState(password)
 
   if (clickable) {
-    console.log('@value', value)
+    // console.log('@value', value)
     if (upload) {
       return (
         <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>

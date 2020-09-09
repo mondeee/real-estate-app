@@ -66,7 +66,6 @@ const COMMERCIAL_DATA = [
     id: 4,
     name: 'مؤثثة ',
     value: 0,
-    type: 'boolean',
   },
   {
     id: 5,
@@ -141,7 +140,7 @@ export default function AddSectionScreen(props) {
   //CALENDARS
   const [general, setGeneral] = useState(false)
   const [generalPrice, setGeneralPrice] = useState(null)
-  const [sesaonalPrice, setSeasonalPrice] = useState(null)
+  const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)
 
@@ -169,7 +168,14 @@ export default function AddSectionScreen(props) {
 
   useEffect(() => {
     // _requestPermission()
-  }, [])
+    if (selectedFac && selectedFac.length > 0) {
+      const items = [...selectedFac]
+      items.forEach(i => {
+        i.facility_id = i.id
+        delete i.id
+      })
+    }
+  }, [selectedFac])
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
   const [payload, setPayload] = useState(null)
@@ -300,23 +306,13 @@ export default function AddSectionScreen(props) {
     const data = { ...payload }
     data.property_id = params.id
     data.type_id = 2
-    data.facilities = [1, 2]
+    data.facilities = selectedFac
     // data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
     // data.latitude = location.latitude
     // data.longitude = location.longitude
     data.general_price = generalPrice
-    data.seasonal_price = {
-      "to": "2020-06-01 00:00:00",
-      "from": "2020-06-10 00:00:00",
-      "monday": 101,
-      "tuesday": 102,
-      "wednesday": 103,
-      "thursday": 104,
-      "friday": 105,
-      "saturday": 106,
-      "sunday": 107
-    }
+    data.seasonal_prices = seasonalPrice
     data.availablities = [
       {
         "to": "2020-06-11 00:00:00",
@@ -497,9 +493,9 @@ export default function AddSectionScreen(props) {
         <View style={{ height: 400 }} />
         {/* </KeyboardAvoidingView> */}
       </ScrollView>
-      <CalendarComponent setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
+      {showCalendar && <CalendarComponent seasonal={seasonalPrice} setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
         setShowCalendar(false)
-      }} isVisible={showCalendar} />
+      }} isVisible={showCalendar} />}
       <CalendarComponent setPrice={setGeneralPrice} general={true} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />
