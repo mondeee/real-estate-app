@@ -198,6 +198,7 @@ export default function AddPropertyScreen(props) {
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
   const [selectedFac, setSeelectedFac] = useState(null)
+  const [finalFac, setFinalFac] = useState(null)
   const [facilities, setFacilities] = useState(COMMERCAL)
   //
   const [photos, setSelectedPhotos] = useState(false)
@@ -222,6 +223,17 @@ export default function AddPropertyScreen(props) {
   useEffect(() => {
     console.log('@SEASONAL', seasonalPrice)
   }, [seasonalPrice])
+
+  useEffect(() => {
+    if (selectedFac) {
+      const items = JSON.parse(JSON.stringify(selectedFac))
+      items.forEach(i => {
+        delete i.name
+        delete i.image
+      })
+      setFinalFac(items)
+    }
+  }, [selectedFac])
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
   const _requestPermission = async () => {
@@ -439,6 +451,7 @@ export default function AddPropertyScreen(props) {
         "input": data
       }
     }
+    console.log(selectedFac, finalFac)
     addPrivateProperty(fpayload).catch(e => {
       onError(e)
     })
@@ -462,6 +475,7 @@ export default function AddPropertyScreen(props) {
     data.images = photos && photos.length > 0 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
+    delete data.contact_name
     const fpayload = {
       variables: {
         "input": data
@@ -642,11 +656,11 @@ export default function AddPropertyScreen(props) {
           i.description = e
           setPayload(i)
         }} style={{ height: 120 }} multiline placeholder={'وصف'} />
-        {types[1].selected && <Input onChangeText={e => {
+        {/* {types[1].selected && <Input onChangeText={e => {
           const i = { ...payload }
           i.contact_name = e
           setPayload(i)
-        }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />}
+        }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />} */}
         <Input onChangeText={e => {
           const i = { ...payload }
           i.contact_no = e
@@ -734,7 +748,7 @@ export default function AddPropertyScreen(props) {
       <ImageBrowser onClose={() => setShowLicense(false)} photos={license} setPhotos={setLicense} key={'Operating License'} isVisible={showLicense} />
       <ImageBrowser photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
-      {isFaciVisible && <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} isVisible={isFaciVisible} />}
+      {isFaciVisible && <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} setFinal={setFinalFac} isVisible={isFaciVisible} />}
     </View>
   );
 }

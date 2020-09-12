@@ -84,13 +84,21 @@ export default function CalendarComponent(props) {
   } = props
 
   const [showCalendar, setShowCalendar] = useState(calendar)
-  const [toDate, setToDate] = useState(`2020-5-11`)
-  const [fromDate, setFromDate] = useState(`2020-5-1`)
+  const [toDate, setToDate] = useState('2020-05-20')
+  const [fromDate, setFromDate] = useState('2020-05-20')
   const [addedPrice, setAddedPrice] = useState(0)
   const [fdate, setfDate] = useState(false)
   const [weekdaysData, setWeekDaysData] = useState(WEEK_DAYS)
   const [weekendData, setWeekendData] = useState(WEEK_ENDS)
   const [sPrices, setsPrices] = useState(seasonal)
+  const [marked, setMarked] = useState(
+    {
+      '2020-06-20': { textColor: Colors.primaryBlue },
+      '2020-06-22': { startingDay: true, color: Colors.primaryBlue, textColor: 'white' },
+      '2020-06-23': { selected: true, startingDay: true, endingDay: true, color: Colors.primaryBlue, textColor: 'white' },
+      '2020-06-04': { disabled: true, startingDay: true, color: Colors.primaryBlue, endingDay: true }
+    }
+  )
 
   useEffect(() => {
     if (!isVisible && !calendar) setShowCalendar(false)
@@ -106,7 +114,25 @@ export default function CalendarComponent(props) {
 
   useEffect(() => {
     setfDate(false)
+    if (toDate && fromDate) {
+      const item = {}
+      item[toDate] = { selected: true, color: Colors.primaryBlue, startingDay: true, endingDay: true, textColor: 'white' }
+      item[fromDate] = { selected: true, color: Colors.primaryBlue, startingDay: true, endingDay: true, textColor: 'white' }
+      setMarked(item)
+    }
   }, [toDate, fromDate])
+
+  useEffect(() => {
+    console.log('@SPRICES', sPrices)
+    // if (fromDate) {
+    //   const item = {}
+    //   console.log('@fromDate', item, !item[fromDate])
+    //   if (!item[fromDate]) {
+    //     item[fromDate] = { selected: true, color: Colors.primaryBlue, startingDay: true, endingDay: true, textColor: 'white' }
+    //     setMarked(item)
+    //   }
+    // }
+  }, [sPrices])
 
   const _onChangeInput = (value, index, type = 1) => {
     if (type == 1) {
@@ -249,12 +275,7 @@ export default function CalendarComponent(props) {
               }
               // setShowCalendar(false)
             }}
-            markedDates={{
-              '2020-06-20': { textColor: Colors.primaryBlue },
-              '2020-06-22': { startingDay: true, color: Colors.primaryBlue, textColor: 'white' },
-              '2020-06-23': { selected: true, endingDay: true, color: Colors.primaryBlue, textColor: 'white' },
-              '2020-06-04': { disabled: true, startingDay: true, color: Colors.primaryBlue, endingDay: true }
-            }}
+            markedDates={marked}
             markingType={'period'}
           />
           <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 8 }} />

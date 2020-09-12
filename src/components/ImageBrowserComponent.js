@@ -59,7 +59,10 @@ export default function ImageBrowser(props) {
   const [finalPhotos, setFinalPhotos] = useState([])
 
   useEffect(() => {
-    if (requestPermission) _requestPermission()
+    if (requestPermission) {
+      _requestPermission()
+      _fetchGallery()
+    }
     // _requestPermission()
   }, [])
 

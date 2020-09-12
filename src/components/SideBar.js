@@ -11,6 +11,7 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Button from './Button';
+import { CONFIG } from '../services/config';
 
 const navList = [
   { label: 'تسجيل الدخول', key: 0, route: 'Register' },
@@ -19,6 +20,7 @@ const navList = [
   { label: 'الأسئلة الشائعة', key: 3, route: 'FAQ' },
   { label: 'ﺃأعطنا رأﻳﻚ ﻋﻦ اﻟﺘﻄﺒﻴﻖ', key: 4, route: 'Terms' },
   { label: 'تواصل معنا', key: 5, route: 'Contact' },
+  { label: CONFIG.BUILD_VERSION, key: 6, route: '' }
 ]
 
 export default function SideBar(props) {

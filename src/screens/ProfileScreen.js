@@ -21,7 +21,6 @@ export default function ProfileScreen(props) {
 
   useEffect(() => {
     getToken()
-
   }, [])
 
   const getToken = async () => {

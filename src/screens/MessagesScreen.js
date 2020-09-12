@@ -20,12 +20,54 @@ import { SafeAreaView } from 'react-navigation';
 import { firebaseListener } from '../services/firebase-chat';
 import * as firebase from 'firebase';
 import { useStoreState } from 'easy-peasy';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { VIEW_USER_DETAILS } from '../services/graphql/queries';
+import { IMAGE_URL } from '../services/api/url';
 
 export default function MessagesScreen(props) {
   const { navigate, goBack } = props.navigation
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
+  const [otherUsers, setOtherUsers] = useState([])
   const userData = useStoreState(state => state.auth.user)
+  const [viewUser, { data, error }] = useLazyQuery(VIEW_USER_DETAILS, {
+    onCompleted: e => {
+      console.log('@FETCHDONE')
+    }
+  })
+
+  useEffect(() => {
+    awaitMessages()
+  }, [])
+
+  useEffect(() => {
+    console.log('@DATAVIEW', data, error)
+    if (data) {
+      var arr = [...otherUsers]
+      arr.push(data.viewUser)
+      setOtherUsers(arr)
+    }
+  }, [data, error])
+
+  useEffect(() => {
+    if (items) {
+      console.log(items)
+      // const newItems = [...items]
+      // newItems.forEach(async i => {
+      //   let id = i.participants.creator.id
+      //   if (i.isOwner) {
+      //     id = i.participants.receiver.id
+      //   }
+      //   if (id) {
+      //     await viewUser({
+      //       variables: {
+      //         id,
+      //       }
+      //     })
+      //   }
+      // })
+    }
+  }, [items])
 
   const awaitMessages = async () => {
     await firebase.database().ref('conversations').on('value', (snapshot) => {
@@ -35,12 +77,12 @@ export default function MessagesScreen(props) {
           var item = snapshot.val()[e]
           item.key = e
           item.isOwner = true
-          // if (item.participants.receiver.id == userData.id || item.participants.creator.id == userData.id) {
-          //   if (item.participants.creator.id != userData.id) {
-          //     item.isOwner = false
-          //   }
-          arrmsgs.push(item)
-          // }
+          if (item.participants.receiver.id == userData.id || item.participants.creator.id == userData.id) {
+            if (item.participants.creator.id != userData.id) {
+              item.isOwner = false
+            }
+            arrmsgs.push(item)
+          }
         })
         setItems(arrmsgs)
       }
@@ -48,14 +90,11 @@ export default function MessagesScreen(props) {
     setLoading(false)
   }
 
-  useEffect(() => {
-    awaitMessages()
-  }, [])
+
 
   const fetchNext = () => { }
 
   renderItem = (item, index) => {
-    // console.log('@ITEM', item, item.val().participants)
     if (!item) return
     return (
       <TouchableOpacity
@@ -83,19 +122,19 @@ export default function MessagesScreen(props) {
               borderRadius: 58,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: Colors.primaryYellow
+              backgroundColor: 'transparent' //Colors.primaryYellow
             }}>
-              <Text style={{ ...Fonts.fontRegular, height: '100%', width: '100%', textAlign: 'center' }}>{item.count || `1`}</Text>
+              {/* <Text style={{ ...Fonts.fontRegular, height: '100%', width: '100%', textAlign: 'center' }}>{item.count || `1`}</Text> */}
             </View>
             <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.created_at || `الأن`}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View>
-              <Text style={{ ...Fonts.fontRegular, }}>{item.isOwner ? item.participants.receiver.name : item.participants.creator.name}</Text>
+              <Text style={{ ...Fonts.fontRegular, }}>{!item.isOwner ? item.participants.receiver.name : item.participants.creator.name}</Text>
               <Text style={{ ...Fonts.fontLight, maxWidth: 150 }} numberOfLines={1}>{item.messages && item.messages.length > 0 ? item.messages[item.messages.length - 1].text : ` ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ `}</Text>
             </View>
             {/* <MaterialCommunityIcons style={{ paddingHorizontal: 8 }} color={Colors.primaryBlue} size={25} name={'bell-outline'} /> */}
-            {renderAvatar(item.isOwner ? item.participants.receiver : item.participants.creator)}
+            {renderAvatar(!item.isOwner ? item.participants.receiver : item.participants.creator)}
           </View>
         </View>
       </TouchableOpacity>
@@ -105,21 +144,22 @@ export default function MessagesScreen(props) {
   const renderAvatar = (item) => {
     if (!item || !item.name) return
     // const item = e.receiver
-    return (
-      <View style={{
-        height: 46,
-        width: 46,
-        borderRadius: 100,
-        backgroundColor: Colors.primaryBlue,
-        marginLeft: 8,
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <Text style={{ fontWeight: '500', color: Colors.primaryYellow, fontSize: 20 }}>{item.name.charAt(0)}</Text>
-      </View>
-    )
+    if (!item.avatar || item.avatar.includes('profile'))
+      return (
+        <View style={{
+          height: 46,
+          width: 46,
+          borderRadius: 100,
+          backgroundColor: Colors.primaryBlue,
+          marginLeft: 8,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Text style={{ fontWeight: '500', color: Colors.primaryYellow, fontSize: 20 }}>{(item.name.charAt(0)).toUpperCase()}</Text>
+        </View>
+      )
 
-    return <Image style={{ height: 46, width: 46, borderRadius: 100, backgroundColor: Colors.primaryBlue, marginLeft: 8 }} />
+    return <Image source={{ uri: IMAGE_URL + item.avatar }} style={{ height: 46, width: 46, borderRadius: 100, marginLeft: 8, backgroundColor: Colors.primaryBlue, }} />
   }
 
 

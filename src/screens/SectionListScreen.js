@@ -170,8 +170,8 @@ export default function SectionListScreen(props) {
           const newitem = { ...item }
           newitem.city = params.item.city
           newitem.district = params.item.district
-          // console.log(newitem)
-          navigate('PropertyDetails', { item: newitem, })
+          console.log(newitem)
+          navigate('SectionDetails', { item: newitem, })
           return
         }}
       >

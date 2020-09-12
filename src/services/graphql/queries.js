@@ -24,62 +24,14 @@ export const onError = (error, pass) => {
   ])
 }
 
-
-
-export const ADD_PRIVATE_PROPERY = gql(`
-mutation($input: AddPrivatePropertyInput!){
-  addPrivatePropety(input:$input){
-    property_id
+export const CREATE_ROOM = gql(`
+query($id:ID!){
+  checkConversationID(receiver_id: $id){
+    conversation_id,
     status
   }
 }
 `)
-
-export const ADD_COMMERCIAL_PROPERTY = gql(`
-mutation($input: AddCommercialPropertyInput!){
-  addCommercialPropety(input:$input){
-    property_id
-    status
-  }
-}
-`)
-
-export const ADD_SECTION_PROPERTY = gql(`
-mutation($input: AddSectionPropertyInput!){
-  addSectionProperty(input:$input){
-    section_id
-    status
-  }
-}
-`)
-
-export const ADD_SUBSCRIPTION = gql(`
-mutation($input: AddSubscriptionInput!){
-  addSubscription(input:$input){
-    limit
-    expired_at
-    package{
-      id
-      name
-      description
-      duration
-      limit
-      price
-      unli
-    }
-  }
-}
-`)
-
-
-export const VERIFY_USER = gql(`
-mutation{
-  verifyUser{
-    status
-    message
-  }
-}`)
-
 
 export const GET_PROPERTY_DETAILS = gql(`
 query($id:ID!){
@@ -123,6 +75,11 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
         id,
         name,
         description
+        type {
+          id
+          en
+          ar
+        }
         images {
           avatar
         }
@@ -200,6 +157,9 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
         }
       },
       review_average
+      price_average
+      is_favorite
+      lowest_price
       owner {
         id
         avatar
@@ -211,6 +171,16 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
   }
 }
 `)
+
+export const VIEW_USER_DETAILS = gql(`
+  query($id: ID!){
+    viewUser(id: $id) {
+      id
+      name
+      avatar
+    }
+  }`
+)
 
 
 export const GET_USER_DETAILS = gql(`
@@ -353,9 +323,164 @@ export const REGISTER = gql(
 export const UPDATE_USER = gql(`
 mutation($input: UpdateUserInput!){
   updateUser(input:$input){
-    name
-    email
-    avatar
+     id
+     avatar
+     name
+     is_verified
+     phone
+     email
+     notifications{
+       message
+       created_at
+     }
+     favorites{
+      id,
+      name,
+      sections {
+        id,
+        name,
+        facilities {
+        	id,
+          value
+          facility {
+            id
+          }
+        }
+        availablities {
+          from
+          to
+        }
+        type {
+          id
+          category {
+            id
+            en
+          }
+        }
+        images {
+          avatar
+        }
+      }
+      description,
+      city {
+        ar,
+        en
+      }
+      type {
+        id,
+        en,
+        ar,
+      }
+      owner{
+        id
+        name
+        avatar
+      }
+      images{
+        avatar
+      }
+      category{
+        id
+        ar
+        en
+      }
+      facilities{
+        id,
+        value,
+        facility {
+          id
+        }
+      }
+      district
+      general_price{
+        monday
+        tuesday
+        friday
+        sunday
+      }
+      proof_of_ownership
+      seasonal_prices{
+				from
+        to
+        price
+      }
+      availablities{
+        to
+        from
+      },
+      reviews {
+        star,
+        comment,
+        user {
+          name
+        }
+      }
+     }
+     role {
+       id
+       en
+     }
+     gender {
+       id
+       en
+     }
+     city {
+       id
+       en
+     }
+   }
+}
+`)
+
+export const ADD_PRIVATE_PROPERY = gql(`
+mutation($input: AddPrivatePropertyInput!){
+  addPrivatePropety(input:$input){
+    property_id
+    status
   }
 }
 `)
+
+export const ADD_COMMERCIAL_PROPERTY = gql(`
+mutation($input: AddCommercialPropertyInput!){
+  addCommercialPropety(input:$input){
+    property_id
+    status
+  }
+}
+`)
+
+export const ADD_SECTION_PROPERTY = gql(`
+mutation($input: AddSectionPropertyInput!){
+  addSectionProperty(input:$input){
+    section_id
+    status
+  }
+}
+`)
+
+export const ADD_SUBSCRIPTION = gql(`
+mutation($input: AddSubscriptionInput!){
+  addSubscription(input:$input){
+    limit
+    expired_at
+    package{
+      id
+      name
+      description
+      duration
+      limit
+      price
+      unli
+    }
+  }
+}
+`)
+
+export const VERIFY_USER = gql(`
+mutation{
+  verifyUser{
+    status
+    message
+  }
+}`)

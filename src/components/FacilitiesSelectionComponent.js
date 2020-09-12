@@ -75,14 +75,9 @@ export default function FacilitiesSelectionComponent(props) {
         </ScrollView>
         <View>
           <Button onPress={() => {
-            const items = [...selection]
+            const items = selection
             const filtered = items.filter(i => i.value != 0)
-            filtered.forEach(i => {
-              delete i.name
-              delete i.image
-            })
             setSelected(filtered)
-            console.log('filter', filtered)
             setSubmittted(true)
             onClose()
           }} style={{ alignSelf: 'center', }} />

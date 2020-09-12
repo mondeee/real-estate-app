@@ -21,6 +21,7 @@ import { firebaseListener, pushToFirebase } from '../services/firebase-chat';
 import { useStoreState } from 'easy-peasy';
 import * as firebase from 'firebase';
 import { v4 as uuid } from 'uuid';
+import { IMAGE_URL } from '../services/api/url';
 
 
 export default function ChatScreen(props) {
@@ -123,21 +124,23 @@ export default function ChatScreen(props) {
   }
 
   const renderAvatar = () => {
-    return (
-      <View style={{
-        height: 40,
-        width: 40,
-        borderRadius: 30,
-        backgroundColor: Colors.primaryBlue,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <Text style={{
-          fontSize: 20,
-          color: Colors.primaryYellow,
-        }}>{item.isOwner ? item.participants.receiver.name.charAt(0) : item.participants.creator.name.charAt(0)}</Text>
-      </View>
-    )
+    const avatar = item.isOwner ? item.participants.creator : item.participants.receiver
+    if (!item.avatar || item.avatar.includes('profile'))
+      return (
+        <View style={{
+          height: 46,
+          width: 46,
+          borderRadius: 100,
+          backgroundColor: Colors.primaryBlue,
+          marginLeft: 8,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Text style={{ fontWeight: '500', color: Colors.primaryYellow, fontSize: 20 }}>{(avatar.name.charAt(0)).toUpperCase()}</Text>
+        </View>
+      )
+
+    return <Image source={{ uri: IMAGE_URL + avatar.avatar }} style={{ height: 46, width: 46, borderRadius: 100, marginLeft: 8, backgroundColor: Colors.primaryBlue, }} />
   }
 
   return (

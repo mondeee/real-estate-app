@@ -58,9 +58,9 @@ export default function NotificationScreen() {
               borderRadius: 58,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: Colors.primaryYellow
+              backgroundColor: 'transparent' //Colors.primaryYellow
             }}>
-              <Text style={{ ...Fonts.fontRegular, height: '100%', width: '100%', textAlign: 'center' }}>{item.count || `1`}</Text>
+              {/* <Text style={{ ...Fonts.fontRegular, height: '100%', width: '100%', textAlign: 'center' }}>{item.count || `1`}</Text> */}
             </View>
             <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.created_at || `الأن`}</Text>
           </View>

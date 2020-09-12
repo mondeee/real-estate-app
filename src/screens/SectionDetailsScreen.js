@@ -5,25 +5,21 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  ActivityIndicator,
-  Alert
+  Image
 } from 'react-native';
 
 import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import ViewPager from '@react-native-community/viewpager';
-import { SAMPLE_LIST, COMMERCIAL_FACILITIES } from '../constants/data';
+import { SAMPLE_LIST, COMMERCIAL_FACILITIES, PRIVATE_FACILITIES } from '../constants/data';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import Styles from '../styles/Styles';
-import { GET_ALL_PROPERTIES, CREATE_ROOM } from '../services/graphql/queries'
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { GET_ALL_PROPERTIES } from '../services/graphql/queries'
+import { useQuery } from '@apollo/react-hooks';
 import { IMAGE_URL } from '../services/api/url';
 import Button from '../components/Button';
-import * as firebase from 'firebase';
-import { useStoreState } from 'easy-peasy';
 
 const FEATURES = [
   {
@@ -40,21 +36,19 @@ const FEATURES = [
   }
 ]
 
-export default function MyPropertyDetailsScreen(props) {
+export default function SectionDetailsScreen(props) {
   const { goBack, navigate, state: { params: { item } } } = props.navigation
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(item.images)
   const [isFavorite, setFavorite] = useState(false)
   const [rating, setRating] = useState(item.review_average)
-  const [loading, setLoading] = useState(false)
-  const userData = useStoreState(state => state.auth.user)
 
   useEffect(() => {
     console.log('@ITEM', props.navigation.state.params)
     setTotalPages(item.images)
   }, [])
 
-  const renderIndicator = () => {
+  renderIndicator = () => {
     return (
       <View style={{ flexDirection: 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0 }}>
         {item.images && item.images.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
@@ -62,7 +56,7 @@ export default function MyPropertyDetailsScreen(props) {
     )
   }
 
-  const renderTopButtons = () => {
+  renderTopButtons = () => {
     return (
       <View style={{ position: 'absolute', top: 0, padding: 12, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '100%', }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -80,7 +74,7 @@ export default function MyPropertyDetailsScreen(props) {
     )
   }
 
-  const renderStars = () => {
+  renderStars = () => {
     if (!rating) return null
     const ratings = []
     for (var i = 0; i < rating; i++) {
@@ -95,8 +89,9 @@ export default function MyPropertyDetailsScreen(props) {
     )
   }
 
-  const renderFeatureItem = (i) => {
-    const arr = COMMERCIAL_FACILITIES.filter(f => f.id == i.facility.id)
+  renderFeatureItem = (i) => {
+    var arr = COMMERCIAL_FACILITIES.filter(f => f.id == i.facility.id)
+    if (arr.length == 0) arr = PRIVATE_FACILITIES.filter(f => f.id == i.facility.id)
     const item = arr[0]
     return (
       <View key={item.id} style={{ margin: 12, minWidth: '23%', maxWidth: '33%' }}>
@@ -111,7 +106,7 @@ export default function MyPropertyDetailsScreen(props) {
     )
   }
 
-  const renderDetails = () => {
+  renderDetails = () => {
     return (
       <ScrollView style={{ flex: 1, }} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ justifyContent: "flex-end", }}>
@@ -159,96 +154,13 @@ export default function MyPropertyDetailsScreen(props) {
               {`${item.description}`}
             </Text>
           </View>
-          {renderContact()}
         </View>
       </ScrollView>
     )
   }
 
-  const renderContact = () => {
-    const owner = item.owner
-    return (
-      <View style={{ padding: 12, paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <TouchableOpacity onPress={() => {
-          setLoading(true)
-          onCreateChat(owner.id)
-        }} style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <MaterialIcons name={'message'} size={40} color={Colors.primaryBlue} />
-          <Text style={{ ...Fonts.FontMed, fontSize: 18, marginTop: 8 }}>Chat</Text>
-        </TouchableOpacity>
-        <View style={{ alignItems: 'flex-end' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <Text style={{ ...Fonts.fontLight, marginRight: 12, }}>{owner.name}</Text>
-            <MaterialIcons name='person' size={25} color={Colors.primaryBlue} />
-          </View>
-          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ ...Fonts.fontLight, marginRight: 12, }}>{owner.phone}</Text>
-            <MaterialIcons name='phone' size={25} color={Colors.primaryBlue} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    )
-  }
-
-  const [checkConversationID, { data: roomData, error: roomError }] = useLazyQuery(CREATE_ROOM, {
-    onCompleted: e => {
-      if (roomData) {
-        const id = roomData.checkConversationID.conversation_id
-        fetchChat(id)
-      }
-    }
-  })
-
-  const onCreateChat = id => {
-    if (id == userData.id) {
-      Alert.alert('Error', 'You cannot message your ownself')
-      setLoading(false)
-      return
-    }
-    checkConversationID({
-      variables: {
-        id: id
-      }
-    })
-    return
-  }
-
-  const fetchChat = async id => {
-    await firebase.database().ref(`conversations/${id}`).on('value', (snapshot) => {
-      if (snapshot) {
-        console.log('snapshot', snapshot)
-        var item = snapshot.val()
-        item.key = id
-        if (item.participants.creator.id == userData.id) {
-          item.isOwner = true
-        } else {
-          item.isOwner = false
-        }
-        navigate('Chat', { item })
-      }
-    })
-    setLoading(false)
-  }
-
-  const renderLoading = () => {
-    if (!loading) return null
-    return (
-      <View style={{
-        height: '100%',
-        width: '100%', backgroundColor: 'transparent',
-        position: 'absolute',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-      >
-        <ActivityIndicator size={'large'} color={Colors.primaryBlue} />
-      </View>
-    )
-  }
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {renderLoading()}
       <ViewPager style={{ height: '30%', }}
         onPageSelected={e => setPage(e.nativeEvent.position)}
       >

@@ -201,7 +201,7 @@ export default function HomeScreen(props) {
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
-            {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.general_price.monday} `}<FontAwesome name={'money'} /></Text>}
+            <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
           </View>
         </View>
         {

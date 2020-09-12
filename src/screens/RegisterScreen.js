@@ -126,8 +126,8 @@ export default function RegisterScreen(props) {
   }
 
   const onSendVerification = async () => {
-    // const phoneNum = phone && phone.length > 0 ? `+966${phone.slice(1)}` : `+966${userData.phone.slice(1)}`
-    const phoneNum = '+639276160873'
+    const phoneNum = phone && phone.length > 0 ? `+966${phone.slice(1)}` : `+966${userData.phone.slice(1)}`
+    // const phoneNum = '+639276160873'
     console.log('@PHONE', phoneNum)
     try {
       const phoneProvider = new firebase.auth.PhoneAuthProvider();
@@ -202,6 +202,7 @@ export default function RegisterScreen(props) {
           "avatar": null,
           "name": name,
           "phone": phone,
+          "email": null,
           "password": password,
           "password_confirmation": confirmPassword,
           "role_id": 2

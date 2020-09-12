@@ -21,6 +21,7 @@ import AddPropertyScreen from '../screens/AddPropertyScreen';
 import AddSectionScreen from '../screens/AddSectionScreen';
 import SectionListScreen from '../screens/SectionListScreen';
 import ChatScreen from '../screens/ChatScreen';
+import SectionDetailsScreen from '../screens/SectionDetailsScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
@@ -28,6 +29,7 @@ const AppNavigator = createAppContainer(
       HomeBottomBar,
       Contact: ContactScreen,
       PropertyDetails: MyPropertyDetailsScreen,
+      SectionDetails: SectionDetailsScreen,
       SectionList: SectionListScreen,
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,

@@ -28,6 +28,7 @@ import CalendarComponent from '../components/CalendarComponent';
 import * as Permissions from "expo-permissions";
 import { Toast } from 'native-base';
 import FacilitiesSelectionComponent from '../components/FacilitiesSelectionComponent';
+import { COMMERCIAL_FACILITIES } from '../constants/data';
 
 const TYPES = [
   {
@@ -43,7 +44,7 @@ const TYPES = [
 ]
 
 
-const COMMERCIAL_DATA = [
+const ASDASD = [
   {
     id: 1,
     name: 'غرفة خادمة',
@@ -120,7 +121,7 @@ const COMMERCIAL_DATA = [
 export default function AddSectionScreen(props) {
   const { navigate, goBack } = props.navigation
 
-  const COMMERCIAL = COMMERCIAL_DATA
+  const COMMERCIAL = COMMERCIAL_FACILITIES
 
   const [types, setTypes] = useState(TYPES)
   const [location, setLocation] = useState(null)
@@ -147,6 +148,7 @@ export default function AddSectionScreen(props) {
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
   const [selectedFac, setSeelectedFac] = useState(null)
+  const [finalFac, setFinalFac] = useState(null)
   const [facilities, setFacilities] = useState(COMMERCIAL)
 
   const categories = useStoreState(state => state.auth.categories)
@@ -173,9 +175,13 @@ export default function AddSectionScreen(props) {
       items.forEach(i => {
         i.facility_id = i.id
         delete i.id
+        delete i.name
+        delete i.image
       })
     }
   }, [selectedFac])
+
+
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
   const [payload, setPayload] = useState(null)

@@ -26,7 +26,7 @@ import { UPDATE_USER, onError } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 import { ReactNativeFile } from 'apollo-upload-client'
 import ActionComponent from '../components/ActionComponent';
@@ -43,6 +43,7 @@ export default function EditProfileScreen(props) {
   const cities = useStoreState(state => state.auth.cities)
   const genderchoices = useStoreState(state => state.auth.genders)
   const userData = useStoreState(state => state.auth.user)
+  const storeUser = useStoreActions(actions => actions.auth.setUser)
   // const [cities, setCities] = useState(null)
   // const [genderchoices, setGenderChoices] = useState(null)
   const [name, setName] = useState(null)
@@ -55,6 +56,7 @@ export default function EditProfileScreen(props) {
   const [message, setMessage] = useState(false)
   const [updateUser, { data, loading, error }] = useMutation(UPDATE_USER, {
     onCompleted: e => {
+      console.log(data, error)
       setMessage(true)
     }
   })
@@ -112,7 +114,7 @@ export default function EditProfileScreen(props) {
         "input": {
           "avatar": imageFile,
           "name": name,
-          "email": email,
+          // "email": email,
           "phone": phone,
           "city_id": location.id,
           "gender_id": gender.id,
@@ -124,6 +126,13 @@ export default function EditProfileScreen(props) {
       onError(e)
     })
   }
+
+  useEffect(() => {
+    console.log('@LISTENER', data, error)
+    if (data) {
+      storeUser(data.updateUser)
+    }
+  }, [data, error])
 
   useEffect(() => {
     getPermissionAsync()
@@ -172,7 +181,7 @@ export default function EditProfileScreen(props) {
           </View>
           <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           <Input onChangeText={setConfirmPass} placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
-          {!loading ? <Button onPress={() => _onUpdateUser()} style={{ width: '80%', alignSelf: 'center', marginTop: 12 }} text={`حفظ`} /> : <ActivityIndicator size={'large'} color={Colors.primaryBlue}/>}
+          {!loading ? <Button onPress={() => _onUpdateUser()} style={{ width: '80%', alignSelf: 'center', marginTop: 12 }} text={`حفظ`} /> : <ActivityIndicator size={'large'} color={Colors.primaryBlue} />}
         </KeyboardAvoidingView>
       </ScrollView>
       <ActionComponent success={true} isVisible={message} onClose={() => setMessage(false)} />
