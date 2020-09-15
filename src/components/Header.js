@@ -24,6 +24,7 @@ export default function Header(props) {
     leftButton,
     style,
     section,
+    name,
     openDrawer,
     MapHeader,
   } = props
@@ -35,6 +36,7 @@ export default function Header(props) {
         {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
           <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
         </TouchableOpacity>}
+        <Text style={{ textAlign: 'center', alignSelf: 'center', marginTop: 12 }}>{name || ''}</Text>
       </SafeAreaView>
     )
   }

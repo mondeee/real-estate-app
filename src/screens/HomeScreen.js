@@ -85,7 +85,7 @@ export default function HomeScreen(props) {
   }, [])
 
   useEffect(() => {
-    // console.log('@userdata', userdata, userError)
+    console.log('@userdata', userdata, userError)
     if (userdata && userdata.me) {
       storeUser(userdata.me)
       if (!userdata.me.is_verified) {
@@ -105,6 +105,7 @@ export default function HomeScreen(props) {
 
   const deleteToken = async () => {
     await AsyncStorage.removeItem('token')
+    storeUser(null)
   }
 
   useEffect(() => {

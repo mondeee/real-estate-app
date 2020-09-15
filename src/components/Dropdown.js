@@ -46,7 +46,7 @@ export default function Dropdown(props) {
   const [pass, setPass] = useState(password)
   const [value, setValue] = useState(props.value ? props.value : '')
   useEffect(() => {
-    setValue(data[0])
+    if (!value) setValue(placeholder)
   }, [data])
 
   return (

@@ -43,11 +43,11 @@ export default function LoginScreen(props) {
 
 
   useEffect(() => {
-    console.log('@DATA', data)
+    console.log('@DATA', data, error)
     if (data) {
       saveToken()
     }
-  }, [data])
+  }, [data, error])
 
   const saveToken = async () => {
     const save = await AsyncStorage.setItem('token', data.loginViaPhone.token)

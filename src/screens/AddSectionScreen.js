@@ -378,6 +378,12 @@ export default function AddSectionScreen(props) {
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
+            value={item.value.toString()}
+            onChangeText={e => {
+              var facis = selectedFac
+              facis[index].value = e
+              setSeelectedFac(facis)
+            }}
             keyboardType={'numeric'}
             style={{ borderColor: 'gray', borderBottomWidth: 1, width: 17, marginRight: 4, fontSize: 12, }}
           />

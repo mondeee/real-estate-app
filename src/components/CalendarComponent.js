@@ -21,11 +21,14 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import Input from './Input';
 import moment from 'moment';
+import Button from './Button'
+
+import DateRangePicker from './DateRangePicker'
 
 
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Toast } from 'native-base';
-
+const XDate = require('xdate');
 
 const WEEK_DAYS = [
   {
@@ -84,21 +87,14 @@ export default function CalendarComponent(props) {
   } = props
 
   const [showCalendar, setShowCalendar] = useState(calendar)
-  const [toDate, setToDate] = useState('2020-05-20')
-  const [fromDate, setFromDate] = useState('2020-05-20')
+  const [toDate, setToDate] = useState(null)
+  const [fromDate, setFromDate] = useState(null)
   const [addedPrice, setAddedPrice] = useState(0)
   const [fdate, setfDate] = useState(false)
   const [weekdaysData, setWeekDaysData] = useState(WEEK_DAYS)
   const [weekendData, setWeekendData] = useState(WEEK_ENDS)
   const [sPrices, setsPrices] = useState(seasonal)
-  const [marked, setMarked] = useState(
-    {
-      '2020-06-20': { textColor: Colors.primaryBlue },
-      '2020-06-22': { startingDay: true, color: Colors.primaryBlue, textColor: 'white' },
-      '2020-06-23': { selected: true, startingDay: true, endingDay: true, color: Colors.primaryBlue, textColor: 'white' },
-      '2020-06-04': { disabled: true, startingDay: true, color: Colors.primaryBlue, endingDay: true }
-    }
-  )
+  const [marked, setMarked] = useState({})
 
   useEffect(() => {
     if (!isVisible && !calendar) setShowCalendar(false)
@@ -114,13 +110,40 @@ export default function CalendarComponent(props) {
 
   useEffect(() => {
     setfDate(false)
+    console.log(fromDate, toDate)
     if (toDate && fromDate) {
-      const item = {}
-      item[toDate] = { selected: true, color: Colors.primaryBlue, startingDay: true, endingDay: true, textColor: 'white' }
-      item[fromDate] = { selected: true, color: Colors.primaryBlue, startingDay: true, endingDay: true, textColor: 'white' }
-      setMarked(item)
+      // const item = {}
+      // item[toDate] = { selected: true, color: Colors.primaryBlue, textColor: 'white' }
+      // item[fromDate] = { selected: true, color: Colors.primaryBlue, textColor: 'white' }
+      // setMarked(item)
+      setupMarkedDates(fromDate, toDate)
     }
   }, [toDate, fromDate])
+
+  const setupMarkedDates = (fromDate, toDate) => {
+    let markedDates = {
+      [fromDate]: { startingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+    }
+    let mFromDate = new XDate(fromDate)
+    let mToDate = new XDate(toDate)
+    let range = mFromDate.diffDays(mToDate)
+    if (range >= 0) {
+      if (range == 0) {
+        markedDates = { [toDate]: { startingDay: true, color: Colors.primaryYellow, textColor: 'white' } }
+      } else {
+        for (var i = 1; i <= range; i++) {
+          let tempDate = mFromDate.addDays(1).toString('yyyy-MM-dd')
+          if (i < range) {
+            markedDates[tempDate] = { color: Colors.primaryYellow, textColor: 'white' }
+          } else {
+            markedDates[tempDate] = { endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+          }
+        }
+      }
+    }
+    setMarked(markedDates)
+    // return [markedDates, range]
+  }
 
   useEffect(() => {
     console.log('@SPRICES', sPrices)
@@ -268,9 +291,9 @@ export default function CalendarComponent(props) {
               console.log('selected day', moment(day.dateString).format("YYYY-MM-DD"))
               if (seasonal) {
                 if (fdate) {
-                  setFromDate(moment(day.dateString).format("YYYY-MM-DD"))
-                } else {
                   setToDate(moment(day.dateString).format("YYYY-MM-DD"))
+                } else {
+                  setFromDate(moment(day.dateString).format("YYYY-MM-DD"))
                 }
               }
               // setShowCalendar(false)
@@ -357,6 +380,96 @@ export default function CalendarComponent(props) {
       </Modal>
     )
   }
+
+  const renderDateRange = () => {
+    return (
+      <Modal isVisible={isVisible} style={{ alignItems: "flex-end" }}>
+        <View
+          style={{
+            width: "100%",
+            height: "80%",
+            alignSelf: "flex-end",
+            backgroundColor: "white",
+            borderRadius: 20,
+            padding: 25,
+            paddingHorizontal: 12,
+            paddingTop: 50,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => onClose()}
+            style={{
+              position: "absolute",
+              alignSelf: "flex-end",
+              right: 10,
+              top: 10,
+            }}
+          >
+            <MaterialIcons
+              size={30}
+              color={Colors.primaryBlue}
+              name={"chevron-right"}
+            />
+          </TouchableOpacity>
+          {/* <View style={{ flexDirection: "row" }}>
+            <Text style={{}}>{"CheckIn Date"}</Text>
+            <Text
+              style={{
+                ...Fonts.FontMed,
+                fontSize: 18,
+                color: Colors.primaryYellow,
+                marginHorizontal: 10,
+              }}
+            >
+              1,500ر.س/ لليلة
+            </Text>
+            <Text>{"CheckOut Date"}</Text>
+          </View> */}
+
+          <DateRangePicker
+            // initialRange={['2020-07-03', '2012-07-12']}
+            onSuccess={(s, e) => {
+              global.startday_reserv = s;
+              global.endday_reserv = e;
+              console.log(s + "||" + e);
+            }}
+            style={{ borderRadius: 15 }}
+            theme={{ markColor: Colors.primaryYellow, markTextColor: "white" }}
+          />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              borderBottomColor: Colors.gray,
+              borderBottomWidth: 1,
+            }}
+          ></View>
+          <Button
+            text={'asdasdasd'}
+            style={{
+              width: 145,
+              height: 40,
+              alignSelf: "flex-end",
+              marginTop: 30,
+              paddingTop: 3,
+            }}
+            textStyle={{ marginTop: -5, color: Colors.white }}
+            onPress={() => {
+              console.log("Reservation");
+              console.log(global.startday_reserv, global.endday_reserv);
+              if (
+                global.startday_reserv != null &&
+                global.endday_reserv != null
+              ) {
+                onClose();
+                // props.navigate("Booking");
+              }
+            }}
+          ></Button>
+        </View>
+      </Modal>
+    );
+  };
 
   if (showCalendar || calendar) return renderCalendar()
 

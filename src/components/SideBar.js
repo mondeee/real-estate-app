@@ -12,6 +12,7 @@ import Fonts from '../styles/Fonts';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Button from './Button';
 import { CONFIG } from '../services/config';
+import { useStoreState } from 'easy-peasy';
 
 const navList = [
   { label: 'تسجيل الدخول', key: 0, route: 'Register' },
@@ -26,6 +27,7 @@ const navList = [
 export default function SideBar(props) {
   // const { navigate } = props.navigation
   const [isLogin, setLogin] = useState(false)
+  const userData = useStoreState(state => state.auth.user)
   const fetchToken = async () => {
     const token = await AsyncStorage.getItem('token')
     if (token && token.length > 0) {
@@ -38,6 +40,12 @@ export default function SideBar(props) {
     await AsyncStorage.removeItem('token')
     setLogin(false)
   }
+
+  useEffect(() => {
+    if (!userData) {
+      setLogin(false)
+    }
+  }, [userData])
 
   useEffect(() => {
     fetchToken()

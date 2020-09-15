@@ -76,10 +76,10 @@ export default function MessagesScreen(props) {
         Object.keys(snapshot.val()).forEach(e => {
           var item = snapshot.val()[e]
           item.key = e
-          item.isOwner = true
+          item.isOwner = false
           if (item.participants.receiver.id == userData.id || item.participants.creator.id == userData.id) {
-            if (item.participants.creator.id != userData.id) {
-              item.isOwner = false
+            if (item.participants.creator.id == userData.id) {
+              item.isOwner = true
             }
             arrmsgs.push(item)
           }
@@ -130,11 +130,11 @@ export default function MessagesScreen(props) {
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View>
-              <Text style={{ ...Fonts.fontRegular, }}>{!item.isOwner ? item.participants.receiver.name : item.participants.creator.name}</Text>
+              <Text style={{ ...Fonts.fontRegular, }}>{!item.isOwner ? item.participants.creator.name : item.participants.receiver.name}</Text>
               <Text style={{ ...Fonts.fontLight, maxWidth: 150 }} numberOfLines={1}>{item.messages && item.messages.length > 0 ? item.messages[item.messages.length - 1].text : ` ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ `}</Text>
             </View>
             {/* <MaterialCommunityIcons style={{ paddingHorizontal: 8 }} color={Colors.primaryBlue} size={25} name={'bell-outline'} /> */}
-            {renderAvatar(!item.isOwner ? item.participants.receiver : item.participants.creator)}
+            {renderAvatar(!item.isOwner ? item.participants.creator : item.participants.receiver)}
           </View>
         </View>
       </TouchableOpacity>

@@ -22,40 +22,47 @@ import { useStoreState } from 'easy-peasy';
 import * as firebase from 'firebase';
 import { v4 as uuid } from 'uuid';
 import { IMAGE_URL } from '../services/api/url';
+import { useLazyQuery, useQuery } from '@apollo/react-hooks';
+import { VIEW_USER_DETAILS } from '../services/graphql/queries';
 
 
 export default function ChatScreen(props) {
   const { goBack, navigate, state: { params } } = props.navigation;
   const item = params.item
+  const username = item.isOwner ? item.participants.receiver.name : item.participants.creator.name
   const userData = useStoreState(state => state.auth.user)
   // const [receiver, setReceiver] = useState()
   const [messages, setMessages] = useState(item.messages && item.messages.length > 0 ? item.messages : [])
+  const { data, error } = useQuery(VIEW_USER_DETAILS, {
+    variables: {
+      id: item.isOwner ? item.participants.receiver.id : item.participants.creator.id
+    },
+  })
+
+  useEffect(() => {
+    if (data) {
+      console.log('@DATA', data)
+      delete data.viewUser.__typename
+      updateUser(data.viewUser)
+    }
+  }, [data, error])
 
   useEffect(() => {
     console.log('@after', item)
     if (item.messages && item.messages.length > 0) {
       setMessages(item.messages)
     }
-    // setMessages([
-    //   {
-    //     _id: 1,
-    //     text: 'You can now chat with each other.',
-    //     createdAt: new Date(),
-    //     system: true,
-    //     // Any additional custom parameters are passed through
-    //   },
-    //   {
-    //     _id: 1,
-    //     text: 'Hello User',
-    //     createdAt: new Date(),
-    //     user: {
-    //       _id: 2,
-    //       name: 'React Native',
-    //       avatar: 'https://placeimg.com/140/140/any',
-    //     },
-    //   },
-    // ])
   }, [])
+
+  const updateUser = user => {
+    const data = item.participants
+    if (item.isOwner) {
+      data.receiver = user
+    } else {
+      data.creator = user
+    }
+    pushToFirebase(`conversations/${item.key}/participants`, data)
+  }
 
   const createMessageObj = () => {
     return {
@@ -78,8 +85,9 @@ export default function ChatScreen(props) {
 
   const renderBubble = props => {
     // let username = props.currentMessage.user.name
-    const username = 'AAA'
+
     const color = Colors.primaryBlue
+    // if (props.currentMessage.user.name != username) {
     return (
       <Bubble
         {...props}
@@ -100,6 +108,32 @@ export default function ChatScreen(props) {
           }
         }}
       />
+    )
+    // }
+
+    return (
+      <View>
+        <Text>{username}</Text>
+        <Bubble
+          {...props}
+          textStyle={{
+            right: {
+              color: 'white',
+            },
+            left: {
+              color: color,
+            }
+          }}
+          wrapperStyle={{
+            left: {
+              backgroundColor: `#F1F0F0`,
+            },
+            right: {
+              backgroundColor: `${color}`
+            }
+          }}
+        />
+      </View>
     )
   }
 
@@ -145,8 +179,9 @@ export default function ChatScreen(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header onPressBack={() => { goBack() }} />
+      <Header name={username} onPressBack={() => { goBack() }} />
       <View style={styles.container}>
+        <Text></Text>
         <GiftedChat
           inverted={false}
           renderBubble={renderBubble}

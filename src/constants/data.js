@@ -53,7 +53,7 @@ export const PRIVATE_FACILITIES = [
     name: 'مؤثثة ',
     value: 0,
     type: 'boolean',
-    image: require('../../assets/room.png'),
+    // image: require('../../assets/room.png'),
   },
   {
     id: 5,
@@ -122,8 +122,8 @@ export const COMMERCIAL_FACILITIES = [
     id: 15,
     name: 'مؤثثة ',
     value: 0,
-    type: 'boolean',
-    image: '../../assets/garage.png',
+    // type: 'boolean',
+    // image: '../../assets/garage.png',
   },
   {
     id: 16,

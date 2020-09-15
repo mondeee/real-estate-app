@@ -37,8 +37,6 @@ import { IMAGE_URL } from '../services/api/url';
 export default function EditProfileScreen(props) {
   const { navigate, goBack } = props.navigation
 
-
-
   const [image, setImage] = useState(null)
   const cities = useStoreState(state => state.auth.cities)
   const genderchoices = useStoreState(state => state.auth.genders)
@@ -54,6 +52,7 @@ export default function EditProfileScreen(props) {
   const [password, setPassword] = useState(null)
   const [confirmPass, setConfirmPass] = useState(null)
   const [message, setMessage] = useState(false)
+  const [fetching, setFetching] = useState(true)
   const [updateUser, { data, loading, error }] = useMutation(UPDATE_USER, {
     onCompleted: e => {
       console.log(data, error)
@@ -137,15 +136,35 @@ export default function EditProfileScreen(props) {
   useEffect(() => {
     getPermissionAsync()
     if (userData) {
-      console.log('@userdaa', userData)
+      console.log('@userdaa', userData, genderchoices)
+      const sgender = genderchoices.filter(i => userData.gender.id === i.id)
+      const scity = cities.filter(i => userData.city.id === i.id)
       setName(userData.name)
       setPhone(userData.phone)
       setEmail(userData.email)
-      setGender(userData.gender)
-      setLocation(userData.city)
+      setGender(sgender[0].label)
+      setLocation(scity[0].label)
       setImage(userData.avatar ? IMAGE_URL + userData.avatar : null)
+      setFetching(false)
+    } else {
+      setFetching(false)
     }
   }, [])
+
+  useEffect(() => {
+    console.log('@SGENDER', gender)
+  }, [gender])
+
+  if (fetching) {
+    return (
+      <View style={{ ...styles.container, flex: 1 }}>
+        <Header profile onPressBack={() => goBack()} />
+        <View style={{ flex: 1, marginTop: 40 }}>
+          <ActivityIndicator color={Colors.primaryBlue} />
+        </View>
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
