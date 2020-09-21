@@ -17,6 +17,7 @@ import BottomTabBar from '../components/BottomTabBar';
 import NotificationScreen from '../screens/NotificationScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import AddPropertyScreen from '../screens/AddPropertyScreen';
+import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
 import AddSectionScreen from '../screens/AddSectionScreen';
 import ChatScreen from '../screens/ChatScreen';
 
@@ -74,6 +75,7 @@ const HomeBottomBar = createAppContainer(
           };
         }
       },
+      // UpdateProperty: UpdatePropertyScreen,
       Favorites: NotificationScreen,
       Profile: ProfileStack,
     },

@@ -24,6 +24,7 @@ import { IMAGE_URL } from '../services/api/url';
 import Button from '../components/Button';
 import * as firebase from 'firebase';
 import { useStoreState } from 'easy-peasy';
+import { Toast } from 'native-base';
 
 const FEATURES = [
   {
@@ -47,12 +48,20 @@ export default function MyPropertyDetailsScreen(props) {
   const [isFavorite, setFavorite] = useState(false)
   const [rating, setRating] = useState(item.review_average)
   const [loading, setLoading] = useState(false)
+  const [token, setToken] = useState(null)
   const userData = useStoreState(state => state.auth.user)
 
   useEffect(() => {
     console.log('@ITEM', props.navigation.state.params)
     setTotalPages(item.images)
+    // _fetchToken()
   }, [])
+
+  const _fetchToken = async () => {
+    // const ftoken = await AsyncStorage.getItem('token')
+    // setToken(ftoken)
+  }
+
 
   const renderIndicator = () => {
     return (
@@ -73,7 +82,7 @@ export default function MyPropertyDetailsScreen(props) {
             <FontAwesome size={18} color={isFavorite ? 'red' : 'white'} name={isFavorite ? 'heart' : 'heart-o'} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ alignSelf: 'center', marginBottom: 3 }} onPress={() => goBack()}>
+        <TouchableOpacity style={{ alignSelf: 'center', marginBottom: 3 }} onPress={() => navigate('Home')}>
           <MaterialIcons size={30} color={'white'} name={'chevron-right'} />
         </TouchableOpacity>
       </View>
@@ -137,11 +146,21 @@ export default function MyPropertyDetailsScreen(props) {
       <ScrollView style={{ flex: 1, }} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ justifyContent: "flex-end", }}>
           <View style={{ flexDirection: 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
-            <View style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
+            <TouchableOpacity onPress={() => {
+              if (!userData) {
+                Toast.show({
+                  text: 'User is not Logged In',
+                  type: 'danger'
+                })
+              } else {
+                // console.log(item)
+                navigate('UpdateProperty', { item })
+              }
+            }} style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
               <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ alignItems: 'flex-end', }}>
-              <View style={{ alignItems: 'center', justifyContent: '', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
+              <View style={{ alignItems: 'center', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
                 {renderStars()}
                 <Text style={{ ...Fonts.FontMed, fontSize: 23, flexWrap: 'wrap', paddingTop: 8 }}>{item.name}</Text>
               </View>

@@ -176,12 +176,17 @@ const PRIVATE_DATA = [
   }
 ]
 
-export default function AddPropertyScreen(props) {
-  const { navigate, goBack } = props.navigation
+export default function UpdatePropertyScreen(props) {
+  const { navigate, goBack, state: { params } } = props.navigation
+  const item = params.item
   const COMMERCAL = COMMERCIAL_DATA
   const PRIVATE = PRIVATE_DATA
+
   const [types, setTypes] = useState(TYPES)
-  const [location, setLocation] = useState(null)
+  const [location, setLocation] = useState({
+    latitude: item.latitude,
+    longitude: item.longitude
+  })
   const [selectedType, setType] = useState(null)
   const [city, setCity] = useState(null)
   const [showMap, setMap] = useState(false)
@@ -193,7 +198,13 @@ export default function AddPropertyScreen(props) {
   const [showLicense, setShowLicense] = useState(false)
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
-  const [payload, setPayload] = useState({})
+  const [payload, setPayload] = useState({
+    name: item.name || '',
+    description: item.description || '',
+    district: item.district || '',
+    contact_no: item.contact_no || '',
+    contact_name: item.contact_name || ''
+  })
 
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
@@ -214,26 +225,54 @@ export default function AddPropertyScreen(props) {
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
+  const [load, setLoaded] = useState(false)
 
 
   useEffect(() => {
     // _requestPermission()
+    // console.log('@ITEM', item.facilities)
+    setData()
   }, [])
 
+  const setData = () => {
+    const items = [...categories]
+    items.forEach(i => {
+      i.selected = false
+      if (i.id == String(item.category.id)) {
+        i.selected = true
+      }
+    })
+    // items[0].selected = true
+
+    setTypes(items)
+  }
+
+  const loadFaci = () => {
+    const items = [...facilities]
+    items.forEach(i => {
+      item.facilities.forEach(q => {
+        if (q.facility.id == i.id) {
+          i.value = 1
+        }
+      })
+    })
+    // console.log('@ITEMS', items)
+    const fitems = items.filter(i => i.value == 1)
+    setSeelectedFac(fitems)
+    setFacilities(items)
+  }
+
   useEffect(() => {
-    console.log('@SEASONAL', seasonalPrice)
+    // console.log('@SEASONAL', seasonalPrice)
   }, [seasonalPrice])
 
   useEffect(() => {
+    console.log('@SELECTED', selectedFac)
     if (selectedFac) {
       const items = JSON.parse(JSON.stringify(selectedFac))
       items.forEach(i => {
-        i.facility_id = i.id
         delete i.name
         delete i.image
-        delete i.type
-        // if (i.facility_id)
-        delete i.id
       })
       setFinalFac(items)
     }
@@ -432,7 +471,7 @@ export default function AddPropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    data.facilities = finalFac
+    data.facilities = selectedFac
     data.category_id = 2
     data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
@@ -455,11 +494,10 @@ export default function AddPropertyScreen(props) {
         "input": data
       }
     }
-    console.log('@PRIVATE', fpayload)
-    // return
-    addPrivateProperty(fpayload).catch(e => {
-      onError(e)
-    })
+    console.log(selectedFac, finalFac)
+    // addPrivateProperty(fpayload).catch(e => {
+    //   onError(e)
+    // })
   }
 
   const onCreateCommercial = () => {
@@ -473,7 +511,7 @@ export default function AddPropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    // data.facilities = selectedFac
+    data.facilities = selectedFac
     data.category_id = 1
     data.proof_of_commercial_license = registration[0]
     data.proof_of_operation_license = license[0]
@@ -488,35 +526,30 @@ export default function AddPropertyScreen(props) {
     }
     console.log('@payload', fpayload)
     // return
-    addCommercialPropety(fpayload).catch(e => {
-      onError(e)
-    })
+    // addCommercialPropety(fpayload).catch(e => {
+    //   onError(e)
+    // })
   }
 
   useEffect(() => {
-    const items = [...categories]
-    items.forEach(i => i.selected = false)
-    items[0].selected = true
-    setTypes(items)
-  }, [categories])
-
-
-  useEffect(() => {
-    facilities.forEach(i => {
-      i.value = 0
-    })
-    if (types[0].selected) {
-      setFacilities(COMMERCAL)
-      setPayload(item)
-    } else {
-      setFacilities(PRIVATE)
-      setPayload(item)
+    if (!!types || types.length > 0) {
+      facilities.forEach(i => {
+        i.value = 0
+      })
+      if (types[0].selected) {
+        setFacilities(COMMERCAL)
+        setPayload(item)
+      } else {
+        setFacilities(PRIVATE)
+        setPayload(item)
+      }
+      setSeelectedFac([])
+      loadFaci()
+      const item = types.filter(i => i.selected)
+      const p = { ...payload }
+      p.category_id = item[0].id
+      setPayload(p)
     }
-    setSeelectedFac([])
-    const item = types.filter(i => i.selected)
-    const p = { ...payload }
-    p.category_id = item[0].id.toString()
-    setPayload(p)
   }, [types])
 
 
@@ -548,11 +581,12 @@ export default function AddPropertyScreen(props) {
         const p = { ...payload }
         cTypes.forEach(i => i.selected = false)
         cTypes[index].selected = true
+        // console.log(payload, cTypes)
         // p.type_id = cTypes[index].id
         // setPayload(p)
-        setTypes(cTypes)
+        // setTypes(cTypes)
       }} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
-        <Text>{item.label}</Text>
+        <Text>{item.label || item.name}</Text>
         <View style={styles.selectionCircle}>
           {item.selected && <View style={styles.selectedCircle} />}
         </View>
@@ -563,7 +597,7 @@ export default function AddPropertyScreen(props) {
   const renderFaci = (item, index) => {
     if (item.type == 'boolean') {
       return (
-        <View key={index} style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
@@ -575,7 +609,7 @@ export default function AddPropertyScreen(props) {
     }
 
     return (
-      <View key={index} style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
@@ -660,13 +694,13 @@ export default function AddPropertyScreen(props) {
           const i = { ...payload }
           i.description = e
           setPayload(i)
-        }} style={{ height: 120 }} multiline placeholder={'وصف'} />
-        {types[1].selected && <Input onChangeText={e => {
+        }} style={{ height: 120 }} multiline value={payload.description} placeholder={'وصف'} />
+        {/* {types[1].selected && <Input onChangeText={e => {
           const i = { ...payload }
           i.contact_name = e
           setPayload(i)
-        }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />}
-        <Input onChangeText={e => {
+        }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />} */}
+        <Input value={payload.contact_no} onChangeText={e => {
           const i = { ...payload }
           i.contact_no = e
           setPayload(i)
@@ -691,11 +725,11 @@ export default function AddPropertyScreen(props) {
         {types[1].selected && <TouchableOpacity onPress={() => setShowAvailability(true)} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
           <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  اﻷﺳﻌﺎر العامة `}</Text>
         </TouchableOpacity>}
-        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد القسم`}</Text>
-        <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} />
+        {/* <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد القسم`}</Text>
+        <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} /> */}
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
-        {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
-        <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} />
+        {/* {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
+        <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
         <Input style={{ marginVertical: 12 }} value={photos} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
         {renderFooterButton()}
       </View >
@@ -704,26 +738,25 @@ export default function AddPropertyScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Header Add onPressBack={() => navigate('Home')} />
+      <Header Add onPressBack={() => goBack()} />
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
-          {/* {renderSelection()} */}
-          {types.map((i, index) => renderSelection(i, index))}
+          {!!types && types.map((i, index) => renderSelection(i, index))}
         </View>
-        <Dropdown onChangeText={e => {
+        {/* <Dropdown onChangeText={e => {
           const item = { ...payload }
           item.type_id = e.id
           setPayload(item)
-        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} />
+        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} /> */}
         <Input onChangeText={e => {
           const item = { ...payload }
           item.name = e
           setPayload(item)
-        }} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
+        }} value={payload.name} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
-          <Input onChangeText={e => {
+          <Input value={payload.district} onChangeText={e => {
             const item = { ...payload }
             item.district = e
             setPayload(item)
@@ -749,11 +782,11 @@ export default function AddPropertyScreen(props) {
       <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {
         setShowAvailability(false)
       }} isVisible={showAvailability} />
-      <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />
-      <ImageBrowser onClose={() => setShowLicense(false)} photos={license} setPhotos={setLicense} key={'Operating License'} isVisible={showLicense} />
+      {/* <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />
+      <ImageBrowser onClose={() => setShowLicense(false)} photos={license} setPhotos={setLicense} key={'Operating License'} isVisible={showLicense} /> */}
       <ImageBrowser photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
-      {isFaciVisible && <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} setFinal={setFinalFac} isVisible={isFaciVisible} />}
+      {isFaciVisible && <FacilitiesSelectionComponent update onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} setFinal={setFinalFac} isVisible={isFaciVisible} />}
     </View>
   );
 }

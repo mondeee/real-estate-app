@@ -106,7 +106,34 @@ export default function CalendarComponent(props) {
     if (seasonal) {
       setsPrices(seasonal)
     }
+
   }, [])
+
+  useEffect(() => {
+    console.log('@TRIGGER')
+    const weekend = [...weekendData]
+    const weekdays = [...weekdaysData]
+    if (general && props.data) {
+      Object.keys(props.data).forEach(e => {
+        // console.log('@LISTENER', e, props.data[e])
+        weekend.forEach(wk => {
+          if (wk.en == e) {
+            wk.value == props.data[e]
+          }
+        })
+
+        weekdaysData.forEach(wk => {
+          if (wk.en == e) {
+            console.log(wk.en, e)
+            wk.value == props.data[e]
+          }
+        })
+      })
+
+      setWeekDaysData(weekdays)
+      setWeekendData(weekendData)
+    }
+  }, [general, props.data])
 
   useEffect(() => {
     setfDate(false)
@@ -167,6 +194,8 @@ export default function CalendarComponent(props) {
       data[index].value = value
       setWeekendData(data)
     }
+
+    // console.log('onChange', weekdaysData, weekendData)
   }
 
   const onFinalizeData = () => {
@@ -202,10 +231,22 @@ export default function CalendarComponent(props) {
 
 
   const renderInput = (item, index, type) => {
+    // if (props.data) {
+    //   let value = props.data[item.en]
+    //   return (
+    //     <View key={index} style={{ alignSelf: 'flex-end', width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
+    //       <View />
+    //       <TextInput value={value} onChangeText={(e) => _onChangeInput(e, index, type)} style={{ height: 33, width: 103, borderRadius: 25, borderWidth: 1, padding: 8, textAlign: 'right', borderColor: Colors.gray }} placeholder={`ر.س`} />
+    //       <Text style={{ ...Fonts.fontLight, width: 50 }}>{item.label || 'text'}</Text>
+    //       <View />
+    //     </View>
+    //   )
+    // }
+
     return (
       <View key={index} style={{ alignSelf: 'flex-end', width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
         <View />
-        <TextInput onChangeText={(e) => _onChangeInput(e, index, type)} style={{ height: 33, width: 103, borderRadius: 25, borderWidth: 1, padding: 8, textAlign: 'right', borderColor: Colors.gray }} placeholder={`ر.س`} />
+        <TextInput value={item.value} onChangeText={(e) => _onChangeInput(e, index, type)} style={{ height: 33, width: 103, borderRadius: 25, borderWidth: 1, padding: 8, textAlign: 'right', borderColor: Colors.gray }} placeholder={`ر.س`} />
         <Text style={{ ...Fonts.fontLight, width: 50 }}>{item.label || 'text'}</Text>
         <View />
       </View>
@@ -234,7 +275,14 @@ export default function CalendarComponent(props) {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
         <TouchableOpacity onPress={() => {
+          // if (fdate) {
           setShowCalendar(true)
+          // } else {
+          //   Toast.show({
+          //     type: 'danger',
+          //     text: 'Add From Date First'
+          //   })
+          // }
         }
         }>
           <Text style={{ ...Fonts.fontRegular, textAlign: 'center', }}>{`إلى`}</Text>
@@ -368,6 +416,8 @@ export default function CalendarComponent(props) {
                 items.push(sitem)
                 console.log('@SESONAL', items)
                 setsPrices(items)
+                setFromDate(null)
+                setToDate(null)
               }} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`Add`}</Text>
               </TouchableOpacity >

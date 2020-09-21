@@ -22,14 +22,16 @@ import gql from 'graphql-tag';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
 import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import { Toast } from 'native-base';
 
 
 export default function HomeScreen(props) {
   const { navigate, goBack } = props.navigation
   const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(false)
+  const storedUserState = useStoreState(state => state.auth.user)
   const storeCity = useStoreActions(actions => actions.auth.setCities)
   const storeGender = useStoreActions(actions => actions.auth.setGenders)
   const storeUser = useStoreActions(actions => actions.auth.setUser)
@@ -45,23 +47,39 @@ export default function HomeScreen(props) {
   const [page, setpage] = useState(1)
 
 
-  const { loading: properyloading, error: properyError, data: propertiesdata, refetch } = useQuery(GET_ALL_PROPERTIES, {
+  const [fetchProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES, {
     variables: {
       page: page,
       first: 30,
-      orderBy: [{
-        field: "id",
-        order: "DESC"
-      }]
+      userId: userdata ? userdata.me.id : null
     }
-  })
+  }
+  )
   // const [fetchAllProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
-    console.log('properties', propertiesdata, properyError, properyloading)
-    if (propertiesdata) {
-      setItems(propertiesdata.allProperties.data)
+    if (!storedUserState) {
+      // Toast.show({
+      //   text: 'User is not Logged In, Unable to fetch Properties',
+      //   type: 'danger'
+      // })
+      // setItems(null)
     }
+  }, [storedUserState])
+
+  useEffect(() => {
+    console.log('properties', propertiesdata)
+    if (propertiesdata) {
+      setItems(propertiesdata.allProperties.data.reverse())
+    }
+    setLoading(false)
+
+    // if (properyError) {
+    //   Toast.show({
+    //     text: 'User is not Logged In, Unable to fetch Properties',
+    //     type: 'danger'
+    //   })
+    // }
   }, [propertiesdata, properyError, properyloading])
 
   if (loading || genderLoading) console.log('LOADING')
@@ -73,8 +91,9 @@ export default function HomeScreen(props) {
     const navFocusListener = navigation.addListener('didFocus', () => {
       // API_CALL();
       // fetchAllProperties()
-      if (propertiesdata) {
-        refetch()
+      if (storedUserState) {
+        // refetch()
+        // fetchProperties()
       }
       console.log('hooooks');
     });
@@ -92,6 +111,7 @@ export default function HomeScreen(props) {
         navigate('Register', { varify_user: true, phone: userdata.me.phone })
         return
       }
+      fetchProperties()
     }
 
     if (userError) {
@@ -201,7 +221,8 @@ export default function HomeScreen(props) {
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
-            <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
+            <View/>
+            {/* <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text> */}
             <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
           </View>
         </View>
@@ -246,6 +267,10 @@ export default function HomeScreen(props) {
       <RefreshControl
         refreshing={loading}
         onRefresh={() => {
+          if (storedUserState) {
+            // fetchProperties()
+            refetch()
+          }
         }}
         tintColor={Colors.primarBlue}
       />
@@ -255,7 +280,7 @@ export default function HomeScreen(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => {
-        setItems(propertiesdata.allProperties.data)
+        setItems(propertiesdata.allProperties.data.reverse())
         setSelected(false)
       }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={selected} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>

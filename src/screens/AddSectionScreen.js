@@ -435,7 +435,7 @@ export default function AddSectionScreen(props) {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input onChangeText={e => {
+        <Input multiline={true} onChangeText={e => {
           const item = { ...payload }
           item.description = e
           setPayload(item)
@@ -508,7 +508,7 @@ export default function AddSectionScreen(props) {
       {showCalendar && <CalendarComponent seasonal={seasonalPrice} setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
         setShowCalendar(false)
       }} isVisible={showCalendar} />}
-      <CalendarComponent setPrice={setGeneralPrice} general={true} onClose={() => {
+      <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={true} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />
       <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {

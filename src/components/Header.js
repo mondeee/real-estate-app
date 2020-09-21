@@ -58,12 +58,12 @@ export default function Header(props) {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer, justifyContent: "space-between", paddingVertical: 20, ...style }}>
         <Image style={{ height: 59, width: 41, alignSelf: 'center', marginTop: 8 }} source={require(`../../assets/headericon.png`)} />
-        <View style={{ flexDirection: 'row', width: '90%', margin: 12, marginBottom: 8, padding: 6, borderRadius: 30, backgroundColor: "#F7F7F7", alignSelf: 'center' }}>
+        {/* <View style={{ flexDirection: 'row', width: '90%', margin: 12, marginBottom: 8, padding: 6, borderRadius: 30, backgroundColor: "#F7F7F7", alignSelf: 'center' }}>
           <TextInput style={{ flex: 1, textAlign: 'right', paddingLeft: 12, }} placeholder={'Search'} />
           <TouchableOpacity style={{ paddingLeft: 12, }}>
             <MaterialIcons size={30} color={Colors.gray} name={'search'} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <TouchableOpacity onPress={() => openDrawer()} style={styles.backButton}>
           <Image style={{ height: 36, width: 49, alignSelf: 'center', }} source={require(`../../assets/options.png`)} />
         </TouchableOpacity>

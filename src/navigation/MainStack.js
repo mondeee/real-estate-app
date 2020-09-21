@@ -22,18 +22,33 @@ import AddSectionScreen from '../screens/AddSectionScreen';
 import SectionListScreen from '../screens/SectionListScreen';
 import ChatScreen from '../screens/ChatScreen';
 import SectionDetailsScreen from '../screens/SectionDetailsScreen';
+import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
+
+
+const PropertyStack = createStackNavigator(
+  {
+    PropertyDetails: MyPropertyDetailsScreen,
+    SectionDetails: SectionDetailsScreen,
+    SectionList: SectionListScreen,
+    UpdateProperty: UpdatePropertyScreen
+  },
+  {
+    headerMode: 'none',
+  }
+)
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {
       HomeBottomBar,
       Contact: ContactScreen,
-      PropertyDetails: MyPropertyDetailsScreen,
-      SectionDetails: SectionDetailsScreen,
-      SectionList: SectionListScreen,
+      Property: PropertyStack,
+      // SectionDetails: SectionDetailsScreen,
+      // SectionList: SectionListScreen,
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,
       Subs: SubscriptionScreen,
+      // UpdateProperty: UpdatePropertyScreen
       // EditProfile: EditProfileScreen,
       // Auth: AuthStack,
     },

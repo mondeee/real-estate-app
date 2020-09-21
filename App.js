@@ -9,7 +9,7 @@ import {
   View,
   Platform
 } from 'react-native';
-import { AppLoading } from "expo";
+import { AppLoading, Updates } from "expo";
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Root } from 'native-base'
@@ -27,6 +27,8 @@ import { persistCache } from 'apollo-cache-persist';
 import { HttpLink } from 'apollo-link-http';
 import { createUploadLink } from 'apollo-upload-client'
 
+// I18nManager.forceRTL(false);
+// I18nManager.allowRTL(false);
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -52,15 +54,18 @@ export default function App() {
   });
 
   useEffect(() => {
-    init()
-    I18nManager.allowRTL(false)
-    I18nManager.forceRTL(false)
-    // StatusBar.setHidden(Platform.OS !== 'ios')
+    const isRTLAndroid = Platform.OS === 'android' && I18nManager.isRTL;
+    if (isRTLAndroid) {
+      I18nManager.allowRTL(false)
+      I18nManager.forceRTL(false)
+      Updates.reload()
+    }
     if (Platform.OS !== 'ios') {
       StatusBar.setTranslucent(true)
       StatusBar.setBackgroundColor('black')
       StatusBar.setBarStyle('dark-content')
     }
+    init()
   }, [])
 
   _loadResourcesAsync = async () => {

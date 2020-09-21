@@ -30,13 +30,14 @@ export default function FacilitiesSelectionComponent(props) {
     data,
     onClose,
     isVisible,
+    update
   } = props
 
   const [selection, setSelection] = useState(data || [])
   const [isSubmitted, setSubmittted] = useState(false)
 
   useEffect(() => {
-    if (!isVisible && !isSubmitted) {
+    if (!isVisible && !isSubmitted && !update) {
       const items = [...selection]
       items.forEach(i => i.value = 0)
       setSelection(items)

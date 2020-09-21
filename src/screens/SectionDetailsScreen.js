@@ -115,7 +115,7 @@ export default function SectionDetailsScreen(props) {
               <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
             </View>
             <View style={{ alignItems: 'flex-end', }}>
-              <View style={{ alignItems: 'center', justifyContent: '', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
+              <View style={{ alignItems: 'center', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
                 {renderStars()}
                 <Text style={{ ...Fonts.FontMed, fontSize: 23, flexWrap: 'wrap', paddingTop: 8 }}>{item.name}</Text>
               </View>
