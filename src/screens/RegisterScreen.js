@@ -261,7 +261,7 @@ export default function RegisterScreen(props) {
       setVerify(false)
       return
     }
-    navigate('Home')
+    navigate('Home', { refresh: false })
   }
 
   return (

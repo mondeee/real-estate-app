@@ -106,11 +106,10 @@ export default function CalendarComponent(props) {
     if (seasonal) {
       setsPrices(seasonal)
     }
-
+    console.log('@DATA', props.data)
   }, [])
 
   useEffect(() => {
-    console.log('@TRIGGER')
     const weekend = [...weekendData]
     const weekdays = [...weekdaysData]
     if (general && props.data) {
@@ -118,20 +117,22 @@ export default function CalendarComponent(props) {
         // console.log('@LISTENER', e, props.data[e])
         weekend.forEach(wk => {
           if (wk.en == e) {
-            wk.value == props.data[e]
+            console.log('weekendloop', wk, e)
+            wk.value = String(props.data[e])
           }
         })
 
-        weekdaysData.forEach(wk => {
+        weekdays.forEach(wk => {
           if (wk.en == e) {
             console.log(wk.en, e)
-            wk.value == props.data[e]
+            wk.value = String(props.data[e])
           }
         })
       })
 
       setWeekDaysData(weekdays)
-      setWeekendData(weekendData)
+      setWeekendData(weekend)
+      console.log(weekdays, weekend)
     }
   }, [general, props.data])
 

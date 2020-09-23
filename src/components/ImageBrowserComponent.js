@@ -38,6 +38,7 @@ export default function ImageBrowser(props) {
     onPress,
     child,
     text,
+    update,
     onClose,
     multiple,
     isVisible,

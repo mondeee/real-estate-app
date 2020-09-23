@@ -232,7 +232,6 @@ export default function AddPropertyScreen(props) {
         delete i.name
         delete i.image
         delete i.type
-        // if (i.facility_id)
         delete i.id
       })
       setFinalFac(items)
@@ -584,7 +583,7 @@ export default function AddPropertyScreen(props) {
             maxLength={2}
             value={item.value.toString()}
             onChangeText={e => {
-              var facis = selectedFac
+              var facis = [...selectedFac]
               facis[index].value = e
               setSeelectedFac(facis)
             }}

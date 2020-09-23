@@ -39,7 +39,7 @@ export default function BottomTabBar(props) {
   useEffect(() => {
     switch (selectedTab) {
       case 0:
-        navigate('Home')
+        navigate('Home', { refresh: false })
         break;
       case 1:
         navigate('Favorites')

@@ -24,11 +24,13 @@ import { SafeAreaView } from 'react-navigation';
 import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Toast } from 'native-base';
+import { ActivityIndicator } from 'react-native';
 
 
 export default function HomeScreen(props) {
-  const { navigate, goBack } = props.navigation
+  const { navigate, goBack, state: { params } } = props.navigation
   const [items, setItems] = useState([])
+  const [firstLoading, setFirstLoading] = useState(true)
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(false)
   const storedUserState = useStoreState(state => state.auth.user)
@@ -45,13 +47,16 @@ export default function HomeScreen(props) {
   const { data: privateTypes } = useQuery(GET_TYPE(2))
   const { data: dataCat } = useQuery(GET_CATEGORIES)
   const [page, setpage] = useState(1)
-
+  const [firstRun, setFirstRun] = useState(true)
 
   const [fetchProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES, {
     variables: {
       page: page,
       first: 30,
       userId: userdata ? userdata.me.id : null
+    },
+    onCompleted: e => {
+      setLoading(false)
     }
   }
   )
@@ -68,9 +73,17 @@ export default function HomeScreen(props) {
   }, [storedUserState])
 
   useEffect(() => {
-    console.log('properties', propertiesdata)
+    // console.log('properties', propertiesdata)
     if (propertiesdata) {
-      setItems(propertiesdata.allProperties.data.reverse())
+      setItems(propertiesdata.allProperties.data)
+    }
+
+    if (properyError) {
+      Toast.show({
+        text: 'User Token has Expired, Please Login again',
+        type: 'danger'
+      })
+      // navigate('Login')
     }
     setLoading(false)
 
@@ -80,6 +93,8 @@ export default function HomeScreen(props) {
     //     type: 'danger'
     //   })
     // }
+    setFirstLoading(false)
+    setFirstRun(false)
   }, [propertiesdata, properyError, properyloading])
 
   if (loading || genderLoading) console.log('LOADING')
@@ -89,18 +104,15 @@ export default function HomeScreen(props) {
     // fetchAllProperties()
     const { navigation } = props
     const navFocusListener = navigation.addListener('didFocus', () => {
-      // API_CALL();
-      // fetchAllProperties()
-      if (storedUserState) {
-        // refetch()
-        // fetchProperties()
+      if (storedUserState && !firstRun) {
+        setLoading(true)
+        refetch()
       }
-      console.log('hooooks');
     });
 
-    return () => {
-      navFocusListener.remove();
-    };
+    // return () => {
+    //   navFocusListener.remove();
+    // };
   }, [])
 
   useEffect(() => {
@@ -221,7 +233,7 @@ export default function HomeScreen(props) {
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
-            <View/>
+            <View />
             {/* <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text> */}
             <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
           </View>
@@ -280,11 +292,11 @@ export default function HomeScreen(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => {
-        setItems(propertiesdata.allProperties.data.reverse())
+        setItems(propertiesdata.allProperties.data)
         setSelected(false)
       }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={selected} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
-        {renderList()}
+        {firstLoading ? <ActivityIndicator size={'large'} color={Colors.primaryBlue} style={{ marginTop: '20%' }} /> : renderList()}
       </View>
     </SafeAreaView>
   );

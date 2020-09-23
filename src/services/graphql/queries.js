@@ -45,6 +45,7 @@ query($id:ID!){
       id
       name
       images {
+        id
         avatar
       }
       facilities {
@@ -79,6 +80,7 @@ query($first: Int!, $page: Int!, $userId: ID!){
         }
         description
         images {
+          id
           avatar
         }
         facilities {
@@ -102,11 +104,13 @@ query($first: Int!, $page: Int!, $userId: ID!){
           }
         }
         images {
+          id
           avatar
         }
       }
       description,
       city {
+        id,
         ar,
         en
       }
@@ -116,6 +120,7 @@ query($first: Int!, $page: Int!, $userId: ID!){
         ar,
       }
       images{
+        id
         avatar
       }
       category{
@@ -196,6 +201,7 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
           ar
         }
         images {
+          id
           avatar
         }
         facilities {
@@ -217,11 +223,13 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
           }
         }
         images {
+          id
           avatar
         }
       }
       description,
       city {
+        id,
         ar,
         en
       }
@@ -231,6 +239,7 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
         ar,
       }
       images{
+        id
         avatar
       }
       category{
@@ -439,6 +448,7 @@ export const REGISTER = gql(
   `
 )
 
+
 export const UPDATE_USER = gql(`
 mutation($input: UpdateUserInput!){
   updateUser(input:$input){
@@ -482,6 +492,7 @@ mutation($input: UpdateUserInput!){
       }
       description,
       city {
+        id,
         ar,
         en
       }
@@ -554,6 +565,15 @@ mutation($input: UpdateUserInput!){
 export const ADD_PRIVATE_PROPERY = gql(`
 mutation($input: AddPrivatePropertyInput!){
   addPrivatePropety(input:$input){
+    property_id
+    status
+  }
+}
+`)
+
+export const UPDAE_PRIVATE_PROPERTY = gql(`
+mutation($input: UpdatePrivatePropertyInput!){
+  updatePrivateProperty(input:$input){
     property_id
     status
   }

@@ -23,6 +23,7 @@ import SectionListScreen from '../screens/SectionListScreen';
 import ChatScreen from '../screens/ChatScreen';
 import SectionDetailsScreen from '../screens/SectionDetailsScreen';
 import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
+import UpdateSectionScreen from '../screens/UpdateSectionScreen';
 
 
 const PropertyStack = createStackNavigator(
@@ -30,7 +31,9 @@ const PropertyStack = createStackNavigator(
     PropertyDetails: MyPropertyDetailsScreen,
     SectionDetails: SectionDetailsScreen,
     SectionList: SectionListScreen,
-    UpdateProperty: UpdatePropertyScreen
+    UpdateProperty: UpdatePropertyScreen,
+    UpdateSection: UpdateSectionScreen,
+    UpdateAndAddSection: AddSectionScreen,
   },
   {
     headerMode: 'none',

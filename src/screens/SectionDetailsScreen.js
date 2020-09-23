@@ -111,9 +111,9 @@ export default function SectionDetailsScreen(props) {
       <ScrollView style={{ flex: 1, }} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ justifyContent: "flex-end", }}>
           <View style={{ flexDirection: 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
-            <View style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
+            <TouchableOpacity onPress={() => navigate('UpdateSection', { item })} style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
               <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ alignItems: 'flex-end', }}>
               <View style={{ alignItems: 'center', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
                 {renderStars()}

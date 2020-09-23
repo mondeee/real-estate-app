@@ -23,6 +23,7 @@ import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
 import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
 import { useStoreActions } from 'easy-peasy';
+import Button from '../components/Button';
 
 
 export default function SectionListScreen(props) {
@@ -171,6 +172,11 @@ export default function SectionListScreen(props) {
           newitem.city = params.item.city
           newitem.district = params.item.district
           console.log(newitem)
+          if (params.update) {
+            console.log(newitem)
+            navigate('UpdateSection', { item: newitem, })
+            return
+          }
           navigate('SectionDetails', { item: newitem, })
           return
         }}
@@ -237,6 +243,13 @@ export default function SectionListScreen(props) {
       }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={params.item} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
         {renderList()}
+        {params.update && <Button
+          text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`}
+          style={{ position: 'absolute', bottom: 50 }}
+          onPress={() => {
+            navigate('UpdateAndAddSection', { id: params.item.id })
+          }}
+        />}
       </View>
     </SafeAreaView>
   );

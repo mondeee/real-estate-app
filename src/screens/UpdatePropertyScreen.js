@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError } from '../services/graphql/queries'
+import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError, UPDAE_PRIVATE_PROPERTY } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -199,6 +199,9 @@ export default function UpdatePropertyScreen(props) {
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
   const [payload, setPayload] = useState({
+    property_id: item.id,
+    city_id: item.city.id,
+    type_id: item.type.id,
     name: item.name || '',
     description: item.description || '',
     district: item.district || '',
@@ -212,11 +215,11 @@ export default function UpdatePropertyScreen(props) {
   const [finalFac, setFinalFac] = useState(null)
   const [facilities, setFacilities] = useState(COMMERCAL)
   //
-  const [photos, setSelectedPhotos] = useState(false)
+  const [photos, setSelectedPhotos] = useState([])
 
   //CALENDARS
   const [general, setGeneral] = useState(true)
-  const [generalPrice, setGeneralPrice] = useState(null)
+  const [generalPrice, setGeneralPrice] = useState(item.general_price)
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)
@@ -230,7 +233,7 @@ export default function UpdatePropertyScreen(props) {
 
   useEffect(() => {
     // _requestPermission()
-    // console.log('@ITEM', item.facilities)
+    console.log('@ITEM', item.images)
     setData()
   }, [])
 
@@ -243,8 +246,22 @@ export default function UpdatePropertyScreen(props) {
       }
     })
     // items[0].selected = true
-
     setTypes(items)
+    const gprice = { ...generalPrice }
+    if (gprice.__typename) {
+      delete gprice.__typename
+      setGeneralPrice(gprice)
+    }
+    // const cits = [...cities]
+    // cits.forEach(i => {
+    //   i.selected = false
+    //   if (i.id == String(item.city.id)) {
+    //     i.selected(true)
+    //   }
+    // })
+
+    //IMAGE CONVERSION
+    // setSelectedPhotos(item.images)
   }
 
   const loadFaci = () => {
@@ -267,18 +284,21 @@ export default function UpdatePropertyScreen(props) {
   }, [seasonalPrice])
 
   useEffect(() => {
-    console.log('@SELECTED', selectedFac)
     if (selectedFac) {
       const items = JSON.parse(JSON.stringify(selectedFac))
       items.forEach(i => {
+        i.facility_id = i.id
         delete i.name
         delete i.image
+        delete i.type
+        delete i.id
       })
       setFinalFac(items)
     }
   }, [selectedFac])
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
+
   const _requestPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
     if (status === 'granted') {
@@ -295,13 +315,14 @@ export default function UpdatePropertyScreen(props) {
     }
   }
 
-  const [addPrivateProperty, { data, error, loading }] = useMutation(ADD_PRIVATE_PROPERY, {
+  const [updatePrivateProperty, { data, error, loading }] = useMutation(UPDAE_PRIVATE_PROPERTY, {
     onCompleted: e => {
-      console.log('@Complete ADD PRIVATE', e)
+      console.log('@Complete UPDATE PRIVATE', e)
       Toast.show({
-        text: 'تم اضافة النزل الخاص بنجاح',
+        text: 'property successfully updated',
         type: 'success'
       })
+      navigate('Home', { refresh: true })
     }
   })
   const [addCommercialPropety, { data: commercial_data, error: commercial_error, loading: commercial_loading }] = useMutation(ADD_COMMERCIAL_PROPERTY, {
@@ -370,16 +391,17 @@ export default function UpdatePropertyScreen(props) {
     //   return validate
     // }
 
-    if (!license) {
-      Toast.show({
-        text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!license) {
+    //   Toast.show({
+    //     text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     if (!generalPrice) {
+      console.log('Validate General Price')
       Toast.show({
         text: 'يرجى ادخال الأسعار العامة ',
         type: 'danger'
@@ -460,7 +482,7 @@ export default function UpdatePropertyScreen(props) {
     return true
   }
 
-  const onCreatePrivate = async () => {
+  const onUpdaePrivateProperty = async () => {
     // const imageFile = new ReactNativeFile({
     //   uri: image,
     //   type: 'image/png',
@@ -471,13 +493,13 @@ export default function UpdatePropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    data.facilities = selectedFac
-    data.category_id = 2
-    data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
+    data.facilities = finalFac,
+      data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
     data.general_price = generalPrice
+    delete data.general_price.__typename
     data.seasonal_prices = seasonalPrice
     data.availablities = [
       {
@@ -494,10 +516,10 @@ export default function UpdatePropertyScreen(props) {
         "input": data
       }
     }
-    console.log(selectedFac, finalFac)
-    // addPrivateProperty(fpayload).catch(e => {
-    //   onError(e)
-    // })
+    console.log('@FINALPAYLOAD', fpayload)
+    updatePrivateProperty(fpayload).catch(e => {
+      onError(e)
+    })
   }
 
   const onCreateCommercial = () => {
@@ -547,7 +569,7 @@ export default function UpdatePropertyScreen(props) {
       loadFaci()
       const item = types.filter(i => i.selected)
       const p = { ...payload }
-      p.category_id = item[0].id
+      // p.category_id = item[0].id
       setPayload(p)
     }
   }, [types])
@@ -597,7 +619,7 @@ export default function UpdatePropertyScreen(props) {
   const renderFaci = (item, index) => {
     if (item.type == 'boolean') {
       return (
-        <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
+        <View key={index} style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
@@ -609,7 +631,7 @@ export default function UpdatePropertyScreen(props) {
     }
 
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
+      <View key={index} style={{ alignItems: 'center', justifyContent: 'center', width: '25%' }}>
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
@@ -618,7 +640,7 @@ export default function UpdatePropertyScreen(props) {
             maxLength={2}
             value={item.value.toString()}
             onChangeText={e => {
-              var facis = selectedFac
+              var facis = [...selectedFac]
               facis[index].value = e
               setSeelectedFac(facis)
             }}
@@ -653,15 +675,16 @@ export default function UpdatePropertyScreen(props) {
       return (
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => {
-            if (commercial_data) {
-              // console.log(commercial_data.addCommercialPropety.property_id)
-              navigate('AddSection', { id: commercial_data.addCommercialPropety.property_id })
-            } else {
-              Toast.show({
-                text: 'يرجى حفظ معلومات النزل قبل اضافة الاقسام',
-                type: 'danger'
-              })
-            }
+            navigate('SectionList', { items: item.sections, item, update: true })
+            // if (commercial_data) {
+            //   // console.log(commercial_data.addCommercialPropety.property_id)
+            //   navigate('AddSection', { id: commercial_data.addCommercialPropety.property_id })
+            // } else {
+            //   Toast.show({
+            //     text: 'يرجى حفظ معلومات النزل قبل اضافة الاقسام',
+            //     type: 'danger'
+            //   })
+            // }
           }} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
           <View style={{ width: 30 }} />
           <Button onPress={() => {
@@ -680,7 +703,7 @@ export default function UpdatePropertyScreen(props) {
     return (
       <Button onPress={() => {
         if (validatePrivate()) {
-          onCreatePrivate()
+          onUpdaePrivateProperty()
         }
       }} style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} text={`إضافة`} />
     )
@@ -730,7 +753,7 @@ export default function UpdatePropertyScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {/* {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
         <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
-        <Input style={{ marginVertical: 12 }} value={photos} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
+        <Input style={{ marginVertical: 12 }} value={photos.concat(item.images)} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
         {renderFooterButton()}
       </View >
     )

@@ -51,7 +51,7 @@ export default function LoginScreen(props) {
 
   const saveToken = async () => {
     const save = await AsyncStorage.setItem('token', data.loginViaPhone.token)
-    navigate('Home')
+    navigate('Home', { refresh: false })
   }
 
   loginButton = () => {
