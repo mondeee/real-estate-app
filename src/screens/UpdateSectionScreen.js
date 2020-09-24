@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_SECTION_PROPERTY, onError } from '../services/graphql/queries'
+import { REGISTER, ADD_SECTION_PROPERTY, onError, UPDATE_SECTION_PROPERTY } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -135,11 +135,11 @@ export default function UpdateSectionScreen(props) {
   const [showLicense, setShowLicense] = useState(false)
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
-  const [photos, setSelectedPhotos] = useState(false)
+  const [photos, setSelectedPhotos] = useState([])
 
   //CALENDARS
   const [general, setGeneral] = useState(false)
-  const [generalPrice, setGeneralPrice] = useState(null)
+  const [generalPrice, setGeneralPrice] = useState(item.general_price)
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)
@@ -157,14 +157,14 @@ export default function UpdateSectionScreen(props) {
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
   const [payload, setPayload] = useState({
+    section_id: item.id || '',
     name: item.name || '',
-    description: item.description || '',
-    district: item.district || '',
+    description: item.description || ''
     // contact_no: item.contact_no || '',
     // contact_name: item.contact_name || ''
   })
 
-  const [addSectionProperty, { data, error, loading }] = useMutation(ADD_SECTION_PROPERTY, {
+  const [updateSectionProperty, { data, error, loading }] = useMutation(UPDATE_SECTION_PROPERTY, {
     onCompleted: e => {
       console.log('@onComplete', e)
       Toast.show({
@@ -321,7 +321,7 @@ export default function UpdateSectionScreen(props) {
     return true
   }
 
-  const onCreateSection = async () => {
+  const onUpdateSection = async () => {
     const { params } = props.navigation.state
     // const imageFile = new ReactNativeFile({
     //   uri: image,
@@ -355,8 +355,8 @@ export default function UpdateSectionScreen(props) {
       }
     }
     console.log('@finalPayload', fpayload)
-    return
-    addSectionProperty(fpayload).catch(e => {
+    // return
+    updateSectionProperty(fpayload).catch(e => {
       onError(e)
     })
   }
@@ -446,7 +446,7 @@ export default function UpdateSectionScreen(props) {
     return (
       <Button style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} onPress={() => {
         if (validateData()) {
-          onCreateSection()
+          onUpdateSection()
         }
       }} text={`إضافة`} />
     )
@@ -489,7 +489,7 @@ export default function UpdateSectionScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {/* {types[0].selected && <Input style={{ marginTop: 12 }} upload clickable={() => setShowImages(true)} placeholder={'السجل التجاري)اختياري('} />} */}
         {/* <Input style={{ marginTop: 12 }} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
-        <Input style={{ marginVertical: 12 }} upload clickable={() => setShowImages(true)} placeholder={`صور النزل`} />
+        <Input style={{ marginVertical: 12 }} value={photos.concat(item.images)} upload clickable={() => setShowImages(true)} placeholder={`صور النزل`} />
         {renderFooterButton()}
       </View >
     )
@@ -505,11 +505,11 @@ export default function UpdateSectionScreen(props) {
         {/* {renderSelection()} */}
         {/* {types.map((i, index) => renderSelection(i, index))} */}
         {/* </View> */}
-        <Dropdown onChangeText={e => {
+        {/* <Dropdown onChangeText={e => {
           const item = { ...payload }
           item.type_id = e.id
           setPayload(item)
-        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} />
+        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} /> */}
         <Input value={payload.name} onChangeText={e => {
           const item = { ...payload }
           item.name = e

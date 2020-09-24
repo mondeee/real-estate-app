@@ -332,6 +332,7 @@ export default function UpdatePropertyScreen(props) {
         text: 'تم اضافة النزل التجاري بنجاح',
         type: 'success'
       })
+      navigate('Home', { refresh: true })
     }
   })
 

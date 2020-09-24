@@ -181,7 +181,7 @@ export default function SectionListScreen(props) {
           console.log(newitem)
           if (params.update) {
             console.log(newitem)
-            navigate('UpdateSection', { item: newitem, })
+            navigate('UpdateSection', { item: newitem, refresh: () => refetch()  })
             return
           }
           navigate('SectionDetails', { item: newitem, })
@@ -253,7 +253,7 @@ export default function SectionListScreen(props) {
         {renderList()}
         {params.update && <Button
           text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`}
-          style={{ position: 'absolute', bottom: 50 }}
+          style={{ position: 'absolute', bottom: 100, height: 40 }}
           onPress={() => {
             navigate('UpdateAndAddSection', { id: params.item.id, refresh: () => refetch() })
           }}
