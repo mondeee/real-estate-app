@@ -29,6 +29,7 @@ import * as Permissions from "expo-permissions";
 import { Toast } from 'native-base';
 import FacilitiesSelectionComponent from '../components/FacilitiesSelectionComponent';
 import { COMMERCIAL_FACILITIES } from '../constants/data';
+import { ActivityIndicator } from 'react-native';
 
 const TYPES = [
   {
@@ -119,7 +120,7 @@ const ASDASD = [
 ]
 
 export default function UpdateSectionScreen(props) {
-  const { navigate, goBack, state: { params: { item } } } = props.navigation
+  const { navigate, goBack, state: { params: { item, refresh } } } = props.navigation
   const COMMERCIAL = COMMERCIAL_FACILITIES
   // console.log(item)
   const [types, setTypes] = useState(TYPES)
@@ -154,6 +155,7 @@ export default function UpdateSectionScreen(props) {
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
+  const [loading, setLoading] = useState(false)
 
   const [isMediaAllowed, setAllowMedia] = useState(false)
   const [payload, setPayload] = useState({
@@ -164,16 +166,24 @@ export default function UpdateSectionScreen(props) {
     // contact_name: item.contact_name || ''
   })
 
-  const [updateSectionProperty, { data, error, loading }] = useMutation(UPDATE_SECTION_PROPERTY, {
+  const [updateSectionProperty, { data, error }] = useMutation(UPDATE_SECTION_PROPERTY, {
     onCompleted: e => {
       console.log('@onComplete', e)
       Toast.show({
         text: 'تم اضافة القسم بنجاح',
         type: 'success'
       })
-      goBack()
+      refresh()
+      setTimeout(() => {
+        goBack()
+      }, 1500)
     }
   })
+
+  useEffect(() => {
+    if (data || error)
+      setLoading(false)
+  }, [data, error])
 
 
   useEffect(() => {
@@ -186,6 +196,7 @@ export default function UpdateSectionScreen(props) {
         delete i.name
         delete i.image
       })
+      setFinalFac(items)
     }
   }, [selectedFac])
 
@@ -323,6 +334,7 @@ export default function UpdateSectionScreen(props) {
 
   const onUpdateSection = async () => {
     const { params } = props.navigation.state
+    setLoading(true)
     // const imageFile = new ReactNativeFile({
     //   uri: image,
     //   type: 'image/png',
@@ -335,7 +347,7 @@ export default function UpdateSectionScreen(props) {
     const data = { ...payload }
     data.property_id = params.id
     data.type_id = 2
-    data.facilities = selectedFac
+    data.facilities = finalFac
     data.images = photos && photos.length > 0 ? photos : []
     data.general_price = generalPrice
     data.seasonal_prices = seasonalPrice
@@ -442,6 +454,11 @@ export default function UpdateSectionScreen(props) {
     //     </View>
     //   )
     // }
+    if (loading) {
+      return (
+        <ActivityIndicator color={Colors.primaryBlue} />
+      )
+    }
 
     return (
       <Button style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} onPress={() => {

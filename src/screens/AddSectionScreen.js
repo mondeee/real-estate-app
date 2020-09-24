@@ -181,6 +181,10 @@ export default function AddSectionScreen(props) {
     }
   })
 
+  useEffect(() => {
+    if (data || error)
+      setLoading(false)
+  }, [data, error])
 
   useEffect(() => {
     // _requestPermission()

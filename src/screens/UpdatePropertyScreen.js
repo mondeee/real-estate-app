@@ -494,8 +494,8 @@ export default function UpdatePropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    data.facilities = finalFac,
-      data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
+    data.facilities = finalFac
+    data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
