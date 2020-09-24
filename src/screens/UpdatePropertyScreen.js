@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError, UPDAE_PRIVATE_PROPERTY } from '../services/graphql/queries'
+import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError, UPDATE_PRIVATE_PROPERTY, UPDATE_COMMERCIAL_PROPERTY } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -315,7 +315,7 @@ export default function UpdatePropertyScreen(props) {
     }
   }
 
-  const [updatePrivateProperty, { data, error, loading }] = useMutation(UPDAE_PRIVATE_PROPERTY, {
+  const [updatePrivateProperty, { data, error, loading }] = useMutation(UPDATE_PRIVATE_PROPERTY, {
     onCompleted: e => {
       console.log('@Complete UPDATE PRIVATE', e)
       Toast.show({
@@ -325,7 +325,7 @@ export default function UpdatePropertyScreen(props) {
       navigate('Home', { refresh: true })
     }
   })
-  const [addCommercialPropety, { data: commercial_data, error: commercial_error, loading: commercial_loading }] = useMutation(ADD_COMMERCIAL_PROPERTY, {
+  const [updateCommercialProperty, { data: commercial_data, error: commercial_error, loading: commercial_loading }] = useMutation(UPDATE_COMMERCIAL_PROPERTY, {
     onCompleted: e => {
       console.log('@Complete ADD COMMERCIAL', commercial_data)
       Toast.show({
@@ -443,14 +443,14 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!registration) {
-      Toast.show({
-        text: 'يرجي رفع صورة رخصة التشيل',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!registration) {
+    //   Toast.show({
+    //     text: 'يرجي رفع صورة رخصة التشيل',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     // if (!facilities) {
     //   Toast.show({
@@ -461,14 +461,14 @@ export default function UpdatePropertyScreen(props) {
     //   return validate
     // }
 
-    if (!license) {
-      Toast.show({
-        text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!license) {
+    //   Toast.show({
+    //     text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     // if (!generalPrice) {
     //   Toast.show({
@@ -482,7 +482,7 @@ export default function UpdatePropertyScreen(props) {
     return true
   }
 
-  const onUpdaePrivateProperty = async () => {
+  const onUpdatePrivateProperty = async () => {
     // const imageFile = new ReactNativeFile({
     //   uri: image,
     //   type: 'image/png',
@@ -522,7 +522,7 @@ export default function UpdatePropertyScreen(props) {
     })
   }
 
-  const onCreateCommercial = () => {
+  const onUpdateCommercial = () => {
     // const imageFile = new ReactNativeFile({
     //   uri: image,
     //   type: 'image/png',
@@ -533,10 +533,7 @@ export default function UpdatePropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    data.facilities = selectedFac
-    data.category_id = 1
-    data.proof_of_commercial_license = registration[0]
-    data.proof_of_operation_license = license[0]
+    data.facilities = []
     data.images = photos && photos.length > 0 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
@@ -548,9 +545,9 @@ export default function UpdatePropertyScreen(props) {
     }
     console.log('@payload', fpayload)
     // return
-    // addCommercialPropety(fpayload).catch(e => {
-    //   onError(e)
-    // })
+    updateCommercialProperty(fpayload).catch(e => {
+      onError(e)
+    })
   }
 
   useEffect(() => {
@@ -691,7 +688,7 @@ export default function UpdatePropertyScreen(props) {
             console.log('@facis', selectedFac)
             if (!commercial_data) {
               if (validateCommercial()) {
-                onCreateCommercial()
+                onUpdateCommercial()
               }
             }
           }
@@ -703,7 +700,7 @@ export default function UpdatePropertyScreen(props) {
     return (
       <Button onPress={() => {
         if (validatePrivate()) {
-          onUpdaePrivateProperty()
+          onUpdatePrivateProperty()
         }
       }} style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} text={`إضافة`} />
     )

@@ -205,7 +205,15 @@ export default function AddPropertyScreen(props) {
 
   //CALENDARS
   const [general, setGeneral] = useState(true)
-  const [generalPrice, setGeneralPrice] = useState(null)
+  const [generalPrice, setGeneralPrice] = useState({
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    saturday: 0,
+    sunday: 0
+  })
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)

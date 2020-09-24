@@ -29,6 +29,7 @@ import * as Permissions from "expo-permissions";
 import { Toast } from 'native-base';
 import FacilitiesSelectionComponent from '../components/FacilitiesSelectionComponent';
 import { COMMERCIAL_FACILITIES } from '../constants/data';
+import { ActivityIndicator } from 'react-native';
 
 const TYPES = [
   {
@@ -119,7 +120,7 @@ const ASDASD = [
 ]
 
 export default function AddSectionScreen(props) {
-  const { navigate, goBack } = props.navigation
+  const { navigate, goBack, state: { params } } = props.navigation
 
   const COMMERCIAL = COMMERCIAL_FACILITIES
 
@@ -137,10 +138,19 @@ export default function AddSectionScreen(props) {
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
   const [photos, setSelectedPhotos] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   //CALENDARS
   const [general, setGeneral] = useState(false)
-  const [generalPrice, setGeneralPrice] = useState(null)
+  const [generalPrice, setGeneralPrice] = useState({
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    saturday: 0,
+    sunday: 0
+  })
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)
@@ -156,14 +166,18 @@ export default function AddSectionScreen(props) {
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
 
-  const [addSectionProperty, { data, error, loading }] = useMutation(ADD_SECTION_PROPERTY, {
+  const [addSectionProperty, { data, error }] = useMutation(ADD_SECTION_PROPERTY, {
     onCompleted: e => {
       console.log('@onComplete', e)
       Toast.show({
         text: 'تم اضافة القسم بنجاح',
         type: 'success'
       })
-      goBack()
+      params.refresh()
+      setLoading(false)
+      setTimeout(() => {
+        goBack()
+      }, 1500)
     }
   })
 
@@ -171,13 +185,14 @@ export default function AddSectionScreen(props) {
   useEffect(() => {
     // _requestPermission()
     if (selectedFac && selectedFac.length > 0) {
-      const items = [...selectedFac]
+      const items = JSON.parse(JSON.stringify(selectedFac))
       items.forEach(i => {
         i.facility_id = i.id
         delete i.id
         delete i.name
         delete i.image
       })
+      setFinalFac(items)
     }
   }, [selectedFac])
 
@@ -299,7 +314,7 @@ export default function AddSectionScreen(props) {
   }
 
   const onCreateSection = async () => {
-    const { params } = props.navigation.state
+    setLoading(true)
     // const imageFile = new ReactNativeFile({
     //   uri: image,
     //   type: 'image/png',
@@ -312,7 +327,7 @@ export default function AddSectionScreen(props) {
     const data = { ...payload }
     data.property_id = params.id
     data.type_id = 2
-    data.facilities = selectedFac
+    data.facilities = finalFac
     // data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
     // data.latitude = location.latitude
@@ -421,6 +436,11 @@ export default function AddSectionScreen(props) {
     //     </View>
     //   )
     // }
+    if (loading) {
+      return (
+        <ActivityIndicator color={Colors.primaryBlue} />
+      )
+    }
 
     return (
       <Button style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} onPress={() => {
@@ -468,7 +488,7 @@ export default function AddSectionScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {/* {types[0].selected && <Input style={{ marginTop: 12 }} upload clickable={() => setShowImages(true)} placeholder={'السجل التجاري)اختياري('} />} */}
         {/* <Input style={{ marginTop: 12 }} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
-        <Input style={{ marginVertical: 12 }} upload clickable={() => setShowImages(true)} placeholder={`صور النزل`} />
+        <Input style={{ marginVertical: 12 }} value={photos} upload clickable={() => setShowImages(true)} placeholder={`صور النزل`} />
         {renderFooterButton()}
       </View >
     )
@@ -476,7 +496,10 @@ export default function AddSectionScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Header Add Section onPressBack={() => goBack()} />
+      <Header Add Section onPressBack={() => {
+        params.refresh()
+        goBack()
+      }} />
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
@@ -516,7 +539,7 @@ export default function AddSectionScreen(props) {
       }} isVisible={showAvailability} />
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} /> */}
       {/* <ImageBrowser onClose={() => setShowLicense(false)} setPhotos={license} key={'Operating License'} isVisible={showLicense} /> */}
-      <ImageBrowser requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
+      <ImageBrowser photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
       <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} isVisible={isFaciVisible} />
     </View>

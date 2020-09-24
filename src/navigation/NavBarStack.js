@@ -17,9 +17,14 @@ import BottomTabBar from '../components/BottomTabBar';
 import NotificationScreen from '../screens/NotificationScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import AddPropertyScreen from '../screens/AddPropertyScreen';
-import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
 import AddSectionScreen from '../screens/AddSectionScreen';
 import ChatScreen from '../screens/ChatScreen';
+import { PropertyStack } from './MainStack';
+import MyPropertyDetailsScreen from '../screens/MyPropertyDetailsScreen';
+import SectionDetailsScreen from '../screens/SectionDetailsScreen';
+import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
+import UpdateSectionScreen from '../screens/UpdateSectionScreen';
+import SectionListScreen from '../screens/SectionListScreen';
 
 const AddStack = createStackNavigator(
   {
@@ -60,11 +65,26 @@ const ChatStack = createStackNavigator(
   }
 )
 
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  PropertyDetails: MyPropertyDetailsScreen,
+  SectionDetails: SectionDetailsScreen,
+  SectionList: SectionListScreen,
+  UpdateProperty: UpdatePropertyScreen,
+  UpdateSection: UpdateSectionScreen,
+  UpdateAndAddSection: AddSectionScreen,
+  // ...PropertyStack
+},
+  {
+    headerMode: 'none',
+  }
+)
+
 
 const HomeBottomBar = createAppContainer(
   createBottomTabNavigator(
     {
-      Home: HomeScreen,
+      Home: HomeStack,
       Messages: ChatStack,
       Add:
       {

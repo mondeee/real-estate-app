@@ -412,6 +412,52 @@ query{
   }
 }`)
 
+export const GET_SECTIONS = gql(`
+query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
+  allSection(property_id: $property_id, first: 30, page: $page, orderBy: $orderBy) {
+    paginatorInfo{
+      hasMorePages
+    }
+    data {
+      id,
+        name,
+        type {
+          id
+          en
+          ar
+        }
+        description
+        images {
+          avatar
+        }
+        facilities {
+        	id,
+          value
+          facility {
+            id
+            type
+            en
+          }
+        }
+        availablities {
+          from
+          to
+        }
+        type {
+          id
+          category {
+            id
+            en
+          }
+        }
+        images {
+          avatar
+        }
+    }
+  }
+}
+`)
+
 
 
 //MUTATIONS
@@ -571,10 +617,28 @@ mutation($input: AddPrivatePropertyInput!){
 }
 `)
 
-export const UPDAE_PRIVATE_PROPERTY = gql(`
+export const UPDATE_PRIVATE_PROPERTY = gql(`
 mutation($input: UpdatePrivatePropertyInput!){
   updatePrivateProperty(input:$input){
     property_id
+    status
+  }
+}
+`)
+
+export const UPDATE_COMMERCIAL_PROPERTY = gql(`
+mutation($input: UpdateCommercialPropertyInput!){
+  updateCommercialProperty(input:$input){
+    property_id
+    status
+  }
+}
+`)
+
+export const UPDATE_SECTION_PROPERTY = gql(`
+mutation($input: UpdateSectionPropertyInput!){
+  updateSectionProperty(input:$input){
+    section_id
     status
   }
 }

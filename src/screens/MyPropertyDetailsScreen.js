@@ -78,9 +78,9 @@ export default function MyPropertyDetailsScreen(props) {
           <TouchableOpacity>
             <Image style={{ height: 27, resizeMode: 'contain', marginRight: 20, marginBottom: 10 }} source={require('../../assets/uploadicon.png')} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setFavorite(!isFavorite)}>
+          {/* <TouchableOpacity onPress={() => setFavorite(!isFavorite)}>
             <FontAwesome size={18} color={isFavorite ? 'red' : 'white'} name={isFavorite ? 'heart' : 'heart-o'} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <TouchableOpacity style={{ alignSelf: 'center', marginBottom: 3 }} onPress={() => navigate('Home')}>
           <MaterialIcons size={30} color={'white'} name={'chevron-right'} />
@@ -307,7 +307,7 @@ export default function MyPropertyDetailsScreen(props) {
         }
       </ViewPager>
       {renderDetails()}
-      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item})} style={{ alignSelf: 'center', width: '50%', marginBottom: 20 }} text={`الأقسام`} />}
+      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item})} style={{ alignSelf: 'center', width: '50%', marginBottom: 30, position: 'absolute', bottom: '10%' }} text={`الأقسام`} />}
     </SafeAreaView>
   );
 }

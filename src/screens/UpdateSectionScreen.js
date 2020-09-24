@@ -179,7 +179,7 @@ export default function UpdateSectionScreen(props) {
   useEffect(() => {
     // _requestPermission()
     if (selectedFac && selectedFac.length > 0) {
-      const items = [...selectedFac]
+      const items = JSON.parse(JSON.stringify(selectedFac))
       items.forEach(i => {
         i.facility_id = i.id
         delete i.id
@@ -336,10 +336,7 @@ export default function UpdateSectionScreen(props) {
     data.property_id = params.id
     data.type_id = 2
     data.facilities = selectedFac
-    // data.proof_of_ownership = license && license.lengh > 0 ? license[0] : null
     data.images = photos && photos.length > 0 ? photos : []
-    // data.latitude = location.latitude
-    // data.longitude = location.longitude
     data.general_price = generalPrice
     data.seasonal_prices = seasonalPrice
     data.availablities = [

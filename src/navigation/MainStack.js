@@ -26,7 +26,7 @@ import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
 import UpdateSectionScreen from '../screens/UpdateSectionScreen';
 
 
-const PropertyStack = createStackNavigator(
+export const PropertyStack = createStackNavigator(
   {
     PropertyDetails: MyPropertyDetailsScreen,
     SectionDetails: SectionDetailsScreen,
@@ -45,7 +45,7 @@ const AppNavigator = createAppContainer(
     {
       HomeBottomBar,
       Contact: ContactScreen,
-      Property: PropertyStack,
+      // Property: PropertyStack,
       // SectionDetails: SectionDetailsScreen,
       // SectionList: SectionListScreen,
       FAQ: FAQScreen,

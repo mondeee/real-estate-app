@@ -21,14 +21,14 @@ import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_SECTIONS } from '../services/graphql/queries';
 import { useStoreActions } from 'easy-peasy';
 import Button from '../components/Button';
 
 
 export default function SectionListScreen(props) {
   const { navigate, goBack, state: { params } } = props.navigation
-  const [items, setItems] = useState(params.items ? params.items : [])
+  const [items, setItems] = useState(params.items ? params.items.reverse() : [])
   const [loading, setLoading] = useState(false)
   const [selected, setSelected] = useState(false)
   const storeCity = useStoreActions(actions => actions.auth.setCities)
@@ -45,13 +45,19 @@ export default function SectionListScreen(props) {
   const { data: dataCat } = useQuery(GET_CATEGORIES)
 
 
-  const { loading: properyloading, error: properyError, data: propertiesdata, refetch } = useQuery(GET_ALL_PROPERTIES)
+  const [allSection, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_SECTIONS, {
+    variables: {
+      page: 1,
+      property_id: params.item.id,
+    }
+  })
   // const [fetchAllProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
+    setLoading(false)
     console.log('properties', propertiesdata, properyError, properyloading)
     if (propertiesdata) {
-      // setItems(propertiesdata.allProperties.data)
+      setItems(propertiesdata.allSection.data.reverse())
     }
   }, [propertiesdata, properyError, properyloading])
 
@@ -60,19 +66,20 @@ export default function SectionListScreen(props) {
 
   useEffect(() => {
     // fetchAllProperties()
+    allSection()
     const { navigation } = props
     const navFocusListener = navigation.addListener('didFocus', () => {
       // API_CALL();
       // fetchAllProperties()
       if (propertiesdata) {
+        setLoading(true)
         refetch()
       }
-      console.log('hooooks');
     });
 
-    return () => {
-      navFocusListener.remove();
-    };
+    // return () => {
+    //   navFocusListener.remove();
+    // };
   }, [])
 
   useEffect(() => {
@@ -230,6 +237,7 @@ export default function SectionListScreen(props) {
       <RefreshControl
         refreshing={loading}
         onRefresh={() => {
+          refetch()
         }}
         tintColor={Colors.primarBlue}
       />
@@ -247,7 +255,7 @@ export default function SectionListScreen(props) {
           text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`}
           style={{ position: 'absolute', bottom: 50 }}
           onPress={() => {
-            navigate('UpdateAndAddSection', { id: params.item.id })
+            navigate('UpdateAndAddSection', { id: params.item.id, refresh: () => refetch() })
           }}
         />}
       </View>
