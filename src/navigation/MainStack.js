@@ -26,34 +26,14 @@ import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
 import UpdateSectionScreen from '../screens/UpdateSectionScreen';
 
 
-export const PropertyStack = createStackNavigator(
-  {
-    PropertyDetails: MyPropertyDetailsScreen,
-    SectionDetails: SectionDetailsScreen,
-    SectionList: SectionListScreen,
-    UpdateProperty: UpdatePropertyScreen,
-    UpdateSection: UpdateSectionScreen,
-    UpdateAndAddSection: AddSectionScreen,
-  },
-  {
-    headerMode: 'none',
-  }
-)
-
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {
       HomeBottomBar,
       Contact: ContactScreen,
-      // Property: PropertyStack,
-      // SectionDetails: SectionDetailsScreen,
-      // SectionList: SectionListScreen,
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,
       Subs: SubscriptionScreen,
-      // UpdateProperty: UpdatePropertyScreen
-      // EditProfile: EditProfileScreen,
-      // Auth: AuthStack,
     },
     {
       headerMode: 'none',

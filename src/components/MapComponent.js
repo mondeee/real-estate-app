@@ -19,6 +19,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import MapView from 'react-native-maps';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 
 
 export default function MapComponent(props) {
@@ -32,19 +33,47 @@ export default function MapComponent(props) {
     onClose,
   } = props
   const [region, setRegion] = useState(null)
+  const [location_name, setLocationName] = useState(null)
+  var timer = null
 
   //يرجى السماح لتطبيق نزل بالوصول إلى الموقع حتى تتمكن من إضافة موقع نزلك.
+
+  useEffect(() => {
+    getLocation(region)
+  }, [region])
+
+  const getLocation = async (data) => {
+    if (!data) return
+    const location = await Location.reverseGeocodeAsync(data).catch(e => {
+      console.log('error', e)
+    })
+    console.log(location)
+    const item = location[0]
+    if (item) {
+      if (!item.city || !item.country) {
+        setLocationName(`${item.name}, ${item.region || ''}`)
+      } else {
+        setLocationName(`${item.city}, ${item.country}`)
+      }
+    }
+    return location
+  }
 
   return (
     <Modal style={styles.container} isVisible={isVisible}>
       <View style={styles.viewContainer}>
         <MapView onRegionChange={e => {
-          console.log('onchangeRegion', e)
-          setRegion(e)
+          if (timer) clearTimeout(timer)
+
+          timer = setTimeout(() => {
+            setRegion(e)
+          }, 1500)
         }} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
           <Button onPress={() => {
-            onPress(region)
+            const item = { ...region }
+            item.location = location_name
+            onPress(item)
             onClose()
           }} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
         </View>

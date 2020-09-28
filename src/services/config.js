@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app";
 
 export const CONFIG = {
-  BUILD_VERSION: '0.0.17',
+  BUILD_VERSION: '0.0.18',
 }
 
 export const FIREBASE_CONFIG = {

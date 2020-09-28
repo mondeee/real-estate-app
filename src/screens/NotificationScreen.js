@@ -82,7 +82,7 @@ export default function NotificationScreen() {
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34 }} source={require('../../assets/additem.png')} />
-        <Text style={styles.text}>{`دعب لزن ﻚﻳﺪﻟﺩدجﻮﻳ ﻻ`}</Text>
+        <Text style={styles.text}>{`لايوجد لديك اي اشعارات`}</Text>
         <Text style={styles.text}>{`نألا كلزنﺇفضأ`}</Text>
       </TouchableOpacity>
     )

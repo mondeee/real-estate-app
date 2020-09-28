@@ -65,7 +65,7 @@ export default function Input(props) {
           flex: 1,
           ...Fonts.fontRegular,
           color: value ? Colors.primaryBlue : Colors.darkGray,
-        }}>{value ? `${value.latitude}, ${value.longitude}` : placeholder}</Text>
+        }}>{value ? `${value.location}` : placeholder}</Text>
       </TouchableOpacity>
     )
 

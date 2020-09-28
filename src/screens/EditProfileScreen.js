@@ -171,13 +171,12 @@ export default function EditProfileScreen(props) {
       <Header profile onPressBack={() => goBack()} />
       <ScrollView
         contentContainerStyle={{
-          flex: 1,
           backgroundColor: '#fff',
           width: '100%',
           alignItems: 'center',
+          paddingBottom: 100,
         }}
         style={{
-          flex: 1,
           backgroundColor: '#fff',
           width: '100%',
           paddingTop: 24,
@@ -201,6 +200,7 @@ export default function EditProfileScreen(props) {
           <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           <Input onChangeText={setConfirmPass} placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           {!loading ? <Button onPress={() => _onUpdateUser()} style={{ width: '80%', alignSelf: 'center', marginTop: 12 }} text={`حفظ`} /> : <ActivityIndicator size={'large'} color={Colors.primaryBlue} />}
+          <View style={{ height: 300, }} />
         </KeyboardAvoidingView>
       </ScrollView>
       <ActionComponent success={true} isVisible={message} onClose={() => setMessage(false)} />
