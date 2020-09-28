@@ -33,6 +33,7 @@ const AddStack = createStackNavigator(
   },
   {
     headerMode: 'none',
+    // unmountInactiveRoutes: true,
     transitionConfig: () => fromRight()
   }
 )
@@ -93,7 +94,8 @@ const HomeBottomBar = createAppContainer(
           return {
             tabBarVisible: false,
           };
-        }
+        },
+        unmountInactiveRoutes: true,
       },
       // UpdateProperty: UpdatePropertyScreen,
       Favorites: NotificationScreen,
@@ -104,7 +106,7 @@ const HomeBottomBar = createAppContainer(
     },
     {
       headerMode: 'none',
-      backBehavior: 'none',
+      // backBehavior: 'none',
       // initialRouteName: 'Home',
       drawerPosition: 'right',
       contentComponent: async ({ navigation }) => {

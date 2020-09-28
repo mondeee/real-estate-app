@@ -25,7 +25,6 @@ import SectionDetailsScreen from '../screens/SectionDetailsScreen';
 import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
 import UpdateSectionScreen from '../screens/UpdateSectionScreen';
 
-
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
     {

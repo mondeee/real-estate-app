@@ -75,8 +75,12 @@ query($first: Int!, $page: Int!, $userId: ID!){
         name,
         type {
           id
-          en
           ar
+          en
+          category {
+            id
+            en
+          }
         }
         description
         images {
@@ -96,13 +100,6 @@ query($first: Int!, $page: Int!, $userId: ID!){
           from
           to
         }
-        type {
-          id
-          category {
-            id
-            en
-          }
-        }
         images {
           id
           avatar
@@ -114,11 +111,6 @@ query($first: Int!, $page: Int!, $userId: ID!){
         ar,
         en
       }
-      type {
-        id,
-        en,
-        ar,
-      }
       images{
         id
         avatar
@@ -127,6 +119,15 @@ query($first: Int!, $page: Int!, $userId: ID!){
         id
         ar
         en
+      }
+      type {
+        id
+        ar
+        en
+        category {
+          id
+          en
+        }
       }
       facilities{
         id,
@@ -217,6 +218,8 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
         }
         type {
           id
+          ar
+          en
           category {
             id
             en
@@ -229,14 +232,14 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
       }
       description,
       city {
-        id,
-        ar,
+        id
+        ar
         en
       }
       type {
-        id,
-        en,
-        ar,
+        id
+        en
+        ar
       }
       images{
         id

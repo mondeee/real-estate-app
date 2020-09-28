@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Colors from '../styles/Colors';
-import { SafeAreaView } from 'react-navigation';
+import { NavigationActions, SafeAreaView, StackActions } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
@@ -194,7 +194,6 @@ export default function AddPropertyScreen(props) {
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
   const [payload, setPayload] = useState({})
-
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
   const [selectedFac, setSeelectedFac] = useState(null)
@@ -202,7 +201,6 @@ export default function AddPropertyScreen(props) {
   const [facilities, setFacilities] = useState(COMMERCAL)
   //
   const [photos, setSelectedPhotos] = useState(false)
-
   //CALENDARS
   const [general, setGeneral] = useState(true)
   const [generalPrice, setGeneralPrice] = useState({
@@ -217,15 +215,37 @@ export default function AddPropertyScreen(props) {
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState(null)
-
   const categories = useStoreState(state => state.auth.categories)
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
 
+  const initialState = () => {
+    setPayload({})
+    setSeasonalPrice([])
+    setAvailabilityDates(null)
+    setLicense(null)
+    setRegistration(null)
+    setSelectedPhotos(null)
+    setFinalFac(null)
+    setLocation(null)
+    setSeelectedFac(null)
+    setFacilities(COMMERCAL)
+    setGeneralPrice(
+      {
+        monday: 0,
+        tuesday: 0,
+        wednesday: 0,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0
+      }
+    )
+  }
 
   useEffect(() => {
-    // _requestPermission()
+
   }, [])
 
   useEffect(() => {
@@ -265,11 +285,13 @@ export default function AddPropertyScreen(props) {
 
   const [addPrivateProperty, { data, error, loading }] = useMutation(ADD_PRIVATE_PROPERY, {
     onCompleted: e => {
-      console.log('@Complete ADD PRIVATE', e)
+      // console.log('@Complete ADD PRIVATE', e)
       Toast.show({
         text: 'تم اضافة النزل الخاص بنجاح',
         type: 'success'
       })
+      initialState()
+      navigate('Home')
     }
   })
   const [addCommercialPropety, { data: commercial_data, error: commercial_error, loading: commercial_loading }] = useMutation(ADD_COMMERCIAL_PROPERTY, {
@@ -398,14 +420,14 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    // if (!facilities) {
-    //   Toast.show({
-    //     text: 'Please add some facilities and details.',
-    //     type: 'danger'
-    //   })
-    //   validate = false
-    //   return validate
-    // }
+    if (!facilities) {
+      Toast.show({
+        text: 'Please add some facilities and details.',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
 
     if (!license) {
       Toast.show({
@@ -480,7 +502,7 @@ export default function AddPropertyScreen(props) {
     // console.log('photos', photos)
     const item = types.filter(i => i.selected)
     const data = { ...payload }
-    // data.facilities = selectedFac
+    data.facilities = finalFac
     data.category_id = 1
     data.proof_of_commercial_license = registration[0]
     data.proof_of_operation_license = license[0]
@@ -638,7 +660,7 @@ export default function AddPropertyScreen(props) {
           }} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
           <View style={{ width: 30 }} />
           <Button onPress={() => {
-            console.log('@facis', selectedFac)
+            // console.log('@facis', selectedFac)
             if (!commercial_data) {
               if (validateCommercial()) {
                 onCreateCommercial()
@@ -663,17 +685,17 @@ export default function AddPropertyScreen(props) {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input maxLength={300} onChangeText={e => {
+        <Input maxLength={300} value={payload.description} onChangeText={e => {
           const i = { ...payload }
           i.description = e
           setPayload(i)
         }} style={{ height: 120 }} multiline placeholder={'وصف'} />
-        {types[1].selected && <Input onChangeText={e => {
+        {types[1].selected && <Input value={payload.contact_name} onChangeText={e => {
           const i = { ...payload }
           i.contact_name = e
           setPayload(i)
         }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />}
-        <Input onChangeText={e => {
+        <Input value={payload.contact_no} onChangeText={e => {
           const i = { ...payload }
           i.contact_no = e
           setPayload(i)
@@ -711,7 +733,10 @@ export default function AddPropertyScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Header Add onPressBack={() => navigate('Home')} />
+      <Header Add onPressBack={() => {
+        initialState()
+        navigate('Home')
+      }} />
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
@@ -728,7 +753,7 @@ export default function AddPropertyScreen(props) {
           const item = { ...payload }
           item.name = e
           setPayload(item)
-        }} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
+        }} value={payload.name || null} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
           <Input onChangeText={e => {
             const item = { ...payload }
@@ -742,7 +767,7 @@ export default function AddPropertyScreen(props) {
           }} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
         </View>
         <Input value={location} clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />
-        {types[1].selected == true && renderDetails()}
+        {renderDetails()}
         {renderDescription()}
         <View style={{ height: 400 }} />
         {/* </KeyboardAvoidingView> */}

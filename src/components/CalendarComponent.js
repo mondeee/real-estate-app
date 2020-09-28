@@ -137,7 +137,6 @@ export default function CalendarComponent(props) {
   }, [general, props.data])
 
   useEffect(() => {
-    setfDate(false)
     console.log(fromDate, toDate)
     if (toDate && fromDate) {
       // const item = {}
@@ -340,9 +339,14 @@ export default function CalendarComponent(props) {
               console.log('selected day', moment(day.dateString).format("YYYY-MM-DD"))
               if (seasonal) {
                 if (fdate) {
-                  setToDate(moment(day.dateString).format("YYYY-MM-DD"))
-                } else {
+                  // setToDate(moment(day.dateString).format("YYYY-MM-DD"))
                   setFromDate(moment(day.dateString).format("YYYY-MM-DD"))
+                  console.log('onselect today')
+                  setfDate(false)
+                } else {
+                  console.log('onselect ffromday')
+                  setToDate(moment(day.dateString).format("YYYY-MM-DD"))
+                  // setFromDate(moment(day.dateString).format("YYYY-MM-DD"))
                 }
               }
               // setShowCalendar(false)

@@ -21,7 +21,7 @@ import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES } from '../services/graphql/queries';
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_OWNED_PROPERTIES } from '../services/graphql/queries';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Toast } from 'native-base';
 import { ActivityIndicator } from 'react-native';
@@ -49,7 +49,7 @@ export default function HomeScreen(props) {
   const [page, setpage] = useState(1)
   const [firstRun, setFirstRun] = useState(true)
 
-  const [fetchProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES, {
+  const [fetchProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_OWNED_PROPERTIES, {
     variables: {
       page: page,
       first: 30,
@@ -60,7 +60,7 @@ export default function HomeScreen(props) {
     }
   }
   )
-  // const [fetchAllProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
+  // const [fetchallOwnerProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
     if (!storedUserState) {
@@ -75,7 +75,7 @@ export default function HomeScreen(props) {
   useEffect(() => {
     // console.log('properties', propertiesdata)
     if (propertiesdata) {
-      setItems(propertiesdata.allProperties.data)
+      setItems(propertiesdata.allOwnerProperties.data.reverse())
     }
 
     if (properyError) {
@@ -101,11 +101,12 @@ export default function HomeScreen(props) {
   if (error || genderError) console.log(`Error! ${error.message}`, `Error! ${genderError.message}`);
 
   useEffect(() => {
-    // fetchAllProperties()
+    // fetchallOwnerProperties()
     const { navigation } = props
     const navFocusListener = navigation.addListener('didFocus', () => {
+      setLoading(true)
       if (storedUserState && !firstRun) {
-        setLoading(true)
+        console.log('refetch')
         refetch()
       }
     });
@@ -197,6 +198,7 @@ export default function HomeScreen(props) {
   }
 
   renderItem = (item, index) => {
+    console.log('ITEM', item.category)
     return (
       <TouchableOpacity key={item.id} style={{
         height: 125,
@@ -234,8 +236,27 @@ export default function HomeScreen(props) {
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <View />
-            {/* <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text> */}
-            <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
+            {item.category.id == 2 ?
+              <TouchableOpacity style={{
+                padding: 8
+              }}>
+                <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
+              </TouchableOpacity>
+              :
+              <TouchableOpacity
+                onPress={() => navigate('SectionList', { items: item.sections.reverse(), item, })}
+                style={{
+                  padding: 8
+                }}>
+                <Text style={{ ...Fonts.fontRegular }}>{`Sections `}<FontAwesome name={'calendar'} /></Text>
+              </TouchableOpacity>
+            }
+            <TouchableOpacity style={{
+              // backgroundColor: 'black',
+              padding: 8
+            }}>
+              <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
+            </TouchableOpacity>
           </View>
         </View>
         {
@@ -255,6 +276,14 @@ export default function HomeScreen(props) {
   }
 
   renderEmpty = () => {
+    if (loading || properyloading) {
+      return (
+        <View>
+          <ActivityIndicator size={'large'} color={Colors.primaryBlue} style={{ marginTop: '20%' }} />
+        </View>
+      )
+    }
+
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34, marginBottom: 20 }} source={require('../../assets/additem.png')} />
@@ -266,7 +295,7 @@ export default function HomeScreen(props) {
 
   renderList = () => <FlatList
     data={items}
-    extraData={items}
+    extraData={propertiesdata}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%' }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => `${item.id}${item.name}`}
@@ -281,7 +310,11 @@ export default function HomeScreen(props) {
         onRefresh={() => {
           if (storedUserState) {
             // fetchProperties()
+            setLoading(true)
             refetch()
+            setTimeout(() => {
+              setLoading(false)
+            }, 1500)
           }
         }}
         tintColor={Colors.primarBlue}
@@ -292,7 +325,7 @@ export default function HomeScreen(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => {
-        setItems(propertiesdata.allProperties.data)
+        // setItems(propertiesdata.allOwnerProperties.data.reverse())
         setSelected(false)
       }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={selected} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>

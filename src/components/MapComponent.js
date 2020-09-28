@@ -64,7 +64,6 @@ export default function MapComponent(props) {
       <View style={styles.viewContainer}>
         <MapView onRegionChange={e => {
           if (timer) clearTimeout(timer)
-
           timer = setTimeout(() => {
             setRegion(e)
           }, 1500)
@@ -77,9 +76,15 @@ export default function MapComponent(props) {
             onClose()
           }} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
         </View>
-        <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => onClose()}>
+        <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => {
+          if (region && location_name) {
+            onClose()
+          }
+        }
+        }>
           <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
         </TouchableOpacity>
+        <Text style={{ position: 'absolute', top: 10, left: 10 }}>{location_name}</Text>
         <View style={{ position: 'absolute', top: '47%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name={'location-on'} size={35} color={Colors.primaryBlue} />
         </View>
