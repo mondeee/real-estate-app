@@ -143,7 +143,7 @@ export default function UpdateSectionScreen(props) {
   const [generalPrice, setGeneralPrice] = useState(item.general_price)
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
-  const [availabilityDates, setAvailabilityDates] = useState(null)
+  const [availabilityDates, setAvailabilityDates] = useState(item.availablities)
 
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
@@ -185,6 +185,10 @@ export default function UpdateSectionScreen(props) {
       setLoading(false)
   }, [data, error])
 
+  useEffect(() => {
+    console.log('EDITSECTION', availabilityDates)
+  }, [availabilityDates])
+
 
   useEffect(() => {
     // _requestPermission()
@@ -202,7 +206,15 @@ export default function UpdateSectionScreen(props) {
 
   useEffect(() => {
     loadFaci()
+    setData()
+    // console.log('@PARAMS', item)
   }, [])
+
+  const setData = () => {
+    const gprice = { ...generalPrice }
+    delete gprice?.__typename
+    setGeneralPrice(gprice)
+  }
 
   const loadFaci = () => {
     const items = [...facilities]
@@ -351,16 +363,7 @@ export default function UpdateSectionScreen(props) {
     data.images = photos && photos.length > 0 ? photos : []
     data.general_price = generalPrice
     data.seasonal_prices = seasonalPrice
-    data.availablities = [
-      {
-        "to": "2020-06-11 00:00:00",
-        "from": "2020-06-15 00:00:00"
-      },
-      {
-        "to": "2020-06-19 00:00:00",
-        "from": "2020-06-19 00:00:00"
-      }
-    ]
+    data.availablities = availabilityDates
     const fpayload = {
       variables: {
         "input": data
@@ -549,7 +552,7 @@ export default function UpdateSectionScreen(props) {
       <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={true} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />
-      <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {
+      <CalendarComponent setDates={setAvailabilityDates} data={availabilityDates} availabilities={true} key={'calendar'} onClose={() => {
         setShowAvailability(false)
       }} isVisible={showAvailability} />
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} /> */}

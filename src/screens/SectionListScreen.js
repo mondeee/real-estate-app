@@ -178,10 +178,10 @@ export default function SectionListScreen(props) {
           const newitem = { ...item }
           newitem.city = params.item.city
           newitem.district = params.item.district
-          console.log(newitem)
+          console.log('@CONVERTED', newitem)
           if (params.update) {
             console.log(newitem)
-            navigate('UpdateSection', { item: newitem, refresh: () => refetch()  })
+            navigate('UpdateSection', { item: newitem, refresh: () => refetch() })
             return
           }
           navigate('SectionDetails', { item: newitem, })

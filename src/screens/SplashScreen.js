@@ -14,26 +14,25 @@ import Colors from '../styles/Colors';
 import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import { useStoreActions } from 'easy-peasy';
+import * as Permissions from "expo-permissions";
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
   const [page, setPage] = useState(0)
   const storeNotifToken = useStoreActions(actions => actions.auth.setNotifToken)
 
-  // const setUpNotif = async () => {
-  //   const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-  //   if (status !== 'granted') {
-  //     // errorToast('No notification permissions!')
-  //     console.log('NOTIF ERROR PERMISSION')
-  //     return;
-  //   }
-  //   const token = await Notifications.getExpoPushTokenAsync();
-  //   storeNotifToken(token)
-  //   console.log("@NOTIF TOKEN", token)
-  //   notifsub = Notifications.addListener(onReceiveNotif)
-  // }
+  const setUpNotif = async () => {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (status !== 'granted') {
+      console.log('NOTIF ERROR PERMISSION')
+      return;
+    }
+    const token = await Notifications.getExpoPushTokenAsync();
+    storeNotifToken(token)
+    notifsub = Notifications.addListener(onReceiveNotif)
+  }
 
   useEffect(() => {
-    // setUpNotif()
+    setUpNotif()
   }, [])
 
   useEffect(() => {

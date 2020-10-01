@@ -92,7 +92,7 @@ export default function NotificationScreen() {
     data={items}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingBottom: 100 }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
-    keyExtractor={item => item.id}
+    keyExtractor={item => String(item.id)}
     renderItem={({ item }) => renderItem(item)}
     ListEmptyComponent={() => renderEmpty()}
     onEndReached={() => fetchNext()}

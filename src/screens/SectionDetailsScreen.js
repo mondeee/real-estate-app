@@ -44,7 +44,6 @@ export default function SectionDetailsScreen(props) {
   const [rating, setRating] = useState(item.review_average)
 
   useEffect(() => {
-    console.log('@ITEM', props.navigation.state.params)
     setTotalPages(item.images)
   }, [])
 

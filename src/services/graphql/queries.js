@@ -62,120 +62,126 @@ query($id:ID!){
 `)
 
 export const GET_OWNED_PROPERTIES = gql(`
-query($first: Int!, $page: Int!, $userId: ID!){
-  allOwnerProperties(first:$first, page: $page, user_id: $userId){
-    paginatorInfo{
-      hasMorePages
-    }
-    data{
-      id,
-      name,
-      sections {
+query($first: Int!, $page: Int!){
+  ownerProperties {
+    id,
+    properties(first: $first, page: $page) {
+      paginatorInfo{
+          hasMorePages
+      }
+      data{
         id,
         name,
+        latitude,
+        longitude
+        sections {
+          id,
+          name,
+          type {
+            id
+            en
+            ar
+          }
+          description
+          images {
+            avatar
+          }
+          facilities {
+            id,
+            value
+            facility {
+              id
+              type
+              en
+            }
+          }
+          availablities {
+            from
+            to
+          }
+        general_price{
+          monday
+          tuesday
+          wednesday
+          thursday
+          saturday
+          friday
+          sunday
+        }
+          type {
+            id
+            category {
+              id
+              en
+            }
+          }
+          images {
+            avatar
+          }
+        }
+        description,
+        city {
+          ar,
+          en
+        }
         type {
+          id,
+          en,
+          ar,
+        }
+        images{
+          avatar
+        }
+        category{
           id
           ar
           en
-          category {
-            id
-            en
-          }
         }
-        description
-        images {
-          id
-          avatar
-        }
-        facilities {
-        	id,
-          value
+        facilities{
+          id,
+          value,
           facility {
             id
-            type
-            en
           }
         }
-        availablities {
-          from
-          to
+        district
+        general_price{
+          monday
+          tuesday
+          wednesday
+          thursday
+          saturday
+          friday
+          sunday
         }
-        images {
+        proof_of_ownership
+        seasonal_prices{
+          price
+          to
+          from
+        }
+        availablities{
+          to
+          from
+        },
+        reviews {
+          star,
+          comment,
+          user {
+            name
+          }
+        },
+        review_average
+        price_average
+        is_favorite
+        lowest_price
+        owner {
           id
           avatar
-        }
-      }
-      description,
-      city {
-        id,
-        ar,
-        en
-      }
-      images{
-        id
-        avatar
-      }
-      category{
-        id
-        ar
-        en
-      }
-      type {
-        id
-        ar
-        en
-        category {
-          id
-          en
-        }
-      }
-      facilities{
-        id,
-        value,
-        facility {
-          id
-        }
-      }
-      district
-      general_price{
-        monday
-        tuesday
-        wednesday
-        thursday
-        saturday
-        friday
-        sunday
-      }
-      proof_of_ownership
-      seasonal_prices{
-        to
-        from
-      }
-      availablities{
-        to
-        from
-      },
-      reviews {
-        star,
-        comment,
-        user {
           name
+          phone
+          email
         }
-      },
-      review_average
-      price_average
-      is_favorite
-      lowest_price
-      contact_name
-      contact_no
-      latitude
-      longitude
-      owner {
-        id
-        avatar
-        name
-        phone
-        email
       }
     }
   }
@@ -269,6 +275,7 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
       }
       proof_of_ownership
       seasonal_prices{
+        price
         to
         from
       }
@@ -445,6 +452,15 @@ query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
         availablities {
           from
           to
+        }
+        general_price{
+          monday
+          tuesday
+          wednesday
+          thursday
+          saturday
+          friday
+          sunday
         }
         type {
           id

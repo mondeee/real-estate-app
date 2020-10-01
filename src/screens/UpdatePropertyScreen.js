@@ -29,6 +29,8 @@ import * as Permissions from "expo-permissions";
 import { Toast } from 'native-base';
 import FacilitiesSelectionComponent from '../components/FacilitiesSelectionComponent';
 import { ReactNativeFile } from 'apollo-upload-client'
+import { getLocationName } from '../utils/functions';
+import { ActivityIndicator } from 'react-native';
 
 const TYPES = [
   {
@@ -187,6 +189,7 @@ export default function UpdatePropertyScreen(props) {
     latitude: item.latitude,
     longitude: item.longitude
   })
+  const [initLoading, setInitLoading] = useState(true)
   const [selectedType, setType] = useState(null)
   const [city, setCity] = useState(null)
   const [showMap, setMap] = useState(false)
@@ -233,11 +236,10 @@ export default function UpdatePropertyScreen(props) {
 
   useEffect(() => {
     // _requestPermission()
-    console.log('@ITEM', item.images)
     setData()
   }, [])
 
-  const setData = () => {
+  const setData = async () => {
     const items = [...categories]
     items.forEach(i => {
       i.selected = false
@@ -252,6 +254,8 @@ export default function UpdatePropertyScreen(props) {
       delete gprice.__typename
       setGeneralPrice(gprice)
     }
+    const l = await getLocationName(location)
+    setLocation(l)
     // const cits = [...cities]
     // cits.forEach(i => {
     //   i.selected = false
@@ -262,6 +266,7 @@ export default function UpdatePropertyScreen(props) {
 
     //IMAGE CONVERSION
     // setSelectedPhotos(item.images)
+    setInitLoading(false)
   }
 
   const loadFaci = () => {
@@ -502,16 +507,7 @@ export default function UpdatePropertyScreen(props) {
     data.general_price = generalPrice
     delete data.general_price.__typename
     data.seasonal_prices = seasonalPrice
-    data.availablities = [
-      {
-        "to": "2020-06-11",
-        "from": "2020-06-15"
-      },
-      {
-        "to": "2020-06-19",
-        "from": "2020-06-19"
-      }
-    ]
+    data.availablities = availabilityDates
     const fpayload = {
       variables: {
         "input": data
@@ -757,6 +753,17 @@ export default function UpdatePropertyScreen(props) {
     )
   }
 
+  // if (initLoading) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Header Add onPressBack={() => goBack()} />
+  //       <View style={{ marginTop: '20%' }}>
+  //         <ActivityIndicator size={'large'} color={Colors.primaryBlue} />
+  //       </View>
+  //     </View >
+  //   )
+  // }
+
   return (
     <View style={styles.container}>
       <Header Add onPressBack={() => goBack()} />
@@ -800,7 +807,7 @@ export default function UpdatePropertyScreen(props) {
       <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={general} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />
-      <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {
+      <CalendarComponent setDates={setAvailabilityDates} data={availabilityDates} availabilities={true} key={'calendar'} onClose={() => {
         setShowAvailability(false)
       }} isVisible={showAvailability} />
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />

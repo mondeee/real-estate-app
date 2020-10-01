@@ -31,7 +31,7 @@ export default function Input(props) {
   const [pass, setPass] = useState(password)
 
   useEffect(() => {
-    console.log('@VALUE', value)
+    // console.log('@VALUE', value)
   }, [])
 
   if (clickable) {

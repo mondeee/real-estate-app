@@ -153,7 +153,7 @@ export default function AddSectionScreen(props) {
   })
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
-  const [availabilityDates, setAvailabilityDates] = useState(null)
+  const [availabilityDates, setAvailabilityDates] = useState([])
 
   //FACI
   const [isFaciVisible, setFaciVisible] = useState(false)
@@ -180,6 +180,10 @@ export default function AddSectionScreen(props) {
       }, 1500)
     }
   })
+
+  const initialState = () => {
+
+  }
 
   useEffect(() => {
     if (data || error)
@@ -338,16 +342,7 @@ export default function AddSectionScreen(props) {
     // data.longitude = location.longitude
     data.general_price = generalPrice
     data.seasonal_prices = seasonalPrice
-    data.availablities = [
-      {
-        "to": "2020-06-11 00:00:00",
-        "from": "2020-06-15 00:00:00"
-      },
-      {
-        "to": "2020-06-19 00:00:00",
-        "from": "2020-06-19 00:00:00"
-      }
-    ]
+    data.availablities = availabilityDates
     const fpayload = {
       variables: {
         "input": data
@@ -538,7 +533,7 @@ export default function AddSectionScreen(props) {
       <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={true} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />
-      <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {
+      <CalendarComponent setDates={setAvailabilityDates} data={availabilityDates} availabilities={true} key={'calendar'} onClose={() => {
         setShowAvailability(false)
       }} isVisible={showAvailability} />
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} /> */}

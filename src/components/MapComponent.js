@@ -29,6 +29,7 @@ export default function MapComponent(props) {
     onPress,
     child,
     text,
+    initialValue,
     isVisible,
     onClose,
   } = props

@@ -25,6 +25,8 @@ import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Toast } from 'native-base';
 import { ActivityIndicator } from 'react-native';
+import Modal from 'react-native-modal';
+import CalendarComponent from '../components/CalendarComponent';
 
 
 export default function HomeScreen(props) {
@@ -48,7 +50,19 @@ export default function HomeScreen(props) {
   const { data: dataCat } = useQuery(GET_CATEGORIES)
   const [page, setpage] = useState(1)
   const [firstRun, setFirstRun] = useState(true)
+  const [mainPriceModal, showmainPriceModal] = useState(false)
+  const [generalPriceModal, showGeneralPriceModal] = useState(false)
+  const [availabilityModal, showAvailabilityModal] = useState(false)
+  const [availabilityDates, setAvailabilityDates] = useState([])
+  const [generalPrice, setGeneralPrice] = useState(null)
+  const [showGeneral, setShowGeneral] = useState(false)
+  const [showAvailability, setShowAvailability] = useState(false)
+  const [showCalendar, setShowCalendar] = useState(false)
+  const [seasonalPrice, setSeasonalPrice] = useState([])
+  const [showSeasonalModal, setShowSeasonalModal] = useState(false)
+  const [seasonalDates, setSeasonalDates] = useState(null)
 
+  
   const [fetchProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_OWNED_PROPERTIES, {
     variables: {
       page: page,
@@ -63,6 +77,29 @@ export default function HomeScreen(props) {
   // const [fetchallOwnerProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
+    if (!mainPriceModal && availabilityModal) {
+      setShowAvailability(true)
+    }
+
+    if (!mainPriceModal && generalPriceModal) {
+      setShowGeneral(true)
+    }
+
+    if (!mainPriceModal && showSeasonalModal) {
+      setShowCalendar(true)
+    }
+
+  }, [mainPriceModal, availabilityModal, generalPriceModal, showSeasonalModal])
+
+  const updatePrices = () => {
+    //LOGIC HERE
+  }
+
+  const updateAvailability = () => {
+    //LOGIC HERE
+  }
+
+  useEffect(() => {
     if (!storedUserState) {
       // Toast.show({
       //   text: 'User is not Logged In, Unable to fetch Properties',
@@ -75,7 +112,7 @@ export default function HomeScreen(props) {
   useEffect(() => {
     // console.log('properties', propertiesdata)
     if (propertiesdata) {
-      setItems(propertiesdata.allOwnerProperties.data.reverse())
+      setItems(propertiesdata.ownerProperties.properties.data.reverse())
     }
 
     if (properyError) {
@@ -109,6 +146,9 @@ export default function HomeScreen(props) {
         console.log('refetch')
         refetch()
       }
+      setTimeout(() => {
+        setLoading(false)
+      }, 1500)
     });
 
     // return () => {
@@ -117,7 +157,7 @@ export default function HomeScreen(props) {
   }, [])
 
   useEffect(() => {
-    console.log('@userdata', userdata, userError)
+    // console.log('@userdata', userdata, userError)
     if (userdata && userdata.me) {
       storeUser(userdata.me)
       if (!userdata.me.is_verified) {
@@ -197,8 +237,44 @@ export default function HomeScreen(props) {
     }
   }
 
-  renderItem = (item, index) => {
-    console.log('ITEM', item.category)
+
+  const renderUpdateModal = () => {
+
+    return (
+      <Modal isVisible={mainPriceModal}>
+        <View style={{ height: 200, backgroundColor: 'white', borderRadius: 30, }}>
+          <TouchableOpacity onPress={() => showmainPriceModal(false)} style={{ marginBottom: 4, alignSelf: 'flex-end', padding: 8 }}>
+            <MaterialIcons size={25} color={Colors.primaryBlue} name={'close'} />
+          </TouchableOpacity >
+          <View style={{ alignSelf: 'center', width: '50%' }}>
+            <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>
+              ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر
+          </Text>
+            <TouchableOpacity onPress={() => {
+              showmainPriceModal(false)
+              setTimeout(() => {
+                setShowSeasonalModal(true)
+              }, 500)
+            }
+            } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8, marginTop: 16, }}>
+              <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{` اﻷﺳﻌﺎر العامة`}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              showmainPriceModal(false)
+              setTimeout(() => {
+                showAvailabilityModal(true)
+              }, 500)
+            }
+            } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8 }}>
+              <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{` اﻷﺳﻌﺎر العامة`}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
+  const renderItem = (item, index) => {
     return (
       <TouchableOpacity key={item.id} style={{
         height: 125,
@@ -237,9 +313,13 @@ export default function HomeScreen(props) {
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <View />
             {item.category.id == 2 ?
-              <TouchableOpacity style={{
-                padding: 8
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowAvailability(true)
+                }}
+                style={{
+                  padding: 8
+                }}>
                 <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
               </TouchableOpacity>
               :
@@ -251,10 +331,21 @@ export default function HomeScreen(props) {
                 <Text style={{ ...Fonts.fontRegular }}>{`Sections `}<FontAwesome name={'calendar'} /></Text>
               </TouchableOpacity>
             }
-            <TouchableOpacity style={{
-              // backgroundColor: 'black',
-              padding: 8
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log(item.category)
+                if (item?.category.id == 2) {
+                  console.log('ONPRESS SET DATA', item.general_price, item.availablities, seasonalPrice)
+                  // return
+                  setGeneralPrice(item?.general_price)
+                  setAvailabilityDates(item?.availablities)
+                  setSeasonalPrice(item?.seasonal_prices)
+                  showmainPriceModal(true)
+                }
+              }}
+              style={{
+                padding: 8
+              }}>
               <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
             </TouchableOpacity>
           </View>
@@ -275,7 +366,7 @@ export default function HomeScreen(props) {
     )
   }
 
-  renderEmpty = () => {
+  const renderEmpty = () => {
     if (loading || properyloading) {
       return (
         <View>
@@ -293,7 +384,7 @@ export default function HomeScreen(props) {
     )
   }
 
-  renderList = () => <FlatList
+  const renderList = () => <FlatList
     data={items}
     extraData={propertiesdata}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%' }}
@@ -325,10 +416,23 @@ export default function HomeScreen(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => {
-        // setItems(propertiesdata.allOwnerProperties.data.reverse())
+        // setItems(propertiesdata.ownerProperties.properties.data.reverse())
         setSelected(false)
       }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={selected} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
+        {renderUpdateModal()}
+        <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={true} key={'general'} onClose={() => {
+          setShowGeneral(false)
+          showGeneralPriceModal(false)
+        }} isVisible={showGeneral} />
+        <CalendarComponent setDates={setAvailabilityDates} data={availabilityDates} availabilities={true} key={'calendar'} onClose={() => {
+          setShowAvailability(false)
+          showAvailabilityModal(false)
+        }} isVisible={showAvailability} />
+        {showCalendar && <CalendarComponent seasonal={seasonalPrice} setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
+          setShowSeasonalModal(false)
+          setShowCalendar(false)
+        }} isVisible={showCalendar} />}
         {firstLoading ? <ActivityIndicator size={'large'} color={Colors.primaryBlue} style={{ marginTop: '20%' }} /> : renderList()}
       </View>
     </SafeAreaView>

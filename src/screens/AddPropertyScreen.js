@@ -214,7 +214,7 @@ export default function AddPropertyScreen(props) {
   })
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
-  const [availabilityDates, setAvailabilityDates] = useState(null)
+  const [availabilityDates, setAvailabilityDates] = useState([])
   const categories = useStoreState(state => state.auth.categories)
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
@@ -223,7 +223,7 @@ export default function AddPropertyScreen(props) {
   const initialState = () => {
     setPayload({})
     setSeasonalPrice([])
-    setAvailabilityDates(null)
+    setAvailabilityDates([])
     setLicense(null)
     setRegistration(null)
     setSelectedPhotos(null)
@@ -245,8 +245,8 @@ export default function AddPropertyScreen(props) {
   }
 
   useEffect(() => {
-
-  }, [])
+    console.log('@ADDSCREEN', availabilityDates)
+  }, [availabilityDates])
 
   useEffect(() => {
     console.log('@SEASONAL', seasonalPrice)
@@ -469,16 +469,7 @@ export default function AddPropertyScreen(props) {
     data.longitude = location.longitude
     data.general_price = generalPrice
     data.seasonal_prices = seasonalPrice
-    data.availablities = [
-      {
-        "to": "2020-06-11",
-        "from": "2020-06-15"
-      },
-      {
-        "to": "2020-06-19",
-        "from": "2020-06-19"
-      }
-    ]
+    data.availablities = availabilityDates
     const fpayload = {
       variables: {
         "input": data
@@ -697,7 +688,7 @@ export default function AddPropertyScreen(props) {
         }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />}
         <Input value={payload.contact_no} onChangeText={e => {
           const i = { ...payload }
-          i.contact_no = e
+          i.contact_no = er
           setPayload(i)
         }} style={{ marginBottom: 12, marginTop: types[0].selected ? 12 : 0 }} placeholder={'رقم التواصل'} />
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>}
@@ -778,7 +769,7 @@ export default function AddPropertyScreen(props) {
       <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={general} onClose={() => {
         setShowSeasonal(false)
       }} isVisible={showSeasonal} />
-      <CalendarComponent setDates={setAvailabilityDates} calendar={true} key={'calendar'} onClose={() => {
+      <CalendarComponent setDates={setAvailabilityDates} data={availabilityDates} availabilities={true} key={'calendar'} onClose={() => {
         setShowAvailability(false)
       }} isVisible={showAvailability} />
       <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />

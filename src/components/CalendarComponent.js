@@ -5,7 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  ScrollView
+  ScrollView, Alert
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -79,6 +79,8 @@ export default function CalendarComponent(props) {
     child,
     text,
     key,
+    availabilities,
+    data,
     seasonal,
     general,
     isVisible,
@@ -90,23 +92,44 @@ export default function CalendarComponent(props) {
   const [toDate, setToDate] = useState(null)
   const [fromDate, setFromDate] = useState(null)
   const [addedPrice, setAddedPrice] = useState(0)
-  const [fdate, setfDate] = useState(false)
+  const [fdate, setfDate] = useState(true)
   const [weekdaysData, setWeekDaysData] = useState(WEEK_DAYS)
   const [weekendData, setWeekendData] = useState(WEEK_ENDS)
   const [sPrices, setsPrices] = useState(seasonal)
   const [marked, setMarked] = useState({})
+  const [tempMarked, setTempMarked] = useState({})
+  const [final, setFinal] = useState(false)
+  const [current_price, setCurrentPrice] = useState(0)
+  const [availabilitiesData, setAvailabilitiesData] = useState(data)
+
 
   useEffect(() => {
     if (!isVisible && !calendar) setShowCalendar(false)
     if (!isVisible) setsPrices([])
+    // if (availabilities) setMarked(tempMarked)
   }, [isVisible])
+
+  useEffect(() => {
+    console.log('2avail', availabilitiesData)
+    if (availabilitiesData?.length > 0) {
+      props.setDates(availabilitiesData)
+    }
+  }, [availabilitiesData])
 
   useEffect(() => {
     setShowCalendar(calendar)
     if (seasonal) {
       setsPrices(seasonal)
+      initialMarkedDates(sPrices)
     }
-    console.log('@DATA', props.data)
+
+    if (availabilities) {
+      setfDate(true)
+      setFinal(false)
+      initialMarkedDates(data)
+    }
+    // console.log('@DATA', props.data)
+
   }, [])
 
   useEffect(() => {
@@ -138,7 +161,7 @@ export default function CalendarComponent(props) {
 
   useEffect(() => {
     console.log(fromDate, toDate)
-    if (toDate && fromDate) {
+    if (toDate || fromDate) {
       // const item = {}
       // item[toDate] = { selected: true, color: Colors.primaryBlue, textColor: 'white' }
       // item[fromDate] = { selected: true, color: Colors.primaryBlue, textColor: 'white' }
@@ -147,41 +170,83 @@ export default function CalendarComponent(props) {
     }
   }, [toDate, fromDate])
 
-  const setupMarkedDates = (fromDate, toDate) => {
+  const initialMarkedDates = data => {
+    if (!data) return
     let markedDates = {
-      [fromDate]: { startingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+      ...marked,
     }
-    let mFromDate = new XDate(fromDate)
-    let mToDate = new XDate(toDate)
-    let range = mFromDate.diffDays(mToDate)
-    if (range >= 0) {
-      if (range == 0) {
-        markedDates = { [toDate]: { startingDay: true, color: Colors.primaryYellow, textColor: 'white' } }
-      } else {
-        for (var i = 1; i <= range; i++) {
-          let tempDate = mFromDate.addDays(1).toString('yyyy-MM-dd')
-          if (i < range) {
-            markedDates[tempDate] = { color: Colors.primaryYellow, textColor: 'white' }
+    data.forEach((item, index) => {
+      delete item.__typename
+      const fromDate = item.from
+      const toDate = item.to
+      markedDates[fromDate] = { startingDay: true, endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+      if (fromDate && toDate) {
+        let mFromDate = new XDate(fromDate)
+        let mToDate = new XDate(toDate)
+        let range = mFromDate.diffDays(mToDate)
+        if (range >= 0) {
+          if (range == 0) {
+            markedDates[toDate] = { startingDay: true, endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
           } else {
-            markedDates[tempDate] = { endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+            for (var i = 1; i <= range; i++) {
+              let tempDate = mFromDate.addDays(1).toString('yyyy-MM-dd')
+              if (i < range) {
+                markedDates[tempDate] = { color: Colors.primaryYellow, textColor: 'white' }
+              } else {
+                markedDates[fromDate] = { startingDay: true, endingDay: false, color: Colors.primaryYellow, textColor: 'white' }
+                markedDates[tempDate] = { endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+              }
+            }
+          }
+        }
+      }
+      console.log('@marked', markedDates)
+      const finalMarked = {
+        ...markedDates
+      }
+      setMarked(finalMarked)
+      setTempMarked(finalMarked)
+    })
+  }
+
+  const setupMarkedDates = (fromDate, toDate, update) => {
+    let markedDates = {
+      [fromDate]: { startingDay: true, endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+    }
+
+    if (fromDate && toDate) {
+      let mFromDate = new XDate(fromDate)
+      let mToDate = new XDate(toDate)
+      let range = mFromDate.diffDays(mToDate)
+      if (range >= 0) {
+        if (range == 0) {
+          markedDates[toDate] = { startingDay: true, endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+        } else {
+          for (var i = 1; i <= range; i++) {
+            let tempDate = mFromDate.addDays(1).toString('yyyy-MM-dd')
+            if (i < range) {
+              markedDates[tempDate] = { color: Colors.primaryYellow, textColor: 'white' }
+            } else {
+              markedDates[fromDate] = { startingDay: true, endingDay: false, color: Colors.primaryYellow, textColor: 'white' }
+              markedDates[tempDate] = { endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+            }
           }
         }
       }
     }
-    setMarked(markedDates)
-    // return [markedDates, range]
+
+    console.log('@marked', markedDates)
+    const finalMarked = {
+      ...marked,
+      ...markedDates
+    }
+    setMarked(finalMarked)
+    if (update) setTempMarked(finalMarked)
   }
 
   useEffect(() => {
     console.log('@SPRICES', sPrices)
-    // if (fromDate) {
-    //   const item = {}
-    //   console.log('@fromDate', item, !item[fromDate])
-    //   if (!item[fromDate]) {
-    //     item[fromDate] = { selected: true, color: Colors.primaryBlue, startingDay: true, endingDay: true, textColor: 'white' }
-    //     setMarked(item)
-    //   }
-    // }
+    // setMarked(markedDates)
   }, [sPrices])
 
   const _onChangeInput = (value, index, type = 1) => {
@@ -198,7 +263,40 @@ export default function CalendarComponent(props) {
     // console.log('onChange', weekdaysData, weekendData)
   }
 
+  const finalizeMarker = () => {
+    let markedDates = {
+    }
+    if (sPrices) {
+      const items = [...sPrices]
+      items.forEach(i => {
+        let mFromDate = new XDate(i.from)
+        let mToDate = new XDate(i.to)
+        let range = mFromDate.diffDays(mToDate)
+        console.log('@CONVERTED DATES', mFromDate, i.from)
+        markedDates[i.from] = { startingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+        if (range >= 0) {
+          if (range == 0) {
+            markedDates[i.to] = { startingDay: true, endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+          } else {
+            for (var i = 1; i <= range; i++) {
+              let tempDate = mFromDate.addDays(1).toString('yyyy-MM-dd')
+              if (i < range) {
+                markedDates[tempDate] = { color: Colors.primaryYellow, textColor: 'white' }
+              } else {
+                // markedDates[mFromDate] = { startingDay: true, endingDay: false, color: Colors.primaryYellow, textColor: 'white' }
+                markedDates[tempDate] = { endingDay: true, color: Colors.primaryYellow, textColor: 'white' }
+              }
+            }
+          }
+        }
+      })
+    }
+    console.log('@MARKED FINALIZE', markedDates)
+    setMarked(markedDates)
+  }
+
   const onFinalizeData = () => {
+    // finalizeMarker()
     const data = {}
 
     weekendData.forEach(i => {
@@ -222,6 +320,7 @@ export default function CalendarComponent(props) {
 
     console.log('@pricedata', data)
     props.setPrice(data)
+    setFinal(false)
     onClose()
   }
 
@@ -277,6 +376,7 @@ export default function CalendarComponent(props) {
         <TouchableOpacity onPress={() => {
           // if (fdate) {
           setShowCalendar(true)
+          setfDate(true)
           // } else {
           //   Toast.show({
           //     type: 'danger',
@@ -302,13 +402,13 @@ export default function CalendarComponent(props) {
   }
 
   const renderMain = () => {
+    // console.log('@GENERAL/MAIN', data)
     return (
       <Modal isVisible={isVisible} style={{ alignItems: 'flex-end' }}>
         <View style={{ width: '100%', height: '80%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, padding: 12, paddingHorizontal: 24, }}>
           <ScrollView>
             <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`ﺗﺤﺪaﻳﺪ أﺳﻌﺎر أيام المواسم `}</Text>
             {/* DATE SECTION */}
-
             {!general && renderDateSection()}
             <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
             {renderWeekDays()}
@@ -337,18 +437,40 @@ export default function CalendarComponent(props) {
             // Collection of dates that have to be marked. Default = {}
             onDayPress={(day) => {
               console.log('selected day', moment(day.dateString).format("YYYY-MM-DD"))
-              if (seasonal) {
+              const selectedDay = moment(day.dateString).format("YYYY-MM-DD")
+
+              if (seasonal && !final) {
+                if (marked[selectedDay]) {
+                  Alert.alert('Error', 'That date is already taken')
+                  return
+                }
                 if (fdate) {
                   // setToDate(moment(day.dateString).format("YYYY-MM-DD"))
-                  setFromDate(moment(day.dateString).format("YYYY-MM-DD"))
+                  setFromDate(selectedDay)
                   console.log('onselect today')
                   setfDate(false)
                 } else {
                   console.log('onselect ffromday')
-                  setToDate(moment(day.dateString).format("YYYY-MM-DD"))
-                  // setFromDate(moment(day.dateString).format("YYYY-MM-DD"))
+                  setToDate(selectedDay)
+                  setFinal(true)
+                  // setFromDate(selectedDay)
                 }
               }
+
+              if (!final) {
+                if (fdate) {
+                  // setToDate(selectedDay)
+                  setFromDate(selectedDay)
+                  console.log('onselect today')
+                  setfDate(false)
+                } else {
+                  console.log('onselect ffromday')
+                  setToDate(selectedDay)
+                  setFinal(true)
+                  // setFromDate(selectedDay)
+                }
+              }
+
               // setShowCalendar(false)
             }}
             markedDates={marked}
@@ -357,7 +479,13 @@ export default function CalendarComponent(props) {
           <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 8 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
             <TouchableOpacity onPress={() => {
-              if (calendar) onClose()
+              if (calendar) {
+                onClose()
+              }
+              setFromDate(null)
+              setToDate(null)
+              setFinal(false)
+              finalizeMarker()
               setShowCalendar(false)
             }} style={{ ...styles.button, alignSelf: 'center', marginBottom: 40 }}>
               <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`إلغاء` || `Calendar`}</Text>
@@ -385,8 +513,9 @@ export default function CalendarComponent(props) {
             <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
             <View style={{ alignSelf: 'flex-end', width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
               <View />
-              <TextInput value={sitem.price || 0} onChangeText={(e) => {
-                sitem.price = e
+              <TextInput value={String(current_price)} onChangeText={(e) => {
+                // sitem.price = e
+                setCurrentPrice(e)
               }} style={{ height: 33, width: 103, borderRadius: 25, borderWidth: 1, padding: 8, textAlign: 'right', borderColor: Colors.gray }} placeholder={`ر.س`} />
               <Text style={{ ...Fonts.fontLight, width: 50 }}>{`Price`}</Text>
               <View />
@@ -408,7 +537,7 @@ export default function CalendarComponent(props) {
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`حفظ` || `Close`}</Text>
               </TouchableOpacity >
               <TouchableOpacity onPress={() => {
-                if (!sitem.price || sitem.price == 0) {
+                if (current_price == 0) {
                   Toast.show({
                     text: 'Please add price',
                     type: 'danger'
@@ -418,10 +547,13 @@ export default function CalendarComponent(props) {
                 var items = [...sPrices]
                 sitem.from = fromDate
                 sitem.to = toDate
+                sitem.price = current_price
                 items.push(sitem)
                 console.log('@SESONAL', items)
                 setsPrices(items)
                 setFromDate(null)
+                setCurrentPrice(0)
+                setFinal(false)
                 setToDate(null)
               }} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`Add`}</Text>
@@ -431,6 +563,127 @@ export default function CalendarComponent(props) {
               <MaterialIcons size={25} color={Colors.primaryBlue} name={'close'} />
             </TouchableOpacity >
           </ScrollView>
+        </View>
+      </Modal>
+    )
+  }
+
+  const onAddAvailabilities = () => {
+    if (fromDate || toDate)
+      Alert.alert(
+        'Do you want to Add?',
+        !toDate ? `${fromDate} ` : `${fromDate} - ${toDate}`,
+        [
+          {
+            text: "Cancel",
+            onPress: () => {
+              setMarked(tempMarked)
+              setFromDate(null)
+              setToDate(null)
+              setFinal(false)
+              setfDate(true)
+            },
+            style: "cancel"
+          },
+          {
+            text: "Confirm",
+            onPress: () => {
+              const arr = availabilitiesData ? [...availabilitiesData] : []
+              const item = {
+                to: toDate || fromDate,
+                from: fromDate
+              }
+              arr.push(item)
+              setAvailabilitiesData(arr)
+              setTempMarked(marked)
+              initAvailabilities()
+            },
+          },
+        ],
+        {
+          cancelable: false
+        }
+      )
+  }
+
+  const onSubmitAvailabilities = () => {
+    console.log(availabilitiesData)
+    //finalizedata
+    initAvailabilities()
+    onClose()
+  }
+
+  const initAvailabilities = () => {
+    // onClose()
+    setFromDate(null)
+    setToDate(null)
+    setFinal(false)
+    setfDate(true)
+  }
+
+  const renderAvailabilities = () => {
+    return (
+      <Modal isVisible={isVisible} style={{ alignItems: 'flex-end' }}>
+        <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, paddingTop: 40, justifyContent: 'space-between' }}>
+          <TouchableOpacity
+            onPress={() => {
+              onClose()
+              setFromDate(null)
+              setToDate(null)
+              setFinal(false)
+              setfDate(true)
+              setMarked(tempMarked)
+              setShowCalendar(false)
+            }}
+            style={{ position: 'absolute', right: 10, top: 10 }}>
+            <MaterialIcons color={'black'} size={20} name={'close'} />
+          </TouchableOpacity>
+          <Calendar
+            // Collection of dates that have to be marked. Default = {}
+            onDayPress={(day) => {
+              const selectedDay = moment(day.dateString).format("YYYY-MM-DD")
+              if (!final) {
+                if (fdate) {
+                  if (marked[selectedDay]) {
+                    Alert.alert('Error', 'date is already taken')
+                    return
+                  }
+                  setFromDate(selectedDay)
+                  console.log('onselect today')
+                  setfDate(false)
+                } else {
+                  if (marked[selectedDay] && selectedDay != fromDate) {
+                    Alert.alert('Error', 'date is already taken')
+                    return
+                  }
+                  console.log('onselect ffromday')
+                  setToDate(selectedDay)
+                  setFinal(true)
+                  setfDate(true)
+                }
+              }
+            }}
+            markedDates={marked}
+            markingType={'period'}
+          />
+          <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 8 }} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
+            <TouchableOpacity onPress={() => {
+              setFromDate(null)
+              setToDate(null)
+              setFinal(false)
+              setfDate(true)
+              setMarked(tempMarked)
+            }} style={{ ...styles.button, alignSelf: 'center', marginBottom: 40 }}>
+              <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`إلغاء` || `Calendar`}</Text>
+            </TouchableOpacity >
+            <TouchableOpacity onPress={() => onSubmitAvailabilities()} style={{ ...styles.button, ...style, alignSelf: 'center', marginBottom: 40 }}>
+              <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`تحديد` || `Calendar`}</Text>
+            </TouchableOpacity >
+            <TouchableOpacity onPress={() => onAddAvailabilities()} style={{ ...styles.button, ...style, alignSelf: 'center', marginBottom: 40 }}>
+              <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`Add`}</Text>
+            </TouchableOpacity >
+          </View>
         </View>
       </Modal>
     )
@@ -527,6 +780,8 @@ export default function CalendarComponent(props) {
   };
 
   if (showCalendar || calendar) return renderCalendar()
+
+  if (availabilities) return renderAvailabilities()
 
   if (seasonal != null) return renderSeasonal()
 

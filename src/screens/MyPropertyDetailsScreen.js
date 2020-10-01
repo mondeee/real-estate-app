@@ -52,7 +52,6 @@ export default function MyPropertyDetailsScreen(props) {
   const userData = useStoreState(state => state.auth.user)
 
   useEffect(() => {
-    console.log('@ITEM', props.navigation.state.params)
     setTotalPages(item.images)
     // _fetchToken()
   }, [])
