@@ -478,6 +478,40 @@ query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
 `)
 
 
+export const GET_OWNER_BOOKINGS = gql(`
+query($page: Int!){
+  ownerBookings {
+    id
+    owner_bookings(first: 1, page: $page) {
+      paginatorInfo {
+        hasMorePages
+      }
+          data {
+      id
+      referrence_id
+      detail{
+        check_in
+        check_out
+        amount
+        property{
+          id
+          name
+          images{
+            avatar
+          }
+        }
+        section {
+          id
+          name
+        }
+      }
+    }
+  }
+    }
+}
+`)
+
+
 
 //MUTATIONS
 

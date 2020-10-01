@@ -11,11 +11,14 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER } from '../services/graphql/queries'
+import { IMAGE_URL } from '../services/api/url'
+import { GET_OWNER_BOOKINGS, REGISTER } from '../services/graphql/queries'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
+import { onError } from 'apollo-link-error';
+import { RefreshControl } from 'react-native';
 
 const SAMPLE = [
   {
@@ -27,6 +30,9 @@ const SAMPLE = [
     "id": "2",
     "referrence_id": "5f744b7dccc83",
     "detail": {
+      "check_in": "2020-09-15",
+      "check_out": "2020-09-21",
+      "amount": 300,
       "property": {
         "id": "4",
         "name": "TEST PRIVATE 3",
@@ -50,15 +56,36 @@ const SAMPLE = [
 export default function BookingListScreen(props) {
   const { navigate, goBack } = props.navigation
   const [loading, setLoading] = useState(false)
-  const [refreshing, setRefreshing] = useState(false)
+  const [refreshing, setRefreshing] = useState(true)
+  const [page, setPage] = useState(1)
   const [bookingList, setBookingList] = useState(SAMPLE)
+  const { loading: fetchLoading, error, data, refetch } = useQuery(GET_OWNER_BOOKINGS, {
+    variables: {
+      page: page
+    },
+    onError: e => console.log('@BOOKING_ERROR', (JSON.stringify(e)))
+  })
 
   useEffect(() => {
 
   }, [])
 
+  useEffect(() => {
+    console.log('@LOADING', fetchLoading)
+    if (data && page == 1) {
+      console.log('@DATA', data?.ownerBookings?.id)
+      setBookingList(data?.ownerBookings?.owner_bookings?.data || [])
+      setRefreshing(false)
+    }
+
+    if (data && page > 1) {
+      setBookingList(bookingList.concat(data?.ownerBookings?.owner_bookings?.data) || [])
+      setRefreshing(false)
+    }
+  }, [data, loading])
+
   const renderItem = ({ item }) => {
-    console.log('@ITEM', item)
+    console.log(IMAGE_URL + item?.detail?.property?.images[0].avatar)
     return (
       <TouchableOpacity style={{
         minHeight: 125,
@@ -75,7 +102,7 @@ export default function BookingListScreen(props) {
       }}>
         <View style={{ width: '65%', padding: 12, }}>
           <Text style={{ ...Fonts.fontLight, marginRight: 4, color: Colors.darkGray }}>
-            {`${item?.detail?.property?.name}  `}
+            {`${item?.detail?.property?.name || 'unknown'}  `}
             <Text style={{ ...Fonts.fontBold, }}>
               {item?.detail?.property?.name || 'unknown'}
             </Text>
@@ -86,13 +113,13 @@ export default function BookingListScreen(props) {
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`المبلغ \n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
-                {`500 ريال`}
+                {`${item?.detail?.amount || 0} ريال`}
               </Text>
             </Text>
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`ﺗﺎرﻳﺦ اﻟﻮﺻﻮل\n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
-                {`2020/9/1`}
+                {`${item?.detail?.check_in || `YYYY-MM-DD`}`}
               </Text>
             </Text>
           </View>
@@ -108,7 +135,7 @@ export default function BookingListScreen(props) {
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`ﺗﺎرﻳﺦ اﻟﻤﻐﺎدرة\n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
-                {`2020/9/12`}
+                {`${item?.detail?.check_out || `YYYY-MM-DD`}`}
               </Text>
             </Text>
           </View>
@@ -151,12 +178,24 @@ export default function BookingListScreen(props) {
             </TouchableOpacity>
           </View>
         </View>
-        <Image style={{
-          alignSelf: 'flex-end',
-          width: '35%',
-          borderTopRightRadius: 11,
-          borderBottomRightRadius: 11
-        }} source={require('../../assets/itemimage.png')} />
+        {item?.detail?.property?.images ?
+          <Image style={{
+            alignSelf: 'flex-end',
+            width: '35%',
+            height: '100%',
+            resizeMode: 'cover',
+            borderTopRightRadius: 11,
+            borderBottomRightRadius: 11
+          }} source={{ uri: IMAGE_URL + item?.detail?.property?.images[0].avatar }} />
+          : <Image style={{
+            alignSelf: 'flex-end',
+            width: '35%',
+            height: '100%',
+            resizeMode: 'cover',
+            borderTopRightRadius: 11,
+            borderBottomRightRadius: 11
+          }} source={require('../../assets/itemimage.png')} />
+        }
       </TouchableOpacity>
     )
   }
@@ -168,6 +207,11 @@ export default function BookingListScreen(props) {
         extraData={bookingList}
         keyExtractor={(item, index) => String(index)}
         renderItem={(item, index) => renderItem(item)}
+        onRefresh={() => {
+          // setPage(page + 1)
+          refetch()
+        }}
+        refreshing={refreshing}
       />
     )
   }
