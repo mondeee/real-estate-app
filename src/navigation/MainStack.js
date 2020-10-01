@@ -24,6 +24,7 @@ import ChatScreen from '../screens/ChatScreen';
 import SectionDetailsScreen from '../screens/SectionDetailsScreen';
 import UpdatePropertyScreen from '../screens/UpdatePropertyScreen';
 import UpdateSectionScreen from '../screens/UpdateSectionScreen';
+import BookingListScreen from '../screens/BookingListScreen';
 
 const AppNavigator = createAppContainer(
   createDrawerNavigator(
@@ -33,6 +34,7 @@ const AppNavigator = createAppContainer(
       FAQ: FAQScreen,
       Terms: TermsAndAgreementScreen,
       Subs: SubscriptionScreen,
+      BookingList: BookingListScreen,
     },
     {
       headerMode: 'none',

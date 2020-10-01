@@ -36,7 +36,7 @@ export default function Header(props) {
         {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
           <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
         </TouchableOpacity>}
-        <Text style={{ textAlign: 'center', alignSelf: 'center', marginTop: 12 }}>{name || ''}</Text>
+        <Text style={{ textAlign: 'center', alignSelf: 'center', marginVertical: 12, ...Fonts.FontMed, fontSize: 20 }}>{name || ''}</Text>
       </SafeAreaView>
     )
   }
