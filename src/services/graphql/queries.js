@@ -482,7 +482,7 @@ export const GET_OWNER_BOOKINGS = gql(`
 query($page: Int!){
   ownerBookings {
     id
-    owner_bookings(first: 1, page: $page) {
+    owner_bookings(first: 30, page: $page) {
       paginatorInfo {
         hasMorePages
       }

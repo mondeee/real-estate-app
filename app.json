@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/nozolicon.png",
     "splash": {
@@ -16,6 +16,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "userInterfaceStyle": "light",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,11 +24,13 @@
       "**/*"
     ],
     "ios": {
+      "userInterfaceStyle": "light",
       "supportsTablet": true,
       "buildNumber": "2",
       "bundleIdentifier": "owner.nozol.app"
     },
     "android": {
+      "userInterfaceStyle": "light",
       "package": "owner.nozol.app",
       "versionCode": 1,
       "permissions": [

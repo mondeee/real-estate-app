@@ -688,7 +688,7 @@ export default function AddPropertyScreen(props) {
         }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />}
         <Input value={payload.contact_no} onChangeText={e => {
           const i = { ...payload }
-          i.contact_no = er
+          i.contact_no = e
           setPayload(i)
         }} style={{ marginBottom: 12, marginTop: types[0].selected ? 12 : 0 }} placeholder={'رقم التواصل'} />
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>}
