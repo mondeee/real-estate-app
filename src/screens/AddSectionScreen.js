@@ -173,7 +173,7 @@ export default function AddSectionScreen(props) {
         text: 'تم اضافة القسم بنجاح',
         type: 'success'
       })
-      params.refresh()
+      if (params?.refresh) params?.refresh()
       setLoading(false)
       setTimeout(() => {
         goBack()
@@ -186,6 +186,7 @@ export default function AddSectionScreen(props) {
   }
 
   useEffect(() => {
+    console.log('@ADDSECTION', data, error)
     if (data || error)
       setLoading(false)
   }, [data, error])
@@ -349,9 +350,11 @@ export default function AddSectionScreen(props) {
       }
     }
     console.log('@finalPayload', fpayload)
-    addSectionProperty(fpayload).catch(e => {
-      onError(e)
-    })
+    addSectionProperty(fpayload)
+    // .catch(e => {
+    //   console.log('@error', JSON.stringify(e))
+    //   onError(e)
+    // })
   }
 
   const renderSelection = (item, index) => {
@@ -496,7 +499,7 @@ export default function AddSectionScreen(props) {
   return (
     <View style={styles.container}>
       <Header Add Section onPressBack={() => {
-        params.refresh()
+        if (params?.refresh) params?.refresh()
         goBack()
       }} />
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>

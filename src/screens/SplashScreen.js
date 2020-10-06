@@ -15,10 +15,14 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import { useStoreActions } from 'easy-peasy';
 import * as Permissions from "expo-permissions";
+import { useQuery } from '@apollo/react-hooks';
+import { GET_DISTRICT } from '../services/graphql/queries';
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
   const [page, setPage] = useState(0)
   const storeNotifToken = useStoreActions(actions => actions.auth.setNotifToken)
+  const storeDistricts = useStoreActions(actions => actions.auth.setDistricts)
+  const { error, data } = useQuery(GET_DISTRICT)
 
   const setUpNotif = async () => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -38,6 +42,17 @@ export default function SplashScreen(props) {
   useEffect(() => {
 
   }, [page])
+
+  useEffect(() => {
+    if (data && data?.allDistrict) {
+      const items = [...data.allDistrict]
+      items.forEach(i => {
+        i.key = i.id
+        i.label = i.ar
+      })
+      storeDistricts(items)
+    }
+  }, [error, data])
 
   renderSkipButton = () => {
     return (

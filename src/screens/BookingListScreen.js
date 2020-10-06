@@ -3,22 +3,19 @@ import {
   Image,
   StyleSheet,
   Text,
-  View
+  View,
+  RefreshControl
 } from 'react-native';
 
 import Colors from '../styles/Colors';
-import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
 import { IMAGE_URL } from '../services/api/url'
-import { GET_OWNER_BOOKINGS, REGISTER } from '../services/graphql/queries'
+import { GET_OWNER_BOOKINGS } from '../services/graphql/queries'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
-import { useStoreActions, useStoreState } from 'easy-peasy';
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
-import { onError } from 'apollo-link-error';
-import { RefreshControl } from 'react-native';
 
 const SAMPLE = [
   {

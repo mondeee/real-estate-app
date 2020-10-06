@@ -74,6 +74,10 @@ export default function HomeScreen(props) {
     }
   }
   )
+  const [ownedProperties, {
+    data: ownedPropertiesData,
+    error: ownedPropertiesError
+  }] = useLazyQuery(GET_OWNED_PROPERTIES)
   // const [fetchallOwnerProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_ALL_PROPERTIES)
 
   useEffect(() => {
@@ -110,7 +114,7 @@ export default function HomeScreen(props) {
   }, [storedUserState])
 
   useEffect(() => {
-    // console.log('properties', propertiesdata)
+    console.log('properties', propertiesdata, properyError)
     if (propertiesdata) {
       setItems(propertiesdata.ownerProperties.properties.data.reverse())
     }
@@ -144,7 +148,7 @@ export default function HomeScreen(props) {
       setLoading(true)
       if (storedUserState && !firstRun) {
         console.log('refetch')
-        refetch()
+        // refetch()
       }
       setTimeout(() => {
         setLoading(false)
@@ -171,10 +175,6 @@ export default function HomeScreen(props) {
       deleteToken()
     }
   }, [userdata, userError])
-
-  useEffect(() => {
-    // console.log('@items')
-  }, [items])
 
   const deleteToken = async () => {
     await AsyncStorage.removeItem('token')
@@ -402,7 +402,7 @@ export default function HomeScreen(props) {
           if (storedUserState) {
             // fetchProperties()
             setLoading(true)
-            refetch()
+            // refetch()
             setTimeout(() => {
               setLoading(false)
             }, 1500)

@@ -26,8 +26,14 @@
     "ios": {
       "userInterfaceStyle": "light",
       "supportsTablet": true,
-      "buildNumber": "2",
-      "bundleIdentifier": "owner.nozol.app"
+      "buildNumber": "4",
+      "bundleIdentifier": "owner.nozol.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "App uses the camera to take pictures for profile setup.",
+        "NSLocationWhenInUseUsageDescription": "App gathers the location of the user to check the nearest properties in the app.",
+        "NSLocationAlwaysUsageDescription": "App gathers the location of the user to check the nearest properties in the app.",
+        "NSPhotoLibraryUsageDescription": "App uses the Gallery to be able users to upload when adding property."
+      }
     },
     "android": {
       "userInterfaceStyle": "light",

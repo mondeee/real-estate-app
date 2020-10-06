@@ -12,6 +12,7 @@ export default {
   commercial_types: null,
   private_types: null,
   isMediaAllowed: false,
+  districts: null,
   setUser: action((state, payload) => {
     state.user = payload;
   }),
@@ -42,6 +43,9 @@ export default {
   setNotifToken: action((state, payload) => {
     state.notifToken = payload;
   }),
+  setDistricts: action((state, payload) => {
+    state.districts = payload;
+  }), 
   clearAuth: action((state, payload) => {
     state.user = {};
   })

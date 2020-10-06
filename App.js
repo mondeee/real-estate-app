@@ -46,11 +46,12 @@ export default function App() {
         uri: 'https://app.nozolsa.com/graphql',
         fetch: async (uri, options) => {
           const token = await AsyncStorage.getItem('token')
-          console.log('token from Appjs', token)
+          console.log('APPJS \n', token)
           options.headers.Authorization = (token) ? `Bearer ${token}` : ''
           return fetch(uri, options)
-        }
+        },
       }),
+    
   });
 
   useEffect(() => {

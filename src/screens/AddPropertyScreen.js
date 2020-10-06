@@ -219,6 +219,7 @@ export default function AddPropertyScreen(props) {
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
+  const storedDistricts = useStoreState(state => state.auth.districts)
 
   const initialState = () => {
     setPayload({})
@@ -243,6 +244,10 @@ export default function AddPropertyScreen(props) {
       }
     )
   }
+
+  useEffect(() => {
+    console.log('@DISTRICTS', storedDistricts)
+  }, [storedDistricts])
 
   useEffect(() => {
     console.log('@ADDSCREEN', availabilityDates)
@@ -746,11 +751,16 @@ export default function AddPropertyScreen(props) {
           setPayload(item)
         }} value={payload.name || null} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
-          <Input onChangeText={e => {
+          {/* <Input onChangeText={e => {
             const item = { ...payload }
             item.district = e
             setPayload(item)
-          }} style={{ width: 140 }} placeholder={`الحي`} />
+          }} style={{ width: 140 }} placeholder={`الحي`} /> */}
+          <Dropdown onChangeText={(e) => {
+            const item = { ...payload }
+            item.district_id = e.id
+            setPayload(item)
+          }} data={storedDistricts} style={{ width: 140 }} placeholder={`الحي`} />
           <Dropdown onChangeText={(e) => {
             const item = { ...payload }
             item.city_id = e.id

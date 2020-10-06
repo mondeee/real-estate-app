@@ -144,7 +144,6 @@ query($first: Int!, $page: Int!){
             id
           }
         }
-        district
         general_price{
           monday
           tuesday
@@ -374,6 +373,16 @@ query{
 export const GET_TYPE = id => gql(
   `query{
     allTypes(category_id:${id}){
+      id
+      en
+      ar
+    }
+  }`
+)
+
+export const GET_DISTRICT = gql(
+  `query{
+    allDistrict{
       id
       en
       ar

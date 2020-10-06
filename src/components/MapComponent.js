@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -20,6 +21,8 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import MapView from 'react-native-maps';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
+import { Toast } from 'native-base';
+import { ActivityIndicator } from 'react-native';
 
 
 export default function MapComponent(props) {
@@ -34,17 +37,22 @@ export default function MapComponent(props) {
     onClose,
   } = props
   const [region, setRegion] = useState(null)
+  const [fetching, setFetching] = useState(true)
   const [location_name, setLocationName] = useState(null)
   var timer = null
 
   //يرجى السماح لتطبيق نزل بالوصول إلى الموقع حتى تتمكن من إضافة موقع نزلك.
 
   useEffect(() => {
+    setFetching(true)
     getLocation(region)
   }, [region])
 
   const getLocation = async (data) => {
-    if (!data) return
+    if (!data) {
+      setFetching(false)
+      return
+    }
     const location = await Location.reverseGeocodeAsync(data).catch(e => {
       console.log('error', e)
     })
@@ -57,6 +65,7 @@ export default function MapComponent(props) {
         setLocationName(`${item.city}, ${item.country}`)
       }
     }
+    setFetching(false)
     return location
   }
 
@@ -70,12 +79,12 @@ export default function MapComponent(props) {
           }, 1500)
         }} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-          <Button onPress={() => {
+          {fetching ? <ActivityIndicator /> : <Button onPress={() => {
             const item = { ...region }
             item.location = location_name
             onPress(item)
             onClose()
-          }} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />
+          }} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />}
         </View>
         <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => {
           if (region && location_name) {
