@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -15,7 +16,6 @@ import { IMAGE_URL } from '../services/api/url'
 import { GET_OWNER_BOOKINGS } from '../services/graphql/queries'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { FlatList } from 'react-native';
-import { TouchableOpacity } from 'react-native';
 
 const SAMPLE = [
   {

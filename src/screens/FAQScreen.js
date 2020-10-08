@@ -4,6 +4,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   ActivityIndicator
 } from 'react-native';
@@ -13,7 +14,6 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_QUESTIONS } from '../services/graphql/queries';

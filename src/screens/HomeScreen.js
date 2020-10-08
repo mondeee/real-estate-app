@@ -7,6 +7,7 @@ import {
   Platform,
   Text,
   View,
+  TouchableOpacity,
   AsyncStorage
 } from 'react-native';
 
@@ -15,7 +16,6 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts'
 import { getToken } from '../utils/functions'
 import { SAMPLE_LIST } from '../constants/data'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
@@ -320,7 +320,7 @@ export default function HomeScreen(props) {
                 style={{
                   padding: 8
                 }}>
-                <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
+                <Text style={{ ...Fonts.fontRegular }}>{`الأوقات المتاحة `}<FontAwesome name={'calendar'} /></Text>
               </TouchableOpacity>
               :
               <TouchableOpacity
@@ -328,9 +328,10 @@ export default function HomeScreen(props) {
                 style={{
                   padding: 8
                 }}>
-                <Text style={{ ...Fonts.fontRegular }}>{`Sections `}<FontAwesome name={'calendar'} /></Text>
+                <Text style={{ ...Fonts.fontRegular }}>{`الأقسام `}<FontAwesome name={'calendar'} /></Text>
               </TouchableOpacity>
             }
+            {item.category.id == 2 ?
             <TouchableOpacity
               onPress={() => {
                 console.log(item.category)
@@ -346,8 +347,8 @@ export default function HomeScreen(props) {
               style={{
                 padding: 8
               }}>
-              <Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>
-            </TouchableOpacity>
+              <Text style={{ ...Fonts.fontRegular }}>{`الأسعار `}<FontAwesome name={'money'} /></Text>
+            </TouchableOpacity> : null }
           </View>
         </View>
         {

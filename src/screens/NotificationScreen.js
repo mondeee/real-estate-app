@@ -77,7 +77,6 @@ export default function NotificationScreen() {
     )
   }
 
-
   renderEmpty = () => {
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
@@ -90,11 +89,11 @@ export default function NotificationScreen() {
 
   renderList = () => <FlatList
     data={items}
+    extraData={items}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingBottom: 100 }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => String(item.id)}
     renderItem={({ item }) => renderItem(item)}
-    ListEmptyComponent={() => renderEmpty()}
     onEndReached={() => fetchNext()}
     onEndReachedThreshold={0.5}
     initialNumToRender={20}
@@ -112,7 +111,7 @@ export default function NotificationScreen() {
     <SafeAreaView style={{ flex: 1 }}>
       <Header />
       <View style={styles.container}>
-        {renderList()}
+        {items ? renderList() : renderEmpty()}
       </View>
     </SafeAreaView>
   );

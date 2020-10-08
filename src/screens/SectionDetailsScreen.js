@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -13,7 +15,6 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import ViewPager from '@react-native-community/viewpager';
 import { SAMPLE_LIST, COMMERCIAL_FACILITIES, PRIVATE_FACILITIES } from '../constants/data';
-import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import Styles from '../styles/Styles';
 import { GET_ALL_PROPERTIES } from '../services/graphql/queries'
@@ -92,6 +93,21 @@ export default function SectionDetailsScreen(props) {
     var arr = COMMERCIAL_FACILITIES.filter(f => f.id == i.facility.id)
     if (arr.length == 0) arr = PRIVATE_FACILITIES.filter(f => f.id == i.facility.id)
     const item = arr[0]
+    if (item.type == 'boolean' || !item.image) {
+      return (
+        <View key={item.id} style={{ margin: 12, minWidth: '23%', maxWidth: '33%' }}>
+          <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
+            <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{item.name}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
+            {/* <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{i.value}</Text> */}
+            {/* <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={item.image} /> */}
+            <MaterialIcons color={Colors.primaryBlue} name={'check'} size={20} />
+          </View>
+        </View>
+      )
+    }
+
     return (
       <View key={item.id} style={{ margin: 12, minWidth: '23%', maxWidth: '33%' }}>
         <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
@@ -120,7 +136,7 @@ export default function SectionDetailsScreen(props) {
               </View>
               {/* <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text> */}
               <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district}`}</Text>
+                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district.ar}`}</Text>
                 <EvilIcons name='location' />
               </View>
             </View>
@@ -133,14 +149,14 @@ export default function SectionDetailsScreen(props) {
           </View>
           <View style={{ flexDirection: 'row', marginHorizontal: 24, justifyContent: 'space-between' }}>
             <Text style={{ ...Fonts.FontMed, fontSize: 18, color: Colors.primaryYellow }}>
-              {`500,1 ر.س/ ﻞﻠﻴﻟة `}
+              {`${item.price_average} ر.س/ ﻞﻠﻴﻟة `}
             </Text>
-            <TouchableOpacity style={{ flexDirection: 'row' }}>
+            {/* <TouchableOpacity style={{ flexDirection: 'row' }}>
               <Text style={{ ...Fonts.fontRegular, marginRight: 8 }}>
                 {`21 ﺮﺠﺑ          24 ﺮﺠﺑ `}
               </Text>
               <FontAwesome name='calendar' color={Colors.primaryBlue} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View style={{ flexDirection: 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {item.facilities.map(i => renderFeatureItem(i))}

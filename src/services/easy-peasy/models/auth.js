@@ -13,6 +13,7 @@ export default {
   private_types: null,
   isMediaAllowed: false,
   districts: null,
+  location: null,
   setUser: action((state, payload) => {
     state.user = payload;
   }),
@@ -45,6 +46,9 @@ export default {
   }),
   setDistricts: action((state, payload) => {
     state.districts = payload;
+  }), 
+  setLocation: action((state, payload) => {
+    state.location = payload;
   }), 
   clearAuth: action((state, payload) => {
     state.user = {};

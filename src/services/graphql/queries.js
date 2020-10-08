@@ -42,6 +42,8 @@ query($id:ID!){
       id
     }
     sections {
+      lowest_price
+      price_average
       id
       name
       images {
@@ -75,6 +77,8 @@ query($first: Int!, $page: Int!){
         latitude,
         longitude
         sections {
+          lowest_price
+          price_average
           id,
           name,
           type {
@@ -121,7 +125,13 @@ query($first: Int!, $page: Int!){
         }
         description,
         city {
+          id,
           ar,
+          en
+        }
+        district {
+          id
+          ar
           en
         }
         type {
@@ -198,6 +208,8 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
       id,
       name,
       sections {
+        lowest_price
+        price_average
         id,
         name,
         description
@@ -262,7 +274,11 @@ query($first: Int!, $page: Int!, $orderBy: [OrderByClause!]){
           id
         }
       }
-      district
+      district {
+        id
+        en,
+        ar
+      }
       general_price{
         monday
         tuesday
@@ -440,6 +456,8 @@ query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
     data {
       id,
         name,
+        lowest_price
+        price_average
         type {
           id
           en
@@ -574,6 +592,7 @@ mutation($input: UpdateUserInput!){
       id,
       name,
       sections {
+        lowest_price,
         id,
         name,
         facilities {
@@ -629,7 +648,11 @@ mutation($input: UpdateUserInput!){
           id
         }
       }
-      district
+      district{
+        id,
+        en,
+        ar
+      }
       general_price{
         monday
         tuesday

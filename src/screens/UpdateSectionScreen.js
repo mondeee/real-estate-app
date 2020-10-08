@@ -7,6 +7,8 @@ import {
   TextInput,
   View,
   Image,
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -17,7 +19,6 @@ import Header from '../components/Header';
 import { REGISTER, ADD_SECTION_PROPERTY, onError, UPDATE_SECTION_PROPERTY } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Dropdown from '../components/Dropdown';
 import Input from '../components/Input';

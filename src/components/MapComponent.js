@@ -106,11 +106,11 @@ export default function MapComponent(props) {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: '60%',
+    height: '100%',
   },
   viewContainer: {
     width: '90%',
-    height: '50%',
+    height: '90%',
     backgroundColor: 'white',
     borderRadius: 15,
   },

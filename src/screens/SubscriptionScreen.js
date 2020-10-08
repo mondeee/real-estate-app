@@ -4,7 +4,8 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity,
 } from 'react-native';
 
 import { Toast } from 'native-base'
@@ -19,7 +20,6 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
 import { onError } from 'apollo-link-error';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import ImageBrowser from '../components/ImageBrowserComponent'
 
 const SAMPLE_LIST = [

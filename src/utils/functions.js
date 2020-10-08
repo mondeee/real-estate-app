@@ -34,3 +34,8 @@ export const getLocationName = async (data) => {
   }
   return copy
 }
+
+export const getLocation = async () => {
+  let location = await Location.getCurrentPositionAsync();
+  return location
+}

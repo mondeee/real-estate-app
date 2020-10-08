@@ -4,12 +4,12 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   AsyncStorage
 } from 'react-native';
 import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Button from './Button';
 import { CONFIG } from '../services/config';
 import { useStoreActions, useStoreState } from 'easy-peasy';

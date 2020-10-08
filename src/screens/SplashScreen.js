@@ -15,12 +15,14 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import { useStoreActions } from 'easy-peasy';
 import * as Permissions from "expo-permissions";
+import * as Location from 'expo-location';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_DISTRICT } from '../services/graphql/queries';
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
   const [page, setPage] = useState(0)
   const storeNotifToken = useStoreActions(actions => actions.auth.setNotifToken)
+  const storeLocation = useStoreActions(actions => actions.auth.setLocation)
   const storeDistricts = useStoreActions(actions => actions.auth.setDistricts)
   const { error, data } = useQuery(GET_DISTRICT)
 
@@ -35,13 +37,37 @@ export default function SplashScreen(props) {
     notifsub = Notifications.addListener(onReceiveNotif)
   }
 
+  const setUpLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      Toast.show({
+        text: 'Location permission not granted',
+        type: 'danger'
+      })
+    }
+
+    const location = await Location.getCurrentPositionAsync();
+    const geores = await Location.reverseGeocodeAsync(
+      {
+        latitude: Number(location.coords.latitude),
+        longitude: Number(location.coords.longitude)
+      }
+    )
+    const geoloc = geores[0]
+    const locname = !geoloc.city || !geoloc.country ? `${geoloc.name}, ${geoloc.region}` : `${geoloc.city}, ${geoloc.country}`
+    const locdata = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      location: locname
+    }
+    console.log('@LOC', locdata)
+    storeLocation(locdata)
+  }
+
   useEffect(() => {
+    setUpLocation()
     setUpNotif()
   }, [])
-
-  useEffect(() => {
-
-  }, [page])
 
   useEffect(() => {
     if (data && data?.allDistrict) {

@@ -3,13 +3,13 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity,
 } from 'react-native';
 import Header from '../components/Header';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ContactScreen(props) {
   const { navigate, goBack } = props.navigation

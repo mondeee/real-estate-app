@@ -7,7 +7,8 @@ import {
   Platform,
   Text,
   View,
-  AsyncStorage
+  AsyncStorage,
+  TouchableOpacity,
 } from 'react-native';
 
 import Header from '../components/Header'
@@ -15,7 +16,6 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts'
 import { getToken } from '../utils/functions'
 import { SAMPLE_LIST } from '../constants/data'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
@@ -160,6 +160,7 @@ export default function SectionListScreen(props) {
   }
 
   renderItem = (item, index) => {
+    console.log('@item', item)
     return (
       <TouchableOpacity key={item.id} style={{
         height: 125,
@@ -178,9 +179,7 @@ export default function SectionListScreen(props) {
           const newitem = { ...item }
           newitem.city = params.item.city
           newitem.district = params.item.district
-          console.log('@CONVERTED', newitem)
           if (params.update) {
-            console.log(newitem)
             navigate('UpdateSection', { item: newitem, refresh: () => refetch() })
             return
           }
@@ -192,8 +191,8 @@ export default function SectionListScreen(props) {
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
-            <Text style={{ ...Fonts.fontRegular }}>{`Date `}<FontAwesome name={'calendar'} /></Text>
-            {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.general_price.monday} `}<FontAwesome name={'money'} /></Text>}
+            <Text style={{ ...Fonts.fontRegular }}>{`الأوقات المتاحة `}<FontAwesome name={'calendar'} /></Text>
+            {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>}
           </View>
         </View>
         {

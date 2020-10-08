@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View
 } from 'react-native';
 
@@ -17,7 +18,7 @@ import Header from '../components/Header';
 import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Dropdown from '../components/Dropdown';
 import Input from '../components/Input';
@@ -220,6 +221,7 @@ export default function AddPropertyScreen(props) {
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
   const storedDistricts = useStoreState(state => state.auth.districts)
+  const storedLocation = useStoreState(state => state.auth.location)
 
   const initialState = () => {
     setPayload({})
@@ -232,6 +234,7 @@ export default function AddPropertyScreen(props) {
     setLocation(null)
     setSeelectedFac(null)
     setFacilities(COMMERCAL)
+    setLocation(storedLocation)
     setGeneralPrice(
       {
         monday: 0,
@@ -246,15 +249,16 @@ export default function AddPropertyScreen(props) {
   }
 
   useEffect(() => {
-    console.log('@DISTRICTS', storedDistricts)
-  }, [storedDistricts])
+    if (storedLocation) {
+      console.log('storedLoc', storedLocation)
+      setLocation(storedLocation)
+    }
+  }, [storedLocation])
 
   useEffect(() => {
-    console.log('@ADDSCREEN', availabilityDates)
   }, [availabilityDates])
 
   useEffect(() => {
-    console.log('@SEASONAL', seasonalPrice)
   }, [seasonalPrice])
 
   useEffect(() => {
@@ -626,9 +630,8 @@ export default function AddPropertyScreen(props) {
     return (
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق`}</Text>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
-            <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  Add + `}</Text>
+            <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق (+ Add)`}</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>

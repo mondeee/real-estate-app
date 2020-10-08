@@ -7,7 +7,9 @@ import {
   View,
   Image,
   ActivityIndicator,
-  Alert
+  Alert,
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -15,7 +17,6 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import ViewPager from '@react-native-community/viewpager';
 import { SAMPLE_LIST, COMMERCIAL_FACILITIES, PRIVATE_FACILITIES } from '../constants/data';
-import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons, FontAwesome, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import Styles from '../styles/Styles';
 import { GET_ALL_PROPERTIES, CREATE_ROOM } from '../services/graphql/queries'
@@ -54,6 +55,7 @@ export default function MyPropertyDetailsScreen(props) {
   useEffect(() => {
     setTotalPages(item.images)
     // _fetchToken()
+    console.log('@ITEM', item)
   }, [])
 
   const _fetchToken = async () => {
@@ -165,7 +167,7 @@ export default function MyPropertyDetailsScreen(props) {
               </View>
               {/* <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text> */}
               <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district}`}</Text>
+                <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district.ar}`}</Text>
                 <EvilIcons name='location' />
               </View>
             </View>
