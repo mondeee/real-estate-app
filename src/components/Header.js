@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler';
 import Fonts from '../styles/Fonts';
 import { SafeAreaView } from 'react-navigation';
 

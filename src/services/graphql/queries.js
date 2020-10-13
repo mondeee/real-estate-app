@@ -65,11 +65,9 @@ query($id:ID!){
 
 export const GET_OWNED_PROPERTIES = gql(`
 query($first: Int!, $page: Int!){
-  ownerProperties {
-    id,
-    properties(first: $first, page: $page) {
+  ownerProperties(first: $first, page: $page) {
       paginatorInfo{
-          hasMorePages
+        hasMorePages
       }
       data{
         id,
@@ -77,8 +75,6 @@ query($first: Int!, $page: Int!){
         latitude,
         longitude
         sections {
-          lowest_price
-          price_average
           id,
           name,
           type {
@@ -124,14 +120,13 @@ query($first: Int!, $page: Int!){
           }
         }
         description,
-        city {
-          id,
-          ar,
-          en
-        }
         district {
-          id
+          id,
+          en,
           ar
+        }
+        city {
+          ar,
           en
         }
         type {
@@ -193,7 +188,6 @@ query($first: Int!, $page: Int!){
         }
       }
     }
-  }
 }
 `)
 
@@ -772,3 +766,12 @@ mutation{
     message
   }
 }`)
+
+export const SEND_NOTIF_TOKEN = gql(`
+mutation($input: AddExpoTokenInput!){
+  addExpoToken(input:$input){
+		status
+    message
+  }
+}
+`)

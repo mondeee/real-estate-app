@@ -70,7 +70,7 @@ export default function BookingListScreen(props) {
   useEffect(() => {
     console.log('@LOADING', fetchLoading)
     if (data && page == 1) {
-      console.log('@DATA', data?.ownerBookings?.id)
+      console.log('@DATA', data?.ownerBookings)
       setBookingList(data?.ownerBookings?.owner_bookings?.data || [])
       setRefreshing(false)
     }
@@ -204,6 +204,7 @@ export default function BookingListScreen(props) {
         extraData={bookingList}
         keyExtractor={(item, index) => String(index)}
         renderItem={(item, index) => renderItem(item)}
+        ListFooterComponent={<View style={{height: 150}}/>}
         onRefresh={() => {
           // setPage(page + 1)
           refetch()
@@ -216,7 +217,7 @@ export default function BookingListScreen(props) {
   return (
     <View style={styles.container}>
       <Header name={`الحجوزات`} onPressBack={() => goBack()} />
-      <View style={{ flex: 1, width: '100%', padding: 24 }}>
+      <View style={{ flex: 1, width: '100%', padding: 24, }}>
         {/* <Text>Booking List Screen</Text> */}
         {renderList()}
       </View>

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  FlatList,
   TouchableOpacity,
 } from 'react-native';
 
@@ -26,7 +27,6 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 
 import * as Permissions from "expo-permissions";
-import { FlatList } from 'react-native-gesture-handler';
 import { ReactNativeFile } from 'apollo-upload-client'
 const width = Dimensions.get('window').width * 0.9;
 

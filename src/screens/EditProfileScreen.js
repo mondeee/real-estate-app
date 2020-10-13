@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
@@ -25,7 +26,6 @@ import Dropdown from '../components/Dropdown';
 import { UPDATE_USER, onError } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 
 import { ReactNativeFile } from 'apollo-upload-client'

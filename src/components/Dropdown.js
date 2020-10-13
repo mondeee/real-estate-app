@@ -4,11 +4,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler';
 import Fonts from '../styles/Fonts';
 import ModalSelector from 'react-native-modal-selector'
 

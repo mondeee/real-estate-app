@@ -41,6 +41,7 @@ export default function SideBar(props) {
     await AsyncStorage.removeItem('token')
     await storeUser(null)
     setLogin(false)
+    props.navigate('Login')
   }
 
   useEffect(() => {

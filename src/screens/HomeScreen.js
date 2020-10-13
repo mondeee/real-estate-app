@@ -19,9 +19,9 @@ import { SAMPLE_LIST } from '../constants/data'
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_OWNED_PROPERTIES } from '../services/graphql/queries';
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_OWNED_PROPERTIES, SEND_NOTIF_TOKEN } from '../services/graphql/queries';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Toast } from 'native-base';
 import { ActivityIndicator } from 'react-native';
@@ -36,6 +36,7 @@ export default function HomeScreen(props) {
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(false)
   const storedUserState = useStoreState(state => state.auth.user)
+  const notifToken = useStoreState(state => state.auth.usnotifTokener)
   const storeCity = useStoreActions(actions => actions.auth.setCities)
   const storeGender = useStoreActions(actions => actions.auth.setGenders)
   const storeUser = useStoreActions(actions => actions.auth.setUser)
@@ -62,12 +63,18 @@ export default function HomeScreen(props) {
   const [showSeasonalModal, setShowSeasonalModal] = useState(false)
   const [seasonalDates, setSeasonalDates] = useState(null)
 
-  
+  const [addExpoToken, { error: tokenError, data: tokenData }] = useMutation(SEND_NOTIF_TOKEN, {
+    variables: {
+      input: {
+        token: "asd"
+      }
+    }
+  })
+
   const [fetchProperties, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_OWNED_PROPERTIES, {
     variables: {
       page: page,
-      first: 30,
-      userId: userdata ? userdata.me.id : null
+      first: 50,
     },
     onCompleted: e => {
       setLoading(false)
@@ -116,7 +123,9 @@ export default function HomeScreen(props) {
   useEffect(() => {
     console.log('properties', propertiesdata, properyError)
     if (propertiesdata) {
-      setItems(propertiesdata.ownerProperties.properties.data.reverse())
+      // const filterdata = propertiesdata.allProperties.data.filter(i => i.owner.id == userdata.me.id)
+      // setItems(filterdata.reverse())e
+      setItems(propertiesdata.ownerProperties.data.reverse())
     }
 
     if (properyError) {
@@ -124,7 +133,7 @@ export default function HomeScreen(props) {
         text: 'User Token has Expired, Please Login again',
         type: 'danger'
       })
-      // navigate('Login')
+      navigate('Login')
     }
     setLoading(false)
 
@@ -136,7 +145,7 @@ export default function HomeScreen(props) {
     // }
     setFirstLoading(false)
     setFirstRun(false)
-  }, [propertiesdata, properyError, properyloading])
+  }, [propertiesdata, properyError])
 
   if (loading || genderLoading) console.log('LOADING')
   if (error || genderError) console.log(`Error! ${error.message}`, `Error! ${genderError.message}`);
@@ -144,24 +153,30 @@ export default function HomeScreen(props) {
   useEffect(() => {
     // fetchallOwnerProperties()
     const { navigation } = props
+    const token = getToken()
+    if (!token) {
+      console.log('@TOKEN', token)
+      navigate('Login')
+    }
+
     const navFocusListener = navigation.addListener('didFocus', () => {
       setLoading(true)
       if (storedUserState && !firstRun) {
         console.log('refetch')
-        // refetch()
+        refetch()
       }
       setTimeout(() => {
         setLoading(false)
       }, 1500)
     });
-
-    // return () => {
-    //   navFocusListener.remove();
-    // };
   }, [])
 
   useEffect(() => {
-    // console.log('@userdata', userdata, userError)
+    console.log('@TOKEN RESP\n', tokenError, '\n', tokenData)
+  }, [tokenError, tokenData])
+
+  useEffect(() => {
+    console.log('@userdata', userdata, userError)
     if (userdata && userdata.me) {
       storeUser(userdata.me)
       if (!userdata.me.is_verified) {
@@ -169,6 +184,7 @@ export default function HomeScreen(props) {
         return
       }
       fetchProperties()
+      addExpoToken()
     }
 
     if (userError) {
@@ -179,6 +195,7 @@ export default function HomeScreen(props) {
   const deleteToken = async () => {
     await AsyncStorage.removeItem('token')
     storeUser(null)
+    navigate('Login')
   }
 
   useEffect(() => {
@@ -332,23 +349,23 @@ export default function HomeScreen(props) {
               </TouchableOpacity>
             }
             {item.category.id == 2 ?
-            <TouchableOpacity
-              onPress={() => {
-                console.log(item.category)
-                if (item?.category.id == 2) {
-                  console.log('ONPRESS SET DATA', item.general_price, item.availablities, seasonalPrice)
-                  // return
-                  setGeneralPrice(item?.general_price)
-                  setAvailabilityDates(item?.availablities)
-                  setSeasonalPrice(item?.seasonal_prices)
-                  showmainPriceModal(true)
-                }
-              }}
-              style={{
-                padding: 8
-              }}>
-              <Text style={{ ...Fonts.fontRegular }}>{`الأسعار `}<FontAwesome name={'money'} /></Text>
-            </TouchableOpacity> : null }
+              <TouchableOpacity
+                onPress={() => {
+                  console.log(item.category)
+                  if (item?.category.id == 2) {
+                    console.log('ONPRESS SET DATA', item.general_price, item.availablities, seasonalPrice)
+                    // return
+                    setGeneralPrice(item?.general_price)
+                    setAvailabilityDates(item?.availablities)
+                    setSeasonalPrice(item?.seasonal_prices)
+                    showmainPriceModal(true)
+                  }
+                }}
+                style={{
+                  padding: 8
+                }}>
+                <Text style={{ ...Fonts.fontRegular }}>{`الأسعار `}<FontAwesome name={'money'} /></Text>
+              </TouchableOpacity> : null}
           </View>
         </View>
         {
@@ -403,7 +420,7 @@ export default function HomeScreen(props) {
           if (storedUserState) {
             // fetchProperties()
             setLoading(true)
-            // refetch()
+            refetch()
             setTimeout(() => {
               setLoading(false)
             }, 1500)

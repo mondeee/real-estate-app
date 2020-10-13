@@ -4,11 +4,11 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image
+  Image,
+  TextInput
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler';
 import Fonts from '../styles/Fonts';
 
 export default function Input(props) {
@@ -76,7 +76,8 @@ export default function Input(props) {
       {password && <TouchableOpacity onPress={() => setPass(!pass)} style={styles.iconContainer}>
         <MaterialIcons color={Colors.darkGray} size={18} name={'remove-red-eye'} />
       </TouchableOpacity>}
-      <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
+      <TextInput placeholder={placeholder || ''}
+        secureTextEntry={pass}
         onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
         maxLength={maxLength ? maxLength : 24}
         autoCapitalize={false}

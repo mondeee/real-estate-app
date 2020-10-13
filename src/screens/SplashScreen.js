@@ -18,6 +18,7 @@ import * as Permissions from "expo-permissions";
 import * as Location from 'expo-location';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_DISTRICT } from '../services/graphql/queries';
+import * as Notifications from 'expo-notifications';
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
   const [page, setPage] = useState(0)
@@ -29,10 +30,11 @@ export default function SplashScreen(props) {
   const setUpNotif = async () => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (status !== 'granted') {
-      console.log('NOTIF ERROR PERMISSION')
+      console.log('NOTIF ERROR PERMISSION', status)
       return;
     }
     const token = await Notifications.getExpoPushTokenAsync();
+    console.log('@token', token)
     storeNotifToken(token)
     notifsub = Notifications.addListener(onReceiveNotif)
   }

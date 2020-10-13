@@ -3,6 +3,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  ScrollView,
   View
 } from 'react-native';
 
@@ -12,7 +13,6 @@ import Fonts from '../styles/Fonts';
 import Button from '../components/Button'
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default function TermsAndAgreementScreen(props) {
   const { navigate, goBack } = props.navigation
