@@ -517,7 +517,7 @@ export default function CalendarComponent(props) {
                 // sitem.price = e
                 setCurrentPrice(e)
               }} style={{ height: 33, width: 103, borderRadius: 25, borderWidth: 1, padding: 8, textAlign: 'right', borderColor: Colors.gray }} placeholder={`ر.س`} />
-              <Text style={{ ...Fonts.fontLight, width: 50 }}>{`Price`}</Text>
+              <Text style={{ ...Fonts.fontLight, width: 50 }}>{`السعر`}</Text>
               <View />
             </View>
             {/* renderPrices */}
@@ -556,7 +556,7 @@ export default function CalendarComponent(props) {
                 setFinal(false)
                 setToDate(null)
               }} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
-                <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`Add`}</Text>
+                <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`إضافة`}</Text>
               </TouchableOpacity >
             </View>
             <TouchableOpacity onPress={() => onClose()} style={{ position: 'absolute', top: 10, right: 10 }}>
@@ -571,11 +571,11 @@ export default function CalendarComponent(props) {
   const onAddAvailabilities = () => {
     if (fromDate || toDate)
       Alert.alert(
-        'Do you want to Add?',
+        'يرجى التحقق من جميع البيانات?',
         !toDate ? `${fromDate} ` : `${fromDate} - ${toDate}`,
         [
           {
-            text: "Cancel",
+            text: "الغاء",
             onPress: () => {
               setMarked(tempMarked)
               setFromDate(null)
@@ -586,7 +586,7 @@ export default function CalendarComponent(props) {
             style: "cancel"
           },
           {
-            text: "Confirm",
+            text: "تأكيد",
             onPress: () => {
               const arr = availabilitiesData ? [...availabilitiesData] : []
               const item = {
@@ -681,7 +681,7 @@ export default function CalendarComponent(props) {
               <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`تحديد` || `Calendar`}</Text>
             </TouchableOpacity >
             <TouchableOpacity onPress={() => onAddAvailabilities()} style={{ ...styles.button, ...style, alignSelf: 'center', marginBottom: 40 }}>
-              <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`Add`}</Text>
+              <Text style={{ ...styles.text, ...textStyle, fontSize: 18, color: 'white' }}>{`إضافة`}</Text>
             </TouchableOpacity >
           </View>
         </View>

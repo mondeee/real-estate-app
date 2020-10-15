@@ -93,12 +93,12 @@ export default function EditProfileScreen(props) {
 
   const _onUpdateUser = async () => {
     if (!password || !confirmPass) {
-      Alert.alert('Error', `Password is Required`)
+      Alert.alert('Error', `كلمة المرور مطلوبة `)
       return
     }
 
     if (password != confirmPass) {
-      Alert.alert('Error', `Password does not match`)
+      Alert.alert('Error', `كلمة المرور غير متطابقة`)
       return
     }
 
