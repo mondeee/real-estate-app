@@ -24,6 +24,8 @@ import { SafeAreaView } from 'react-navigation';
 import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_SECTIONS } from '../services/graphql/queries';
 import { useStoreActions } from 'easy-peasy';
 import Button from '../components/Button';
+import CalendarComponent from '../components/CalendarComponent';
+import Modal from 'react-native-modal'
 
 
 export default function SectionListScreen(props) {
@@ -43,6 +45,18 @@ export default function SectionListScreen(props) {
   const { data: commercialTypes } = useQuery(GET_TYPE(1))
   const { data: privateTypes } = useQuery(GET_TYPE(2))
   const { data: dataCat } = useQuery(GET_CATEGORIES)
+
+  const [mainPriceModal, showmainPriceModal] = useState(false)
+  const [generalPriceModal, showGeneralPriceModal] = useState(false)
+  const [availabilityModal, showAvailabilityModal] = useState(false)
+  const [availabilityDates, setAvailabilityDates] = useState([])
+  const [generalPrice, setGeneralPrice] = useState(null)
+  const [showGeneral, setShowGeneral] = useState(false)
+  const [showAvailability, setShowAvailability] = useState(false)
+  const [showCalendar, setShowCalendar] = useState(false)
+  const [seasonalPrice, setSeasonalPrice] = useState([])
+  const [showSeasonalModal, setShowSeasonalModal] = useState(false)
+  const [seasonalDates, setSeasonalDates] = useState(null)
 
 
   const [allSection, { loading: properyloading, error: properyError, data: propertiesdata, refetch }] = useLazyQuery(GET_SECTIONS, {
@@ -159,7 +173,43 @@ export default function SectionListScreen(props) {
 
   }
 
-  renderItem = (item, index) => {
+  const renderUpdateModal = () => {
+
+    return (
+      <Modal isVisible={mainPriceModal}>
+        <View style={{ height: 200, backgroundColor: 'white', borderRadius: 30, }}>
+          <TouchableOpacity onPress={() => showmainPriceModal(false)} style={{ marginBottom: 4, alignSelf: 'flex-end', padding: 8 }}>
+            <MaterialIcons size={25} color={Colors.primaryBlue} name={'close'} />
+          </TouchableOpacity >
+          <View style={{ alignSelf: 'center', width: '50%' }}>
+            <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>
+              ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر
+          </Text>
+            <TouchableOpacity onPress={() => {
+              showmainPriceModal(false)
+              setTimeout(() => {
+                setShowSeasonalModal(true)
+              }, 500)
+            }
+            } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8, marginTop: 16, }}>
+              <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{` اﻷﺳﻌﺎر العامة`}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              showmainPriceModal(false)
+              setTimeout(() => {
+                setShowAvailability(true)
+              }, 500)
+            }
+            } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8 }}>
+              <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{` اﻷﺳﻌﺎر العامة`}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
+  const renderItem = (item, index) => {
     console.log('@item', item)
     return (
       <TouchableOpacity key={item.id} style={{
@@ -191,8 +241,23 @@ export default function SectionListScreen(props) {
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
-            <Text style={{ ...Fonts.fontRegular }}>{`الأوقات المتاحة `}<FontAwesome name={'calendar'} /></Text>
-            {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>}
+            <TouchableOpacity
+              onPress={() => {
+                setShowAvailability(true)
+              }}
+            >
+              <Text style={{ ...Fonts.fontRegular }}>{`الأوقات المتاحة `}<FontAwesome name={'calendar'} /></Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              console.log('ONPRESS SET DATA', item.general_price, item.availablities, seasonalPrice)
+              // return
+              setGeneralPrice(item?.general_price)
+              setAvailabilityDates(item?.availablities)
+              setSeasonalPrice(item?.seasonal_prices)
+              showmainPriceModal(true)
+            }}>
+              {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>}
+            </TouchableOpacity>
           </View>
         </View>
         {
@@ -211,7 +276,7 @@ export default function SectionListScreen(props) {
     )
   }
 
-  renderEmpty = () => {
+  const renderEmpty = () => {
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34, marginBottom: 20 }} source={require('../../assets/additem.png')} />
@@ -221,10 +286,10 @@ export default function SectionListScreen(props) {
     )
   }
 
-  renderList = () => <FlatList
+  const renderList = () => <FlatList
     data={items}
     extraData={items}
-    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%' }}
+    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '5%' : '5%' }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => `${item.id}${item.name}`}
     renderItem={({ item }) => renderItem(item)}
@@ -249,6 +314,19 @@ export default function SectionListScreen(props) {
         goBack()
       }} style={{ paddingTop: 20 }} openDrawer={() => props.navigation.openDrawer()} search section={params.item} />
       <View style={{ width: '100%', alignItems: 'center', height: '80%' }}>
+        {renderUpdateModal()}
+        <CalendarComponent setPrice={setGeneralPrice} data={generalPrice} general={true} key={'general'} onClose={() => {
+          setShowGeneral(false)
+          showGeneralPriceModal(false)
+        }} isVisible={showGeneral} />
+        <CalendarComponent setDates={setAvailabilityDates} data={availabilityDates} availabilities={true} key={'calendar'} onClose={() => {
+          setShowAvailability(false)
+          setShowAvailability(false)
+        }} isVisible={showAvailability} />
+        {showSeasonalModal && <CalendarComponent seasonal={seasonalPrice} setPrice={setSeasonalPrice} setDates={setSeasonalDates} key={'seasonal'} onClose={() => {
+          setShowSeasonalModal(false)
+          setShowCalendar(false)
+        }} isVisible={showSeasonalModal} />}
         {renderList()}
         {params.update && <Button
           text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`}

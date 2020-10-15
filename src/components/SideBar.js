@@ -58,8 +58,8 @@ export default function SideBar(props) {
   renderFooter = () => {
     return (
       <View style={{ alignSelf: 'flex-end', alignItems: 'center', width: '100%', flex: .5 }}>
-        <Text style={{ ...Fonts.FontMed, fontSize: 14, color: Colors.primaryBlue }}>{`ﻧﻔﺬ ﺑﻮاﺳﻄﺔ`}</Text>
-        <Image style={{ height: 33, width: 83 }} resizeMode={'contain'} source={require('../../assets/sidebar_footer.png')} />
+        {/* <Text style={{ ...Fonts.FontMed, fontSize: 14, color: Colors.primaryBlue }}>{`ﻧﻔﺬ ﺑﻮاﺳﻄﺔ`}</Text>
+        <Image style={{ height: 33, width: 83 }} resizeMode={'contain'} source={require('../../assets/sidebar_footer.png')} /> */}
       </View>
     )
   }

@@ -106,7 +106,7 @@ export default function LoginScreen(props) {
           </View>
         </TouchableOpacity>
         {/* {loginButton()} */}
-        <Button onPress={() => {
+        {!loading ? <Button onPress={() => {
           if (!phone || !password) return
           loginViaPhone({
             variables: {
@@ -119,7 +119,7 @@ export default function LoginScreen(props) {
           }).catch(e => {
             onError(e)
           })
-        }} text={`تسجيل الدخول`} style={{ marginTop: 24 }} />
+        }} text={`تسجيل الدخول`} style={{ marginTop: 24 }} /> : <ActivityIndicator />}
         {/* <Button onPress={() => navigate('Home')} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} /> */}
         <Text onPress={() => navigate('Register')} style={{ color: Colors.primaryBlue, ...Fonts.fontRegular, marginTop: 12 }}>
           {` تسجيل جديد `}

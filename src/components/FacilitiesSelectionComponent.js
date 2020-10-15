@@ -70,18 +70,20 @@ export default function FacilitiesSelectionComponent(props) {
         <TouchableOpacity onPress={() => onClose()} style={{ position: 'absolute', top: 10, right: 10 }}>
           <MaterialIcons name={'close'} size={20} color={Colors.primaryBlue} />
         </TouchableOpacity>
-        <Text style={{ ...Fonts.FontMed, textAlign: 'center', fontSize: 18 }}>Selection</Text>
+        <Text style={{ ...Fonts.FontMed, textAlign: 'center', fontSize: 18 }}>{`المرافق`}</Text>
         <ScrollView style={{ flex: 1, }} contentContainerStyle={{ alignItems: 'center', paddingBottom: 100, }}>
           {selection && selection.map((i, index) => renderItem(i, index))}
         </ScrollView>
         <View>
-          <Button onPress={() => {
-            const items = selection
-            const filtered = items.filter(i => i.value != 0)
-            setSelected(filtered)
-            setSubmittted(true)
-            onClose()
-          }} style={{ alignSelf: 'center', }} />
+          <Button
+            text={`تحديث`}
+            onPress={() => {
+              const items = selection
+              const filtered = items.filter(i => i.value != 0)
+              setSelected(filtered)
+              setSubmittted(true)
+              onClose()
+            }} style={{ alignSelf: 'center', }} />
         </View>
       </View>
     </Modal>

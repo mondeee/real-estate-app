@@ -405,7 +405,7 @@ export default function HomeScreen(props) {
   const renderList = () => <FlatList
     data={items}
     extraData={propertiesdata}
-    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '20%' : '30%' }}
+    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '5%' : '5%' }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => `${item.id}${item.name}`}
     renderItem={({ item }) => renderItem(item)}

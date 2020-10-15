@@ -216,6 +216,7 @@ export default function AddPropertyScreen(props) {
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState([])
+  const [datareload, setDataReload] = useState(false)
   const categories = useStoreState(state => state.auth.categories)
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
@@ -580,6 +581,10 @@ export default function AddPropertyScreen(props) {
         // p.type_id = cTypes[index].id
         // setPayload(p)
         setTypes(cTypes)
+        setDataReload(true)
+        setTimeout(() => {
+          setDataReload(false)
+        }, 500)
       }} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
         <Text>{item.label}</Text>
         <View style={styles.selectionCircle}>
@@ -743,11 +748,11 @@ export default function AddPropertyScreen(props) {
           {/* {renderSelection()} */}
           {types.map((i, index) => renderSelection(i, index))}
         </View>
-        <Dropdown onChangeText={e => {
+        {!datareload ? <Dropdown onChangeText={e => {
           const item = { ...payload }
           item.type_id = e.id
           setPayload(item)
-        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} />
+        }} data={types[0].selected ? commercial_types : private_types} style={{ marginTop: 12, }} placeholder={`نوع النزل`} /> : null}
         <Input onChangeText={e => {
           const item = { ...payload }
           item.name = e

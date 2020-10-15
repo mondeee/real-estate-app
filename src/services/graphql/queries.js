@@ -474,6 +474,11 @@ query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
           from
           to
         }
+        seasonal_prices {
+          to
+          from
+          price
+        }
         general_price{
           monday
           tuesday

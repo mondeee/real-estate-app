@@ -80,7 +80,6 @@ export default function Input(props) {
         secureTextEntry={pass}
         onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
         maxLength={maxLength ? maxLength : 24}
-        autoCapitalize={false}
         multiline={multiline}
         keyboardType={keyboardType || 'default'}
         value={value}

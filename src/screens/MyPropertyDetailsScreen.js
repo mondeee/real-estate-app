@@ -172,7 +172,7 @@ export default function MyPropertyDetailsScreen(props) {
               </View>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', margin: 24, justifyContent: 'space-between' }}>
+          {/* <View style={{ flexDirection: 'row', margin: 24, justifyContent: 'space-between' }}>
             <View />
             <TouchableOpacity style={{ padding: 4, paddingHorizontal: 16, backgroundColor: Colors.primaryYellow, borderRadius: 5, }}>
               <Text style={{ ...Fonts.fontRegular }}>{`ﺎﻟﺄﻳﺎﻣ و ﺎﻟﺄﺴﻋار`}</Text>
@@ -188,7 +188,7 @@ export default function MyPropertyDetailsScreen(props) {
               </Text>
               <FontAwesome name='calendar' color={Colors.primaryBlue} />
             </TouchableOpacity>
-          </View>
+          </View> */}
           <View style={{ flexDirection: 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {item.facilities.map(i => renderFeatureItem(i))}
           </View>
