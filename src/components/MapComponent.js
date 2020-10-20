@@ -42,6 +42,9 @@ export default function MapComponent(props) {
   var timer = null
 
   //يرجى السماح لتطبيق نزل بالوصول إلى الموقع حتى تتمكن من إضافة موقع نزلك.
+  useEffect(() => {
+    console.log('LOC', initialValue)
+  }, [])
 
   useEffect(() => {
     setFetching(true)
@@ -72,7 +75,9 @@ export default function MapComponent(props) {
   return (
     <Modal style={styles.container} isVisible={isVisible}>
       <View style={styles.viewContainer}>
-        <MapView onRegionChange={e => {
+        <MapView 
+        initialRegion={initialValue}
+        onRegionChange={e => {
           if (timer) clearTimeout(timer)
           timer = setTimeout(() => {
             setRegion(e)

@@ -74,10 +74,23 @@ export default function RegisterScreen(props) {
   }, [])
 
   useEffect(() => {
-    if (verError) console.log('@Err', verError)
+    if (verError) {
+      deleteToken()
+      console.log('@Err', verError)
+    }
+
+    if (error) {
+      deleteToken()
+    }
+
     if (verData) console.log('@Data', verData)
 
-  }, [verData, verError])
+  }, [verData, verError, error])
+
+  const deleteToken = async () => {
+    await AsyncStorage.removeItem('token')
+    // navigate('Home', { refresh: false })
+  }
 
   // onPressRegister = () => {
 
@@ -215,14 +228,14 @@ export default function RegisterScreen(props) {
 
   renderVerify = () => {
     return (
-      <KeyboardAvoidingView keyboardVerticalOffset={20} behavior={"padding"} style={{ ...styles.container, marginTop: '15%', paddingHorizontal: 24 }}>
+      <View keyboardVerticalOffset={20} behavior={"padding"} style={{ ...styles.container, marginTop: '15%', paddingHorizontal: 24 }}>
         <FontAwesome size={50} color={Colors.primaryBlue} name={'lock'} />
         <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, fontSize: 20, margin: 12, }}>{`رمز التفعيل`}</Text>
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 18 }} >{`تم إرسال رمز التفعيل لجوالك`}</Text>
         <Input onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24 }} />
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 13 }}>{`إعادة الإرسال`}</Text>
         <Button style={{ marginTop: 30, width: 177 }} onPress={() => onVerifyCode()} text={`التالي`} />
-      </KeyboardAvoidingView>
+      </View>
     )
   }
 

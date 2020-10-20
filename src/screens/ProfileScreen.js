@@ -36,8 +36,8 @@ export default function ProfileScreen(props) {
           <Text style={styles.itemText}>{`Login`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/usericon.png')} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.itemContainer}>
-          <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
+        <TouchableOpacity onPress={() => navigate('BookingList')} style={styles.itemContainer}>
+          <Text style={styles.itemText}>{`Booking list`}</Text>
           {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
         </TouchableOpacity>
       </View>

@@ -133,7 +133,8 @@ export default function HomeScreen(props) {
         text: 'User Token has Expired, Please Login again',
         type: 'danger'
       })
-      navigate('Login')
+      deleteToken()
+      // navigate('Login')
     }
     setLoading(false)
 

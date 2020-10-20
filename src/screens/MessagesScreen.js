@@ -175,13 +175,13 @@ export default function MessagesScreen(props) {
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34 }} source={require('../../assets/additem.png')} />
-        <Text style={styles.text}>{`دعب لزن ﻚﻳﺪﻟﺩدجﻮﻳ ﻻ`}</Text>
-        <Text style={styles.text}>{`نألا كلزنﺇفضأ`}</Text>
+        <Text style={styles.text}>{'لا یوجد لدیك أي رسائل حتى الان'}</Text>
+        {/* <Text style={styles.text}>{`نألا كلزنﺇفضأ`}</Text> */}
       </TouchableOpacity>
     )
   }
 
-  renderList = () => <FlatList
+  const renderList = () => <FlatList
     data={items}
     extraData={items}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingBottom: 100 }}
@@ -206,7 +206,7 @@ export default function MessagesScreen(props) {
     <SafeAreaView style={{ flex: 1, }}>
       <Header />
       <View style={styles.container}>
-        {renderList()}
+        {items ? renderList() : renderEmpty()}
       </View>
     </SafeAreaView>
   );

@@ -47,11 +47,20 @@ export default function LoginScreen(props) {
     if (data) {
       saveToken()
     }
+
+    if (error) {
+      deleteToken()
+    }
   }, [data, error])
 
   const saveToken = async () => {
     const save = await AsyncStorage.setItem('token', data.loginViaPhone.token)
     navigate('Home', { refresh: false })
+  }
+
+  const deleteToken = async () => {
+    await AsyncStorage.removeItem('token')
+    // navigate('Home', { refresh: false })
   }
 
   loginButton = () => {

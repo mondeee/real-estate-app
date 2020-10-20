@@ -661,7 +661,7 @@ export default function AddPropertyScreen(props) {
                 type: 'danger'
               })
             }
-          }} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
+          }} text={`إضافة مرافق النزل`} />
           <View style={{ width: 30 }} />
           <Button onPress={() => {
             // console.log('@facis', selectedFac)
@@ -722,9 +722,9 @@ export default function AddPropertyScreen(props) {
         </View>}
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷيام `}</Text>}
         {types[1].selected && <TouchableOpacity onPress={() => setShowAvailability(true)} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
-          <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  اﻷﺳﻌﺎر العامة `}</Text>
+          <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  الأوقات المتاحة `}</Text>
         </TouchableOpacity>}
-        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد القسم`}</Text>
+        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد الأقسام`}</Text>
         <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} />
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}

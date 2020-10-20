@@ -69,8 +69,8 @@ export default function TermsAndAgreementScreen(props) {
 .ﻖﻴﺒﻄﺘﻟا اﺬﻫ ﻲﻓ ﻪﺿﺮﻌﺗ ﺎﻣ`}</Text>
         </ScrollView>
         <View style={{ height: '10%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: '15%' }}>
-          <Button style={{ minWidth: 100 }} text={`لا أوﺎﻔﻗ`} />
-          <Button style={{ minWidth: 100 }} text={`أوافق`} />
+          <Button onPress={() => goBack()} style={{ minWidth: 100 }} text={`لا أوﺎﻔﻗ`} />
+          <Button onPress={() => goBack()}  style={{ minWidth: 100 }} text={`أوافق`} />
         </View>
       </View>
     </SafeAreaView>

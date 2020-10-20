@@ -17,11 +17,12 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 const navList = [
   { label: 'تسجيل الدخول', key: 0, route: 'Register' },
   { label: ' ﻣﻦ نحن ', key: 1, route: '' },
-  { label: 'الشروط والأحكام \n وسياسة الخصوصية', key: 2, route: 'BookingList' },
-  { label: 'الأسئلة الشائعة', key: 3, route: 'FAQ' },
-  { label: 'ﺃأعطنا رأﻳﻚ ﻋﻦ اﻟﺘﻄﺒﻴﻖ', key: 4, route: 'Terms' },
-  { label: 'تواصل معنا', key: 5, route: 'Contact' },
-  { label: CONFIG.BUILD_VERSION, key: 6, route: '' }
+  // { label: 'Booking', key: 2, route: 'BookingList' },
+  { label: 'الشروط والأحكام \n وسياسة الخصوصية', key: 3, route: 'Terms' },
+  { label: 'الأسئلة الشائعة', key: 4, route: 'FAQ' },
+  { label: 'ﺃأعطنا رأﻳﻚ ﻋﻦ اﻟﺘﻄﺒﻴﻖ', key: 5, route: '' },
+  { label: 'تواصل معنا', key: 6, route: 'Contact' },
+  // { label: CONFIG.BUILD_VERSION, key: 6, route: '' }
 ]
 
 export default function SideBar(props) {

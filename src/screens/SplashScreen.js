@@ -62,7 +62,6 @@ export default function SplashScreen(props) {
       longitude: location.coords.longitude,
       location: locname
     }
-    console.log('@LOC', locdata)
     storeLocation(locdata)
   }
 
