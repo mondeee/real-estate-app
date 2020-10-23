@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Linking, Dimensions
 } from 'react-native';
 
 import { Toast } from 'native-base'
@@ -21,6 +22,12 @@ import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
 import { onError } from 'apollo-link-error';
 import ImageBrowser from '../components/ImageBrowserComponent'
+import { HYPERPAY_CONFIG } from '../services/config';
+import WebView from 'react-native-webview';
+import * as WebBrowser from 'expo-web-browser';
+
+const deviceWidth = Dimensions.get('window').width
+const deviceHeight = Dimensions.get('window').height
 
 const SAMPLE_LIST = [
   {
@@ -83,8 +90,6 @@ export default function SubscriptionScreen(props) {
     })
   }
 
-
-
   useEffect(() => {
     if (data && data.allSubscriptions) {
       console.log('@SUBS', data)
@@ -95,8 +100,31 @@ export default function SubscriptionScreen(props) {
   useEffect(() => {
   }, [])
 
+  const onCheckOutSub = async ({ price }) => {
+    const payload = {
+      entityId: HYPERPAY_CONFIG.PAYMENT_TYPE.VISA.entityId,
+      aomunt: price,
+      currency: 'SAR',
+      paymentType: 'DB'
+    }
+    console.log('@PAYLOAD', payload)
+    const checkoutId = `B68467EE48879BE9269477EA23C6CF6A.uat01-vm-tx01`
+    _openWebBrowser()
+    // Linking.openURL(encodeURI(`https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`))
+  }
 
-  renderIndicator = () => {
+  const _openWebBrowser = async () => {
+    const checkoutId = `B68467EE48879BE9269477EA23C6CF6A.uat01-vm-tx01`
+    const url = encodeURI(`<script src="https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}"></script>`)
+    try {
+      await WebBrowser.openBrowserAsync(url)
+    } catch (e) {
+      console.log('@ERROR', e)
+    }
+  }
+
+
+  const renderIndicator = () => {
     return (
       <View style={{ flexDirection: 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', }}>
         {subs && subs.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
@@ -104,7 +132,26 @@ export default function SubscriptionScreen(props) {
     )
   }
 
-  renderInitial = () => {
+  const renderInitial = () => {
+    const checkoutId = `B68467EE48879BE9269477EA23C6CF6A.uat01-vm-tx01`
+    return (
+      <View style={{ flex: 1, }}>
+        <WebView
+          style={{ height: 300, width: deviceWidth }}
+          javaScriptEnabled={true}
+          scrollEnabled={false}
+          bounces={false}
+          originWhitelist={['*']}
+          scalesPageToFit={true}
+          startInLoadingState={true}
+          // source={{
+          //   uri: 'https://www.yahoo.com',
+          // }}
+          source={{ uri: encodeURI(`https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`) }}
+        />
+      </View>
+    )
+
     return (
       <View style={{ flex: 1, paddingTop: 20, alignItems: 'center' }}>
         <Text style={{ ...Fonts.FontMed, fontSize: 20, marginBottom: 20, textAlign: 'center' }}>{`طﺮﻴﻗة ﺎﻟإﺷﺘﺮﺎﻛ:`}</Text>
@@ -127,9 +174,11 @@ export default function SubscriptionScreen(props) {
     )
   }
 
-  renderPage = (i, index) => {
+  const renderPage = (i, index) => {
     return (
-      <View style={{ ...styles.viewPager }} key={index}>
+      <View style={{
+        ...styles.viewPager,
+      }} key={index}>
         <Text style={styles.titleText}>{i.name}</Text>
         <View style={{ flexDirection: 'row', height: '40%', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={styles.mainText}>{i.duration}</Text>
@@ -139,14 +188,15 @@ export default function SubscriptionScreen(props) {
         <Text style={{ ...styles.textlabel, fontSize: 19, marginVertical: 8, marginHorizontal: '10%', textAlign: 'center' }}>{i.description}</Text>
         {renderIndicator()}
         <Button onPress={() => {
-          setSelectedItem(i)
-          setUpload(true)
+          // setSelectedItem(i)
+          // setUpload(true)
+          onCheckOutSub(i)
         }} style={{ marginVertical: 12 }} text={`اشترك الأن`} />
       </View>
     )
   }
 
-  renderChoices = () => {
+  const renderChoices = () => {
     return (
       // <View style={{ flex: 1, paddingTop: 20, alignItems: 'center', backgroundColor: 'cyan', width: '100%' }}>
       <ViewPager
@@ -179,7 +229,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   viewPager: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     marginTop: 80

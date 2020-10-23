@@ -23,6 +23,24 @@ export const FIREBASE_CONFIG = {
   measurementId: "G-T4J0JT8ZB6"
 }
 
+export const HYPERPAY_CONFIG = {
+  ACCESS_TOKEN: `OGFjN2E0Yzk3NTAyOTVhOTAxNzUwMzQ1OTdkZDAzM2N8Y244azc5V3gzNQ==`,
+  PAYMENT_TYPE: {
+    VISA: {
+      entityId : `8ac7a4c9750295a9017503460b670340`,
+      paymentType: `DB`,
+      currency: `SAR`,
+      paymentMethod: 'VISA'
+    },
+    MADA: {
+      entityId : `8ac7a4c9750295a90175034786b10345`,
+      paymentType: `DB`,
+      currency: `SAR`,
+      paymentMethod: 'MADA'
+    }
+  }
+}
+
 firebase.initializeApp(FIREBASE_CONFIG)
 
 export default firebase
