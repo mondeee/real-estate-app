@@ -780,3 +780,11 @@ mutation($input: AddExpoTokenInput!){
   }
 }
 `)
+
+export const SEND_VERIFICATION_CODE = gql(`
+mutation($input: SendVerificationInput){
+  sendVerification(input:$input){
+    code
+    message
+  }
+}`)

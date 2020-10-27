@@ -14,7 +14,7 @@ export const buildFormUrlAcceptHeader = () => ({
 })
 
 export const tokenHeader = Token => ({
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/x-www-form-urlencoded',
   'Accept': 'application/json',
   'Authorization': `Bearer OGFjN2E0Yzk3NTAyOTVhOTAxNzUwMzQ1OTdkZDAzM2N8Y244azc5V3gzNQ==`
 })
@@ -22,7 +22,7 @@ export const tokenHeader = Token => ({
 export const multiPartHeader = Token => ({
   'Content-Type': 'multipart/form_data',
   'Accept': 'application/json',
-  'Authorization': `Bearer ${Token}`
+  'Authorization': `Bearer OGFjN2E0Yzk3NTAyOTVhOTAxNzUwMzQ1OTdkZDAzM2N8Y244azc5V3gzNQ`
 })
 
 const buildURL = (path) => {

@@ -19,7 +19,7 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
 import AlertModal from '../components/AlertComponent';
 import ActionComponent from '../components/ActionComponent';
-import { REGISTER, onError, VERIFY_USER } from '../services/graphql/queries'
+import { REGISTER, onError, VERIFY_USER, SEND_VERIFICATION_CODE } from '../services/graphql/queries'
 import { useMutation } from '@apollo/react-hooks';
 
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
@@ -38,6 +38,8 @@ export default function RegisterScreen(props) {
 
   const storeToken = useStoreActions(actions => actions.auth.setToken)
   const userData = useStoreState(state => state.auth.user)
+  const local_verification_code = useStoreActions(state => state.auth.verification_code)
+  const storeVerCode = useStoreActions(actions => actions.auth.setVerificationCode)
 
   const [alerVisible, setAlertVisible] = useState(false)
   const [verify, setVerify] = useState(false)
@@ -45,9 +47,11 @@ export default function RegisterScreen(props) {
   const [phone, setPhone] = useState('')
   const [password, setPass] = useState('')
   const [confirmPassword, setConfirmPass] = useState('')
+  const [countdown, setCountDown] = useState(10)
 
   const recaptchaVerifier = useRef(null)
   const [code, setCode] = useState('')
+  const [verificationCode, setVerificationCode] = useState('')
   const [verificationid, setVerificationId] = useState(null)
 
   const [isError, setError] = useState(false)
@@ -55,7 +59,7 @@ export default function RegisterScreen(props) {
   const [registerUser, { data, loading, error }] = useMutation(REGISTER, {
     onCompleted: e => {
       setVerify(true)
-      onSendVerification()
+      sendVerificationCode()
     }
   })
 
@@ -65,12 +69,51 @@ export default function RegisterScreen(props) {
     }
   })
 
+  const [sendVerificationCode, { data: verCodeData, error: verCodeError }] = useMutation(SEND_VERIFICATION_CODE, {
+    variables: {
+      input: {
+        phone: phone,
+      }
+    }
+  })
+
+  useEffect(() => {
+    if (verCodeData) {
+      console.log("CODE RESP", verCodeData)
+      setVerificationCode(verCodeData.sendVerification.code)
+      storeVerCode(verCodeData.sendVerification.code)
+    }
+
+    if (verCodeError) {
+      console.log('CODE ERROR', verCodeError)
+      Alert.alert('', 'Failed.')
+    }
+  }, [verCodeData, verCodeError])
+
+
+  useEffect(() => {
+    let interval = null
+
+    if (verify && countdown > 0) {
+      interval = setInterval(() => {
+        setCountDown(countdown => countdown - 1);
+      }, 1000);
+    } else if (!verify && countdown !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+
+  }, [verify, countdown])
+
   useEffect(() => {
     if (params && params.varify_user) {
       setPhone(params.phone)
       setVerify(true)
-      onSendVerification()
+      sendVerificationCode()
+      // setVerificationCode(local_verification_code)
+      // onSendVerification()
     }
+    console.log('stored', local_verification_code)
   }, [])
 
   useEffect(() => {
@@ -92,45 +135,6 @@ export default function RegisterScreen(props) {
     // navigate('Home', { refresh: false })
   }
 
-  // onPressRegister = () => {
-
-  //   let error_msg = ''
-
-  //   if (loading) return <ActivityIndicator />
-
-  //   // if (error) {
-  //   //   error.graphQLErrors.map(({ message, extensions }, i) => {
-  //   //     console.log('Login Error', message)
-  //   //     if (extensions && extensions.validation) {
-  //   //       for (var key in extensions.validation) {
-  //   //         if (extensions.validation.hasOwnProperty(key)) {
-  //   //           console.log(key + " -> " + extensions.validation[key]);
-  //   //           error_msg = error_msg + extensions.validation[key] + '\n'
-  //   //         }
-  //   //       }
-  //   //     }
-  //   //   })
-  //   //   Alert.alert('Error', error_msg, [
-  //   //     {
-  //   //       text: 'OK', onPress: () => {
-  //   //         setPass('')
-  //   //         setConfirmPass('')
-  //   //       }
-  //   //     }
-  //   //   ])
-  //   // }
-
-  //   if (data) {
-  //     console.log(data)
-  //     AsyncStorage.setItem('token', data.registerUser.token)
-  //     setVerify(true)
-  //   }
-
-  //   if (!data) {
-  //     return
-  //   }
-  // }
-
   if (data) {
     console.log(data)
     AsyncStorage.setItem('token', data.registerUser.token)
@@ -141,7 +145,6 @@ export default function RegisterScreen(props) {
   const onSendVerification = async () => {
     const phoneNum = phone && phone.length > 0 ? `+966${phone.slice(1)}` : `+966${userData.phone.slice(1)}`
     // const phoneNum = '+639276160873'
-    console.log('@PHONE', phoneNum)
     try {
       const phoneProvider = new firebase.auth.PhoneAuthProvider();
       const verificationId = await phoneProvider.verifyPhoneNumber(
@@ -165,21 +168,15 @@ export default function RegisterScreen(props) {
 
   const onVerifyCode = async () => {
     try {
-      console.log(verificationid, '\n', code)
-      const credential = firebase.auth.PhoneAuthProvider.credential(
-        verificationid,
-        code
-      );
-      await firebase.auth().signInWithCredential(credential);
-      Toast.show({
-        text: 'تم التحقق من كود التفعيل بنجاح  👍',
-        type: 'success'
-      })
-      verifyUser()
-      // onVerifyuserAPI()
-      // onPressRegister()
-      // setAlertVisible(true)
-      // showMessage({ text: "Phone authentication successful 👍" });
+      console.log(verificationCode, '\n', code, '\n', local_verification_code)
+      if (code == verificationCode) {
+        console.log('TRUE')
+      } else {
+        Alert.alert('', 'Wrong Code')
+        console.log('FALSE')
+      }
+
+      // verifyUser()
     } catch (err) {
       // showMessage({ text: `Error: ${err.message}`, color: "red" });
       console.log('error in verify', err.message)
@@ -189,10 +186,6 @@ export default function RegisterScreen(props) {
       })
     }
   }
-
-  // const onVerifyuserAPI = () => {
-  //   verifyUser()
-  // }
 
   const onPressRegister = () => {
     if (!name || !password || !phone) return
@@ -209,6 +202,7 @@ export default function RegisterScreen(props) {
       Alert.alert('كلمة المرور غير متطابقة ')
       return
     }
+
     registerUser({
       variables: {
         "input": {
@@ -224,6 +218,7 @@ export default function RegisterScreen(props) {
     }).catch(e => {
       onError(e)
     });
+
   }
 
   renderVerify = () => {
@@ -232,9 +227,13 @@ export default function RegisterScreen(props) {
         <FontAwesome size={50} color={Colors.primaryBlue} name={'lock'} />
         <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, fontSize: 20, margin: 12, }}>{`رمز التفعيل`}</Text>
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 18 }} >{`تم إرسال رمز التفعيل لجوالك`}</Text>
-        <Input onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24 }} />
+        <Input maxLength={5} onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24 }} />
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 13 }}>{`إعادة الإرسال`}</Text>
         <Button style={{ marginTop: 30, width: 177 }} onPress={() => onVerifyCode()} text={`التالي`} />
+        <Button disabled={countdown > 0} style={{ marginTop: 12, width: 177, backGroundColor: countdown == 0 ? Colors.primaryYellow : Colors.gray }} onPress={() => {
+          setCountDown(10)
+          sendVerificationCode()
+        }} text={`Resend Code (${countdown})`} />
       </View>
     )
   }
@@ -281,10 +280,6 @@ export default function RegisterScreen(props) {
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView keyboardVerticalOffset={100} style={{ flex: 1 }} behavior={"padding"}>
         <Header onPressBack={onPressBack} />
-        <FirebaseRecaptchaVerifierModal
-          ref={recaptchaVerifier}
-          firebaseConfig={FIREBASE_CONFIG}
-        />
         <ActionComponent success={true} isVisible={alerVisible} onClose={() => navigate('Home')} />
         {!verify && renderRegister()}
         {verify && renderVerify()}

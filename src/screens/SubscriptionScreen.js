@@ -6,7 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Linking, Dimensions
+  Linking, Dimensions, Alert
 } from 'react-native';
 
 import { Toast } from 'native-base'
@@ -25,6 +25,7 @@ import ImageBrowser from '../components/ImageBrowserComponent'
 import { HYPERPAY_CONFIG } from '../services/config';
 import WebView from 'react-native-webview';
 import * as WebBrowser from 'expo-web-browser';
+import { checkoutPayment } from '../services/api/checkout_request';
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
@@ -98,24 +99,50 @@ export default function SubscriptionScreen(props) {
   }, [data])
 
   useEffect(() => {
+    WebBrowser.dismissBrowser();
+    Linking.addEventListener('url', handleOpenURL)
+    return () => Linking.removeEventListener('url', handleOpenURL)
   }, [])
 
-  const onCheckOutSub = async ({ price }) => {
+  const handleOpenURL = (event) => {
+    console.log('LINKING LISTENER', event)
+  }
+
+  const confirmAlert = (item) => {
+    Alert.alert('Confirm', `are you sure you want to subscribe to ${item.name}`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Pay via Visa/MasterCard", onPress: () => onCheckOutSub('visa') },
+        { text: "Pay via Mada", onPress: () => onCheckOutSub('mada') }
+      ],
+    )
+  }
+
+  const onCheckOutSub = async (type = 'visa') => {
+    const { price } = selectedItem
     const payload = {
       entityId: HYPERPAY_CONFIG.PAYMENT_TYPE.VISA.entityId,
-      aomunt: price,
+      amount: price,
       currency: 'SAR',
       paymentType: 'DB'
     }
-    console.log('@PAYLOAD', payload)
-    const checkoutId = `B68467EE48879BE9269477EA23C6CF6A.uat01-vm-tx01`
-    _openWebBrowser()
-    // Linking.openURL(encodeURI(`https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`))
+    var qs = require('qs');
+    qs.stringify(payload)
+    console.log('@resp', resp)
+    if (resp.result.code == "000.200.100") {
+      _openWebBrowser(resp.id, type)
+    } else {
+      Alert.alert('', 'Request checkout Failed')
+    }
   }
 
-  const _openWebBrowser = async () => {
+  const _openWebBrowser = async (id, type = 'visa') => {
     const checkoutId = `B68467EE48879BE9269477EA23C6CF6A.uat01-vm-tx01`
-    const url = encodeURI(`<script src="https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}"></script>`)
+    const url = encodeURI(`https://app.nozolsa.com/payments/hyperpay2?checkout_id=${id}&brand=${type}`)
     try {
       await WebBrowser.openBrowserAsync(url)
     } catch (e) {
@@ -188,9 +215,9 @@ export default function SubscriptionScreen(props) {
         <Text style={{ ...styles.textlabel, fontSize: 19, marginVertical: 8, marginHorizontal: '10%', textAlign: 'center' }}>{i.description}</Text>
         {renderIndicator()}
         <Button onPress={() => {
-          // setSelectedItem(i)
+          setSelectedItem(i)
           // setUpload(true)
-          onCheckOutSub(i)
+          confirmAlert(i)
         }} style={{ marginVertical: 12 }} text={`اشترك الأن`} />
       </View>
     )

@@ -17,10 +17,11 @@ export default function Button(props) {
     onPress,
     child,
     text,
+    disabled
   } = props
 
   return (
-    <TouchableOpacity onPress={() => onPress()} style={{ ...styles.button, ...style, }}>
+    <TouchableOpacity onPress={() => onPress()} style={{ ...styles.button, ...style, backgroundColor: disabled ? Colors.darkGray : Colors.primaryYellow }}>
       <Text style={{ ...styles.text, ...textStyle }}>{text || `Button`}</Text>
     </TouchableOpacity >
   )
