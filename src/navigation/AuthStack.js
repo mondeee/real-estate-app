@@ -8,6 +8,7 @@ import SplashScreen from '../screens/SplashScreen';
 import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen'
+import TermsAndAgreementScreen from '../screens/TermsAndAgreementScreen';
 
 
 const AppNavigator = createAppContainer(
@@ -15,6 +16,7 @@ const AppNavigator = createAppContainer(
     {
       Login: LoginScreen,
       Register: RegisterScreen,
+      Terms_: TermsAndAgreementScreen,
       // Auth: AuthStack,
       // Main: HomeStack,
     },

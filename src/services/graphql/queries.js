@@ -63,6 +63,18 @@ query($id:ID!){
 }
 `)
 
+export const GET_SETTINGS = gql(`
+query{
+  allSettings {
+    terms_and_conditions
+    about_us
+    contact_us
+    instructions
+    cancellation_policy
+  }
+}
+`)
+
 export const GET_OWNED_PROPERTIES = gql(`
 query($first: Int!, $page: Int!){
   ownerProperties(first: $first, page: $page) {

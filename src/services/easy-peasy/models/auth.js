@@ -15,11 +15,15 @@ export default {
   districts: null,
   location: null,
   verification_code: null,
+  settings: {},
   setVerificationCode: action((state, payload) => {
     state.verification_code = payload;
   }),
   setUser: action((state, payload) => {
     state.user = payload;
+  }),
+  setSettings: action((state, payload) => {
+    state.settings = payload;
   }),
   setAllowMedia: action((state, payload) => {
     state.isMediaAllowed = payload;

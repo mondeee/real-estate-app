@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
@@ -17,7 +18,7 @@ import { useStoreActions } from 'easy-peasy';
 import * as Permissions from "expo-permissions";
 import * as Location from 'expo-location';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_DISTRICT } from '../services/graphql/queries';
+import { GET_DISTRICT, GET_SETTINGS } from '../services/graphql/queries';
 import * as Notifications from 'expo-notifications';
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
@@ -25,7 +26,25 @@ export default function SplashScreen(props) {
   const storeNotifToken = useStoreActions(actions => actions.auth.setNotifToken)
   const storeLocation = useStoreActions(actions => actions.auth.setLocation)
   const storeDistricts = useStoreActions(actions => actions.auth.setDistricts)
+  const storeSettings = useStoreActions(actions => actions.auth.setSettings)
+  var hasToken = false
   const { error, data } = useQuery(GET_DISTRICT)
+  const { data: settings_data } = useQuery(GET_SETTINGS)
+
+  useEffect(() => {
+
+    if (settings_data) {
+      storeSettings(settings_data.allSettings)
+    }
+
+  }, [settings_data])
+
+  const fetchToken = async () => {
+    const token = await AsyncStorage.getItem('token')
+    if (token && token?.length > 0) {
+      hasToken = true
+    }
+  }
 
   const setUpNotif = async () => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -68,6 +87,7 @@ export default function SplashScreen(props) {
   useEffect(() => {
     setUpLocation()
     setUpNotif()
+    fetchToken()
   }, [])
 
   useEffect(() => {
@@ -84,7 +104,7 @@ export default function SplashScreen(props) {
   renderSkipButton = () => {
     return (
       <Button
-        onPress={() => navigate('Home')}
+        onPress={() => hasToken ? navigate('Home') : navigate('Login')}
         text={`ابدأ`}
         style={{ width: 177 }}
         textStyle={{ fontFamily: 'tajawal_med' }}

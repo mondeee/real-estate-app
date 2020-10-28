@@ -78,7 +78,6 @@ export default function CalendarComponent(props) {
     onPress,
     child,
     text,
-    key,
     availabilities,
     data,
     seasonal,

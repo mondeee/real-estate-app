@@ -6,9 +6,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Linking, Dimensions, Alert
+  Dimensions, Alert
 } from 'react-native';
-
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
 import { Toast } from 'native-base'
 
 import Colors from '../styles/Colors';
@@ -24,7 +25,7 @@ import { onError } from 'apollo-link-error';
 import ImageBrowser from '../components/ImageBrowserComponent'
 import { HYPERPAY_CONFIG } from '../services/config';
 import WebView from 'react-native-webview';
-import * as WebBrowser from 'expo-web-browser';
+
 import { checkoutPayment } from '../services/api/checkout_request';
 
 const deviceWidth = Dimensions.get('window').width
@@ -99,12 +100,13 @@ export default function SubscriptionScreen(props) {
   }, [data])
 
   useEffect(() => {
-    WebBrowser.dismissBrowser();
+    // WebBrowser.dismissBrowser();
     Linking.addEventListener('url', handleOpenURL)
     return () => Linking.removeEventListener('url', handleOpenURL)
   }, [])
 
   const handleOpenURL = (event) => {
+    WebBrowser.dismissBrowser()
     console.log('LINKING LISTENER', event)
   }
 
@@ -123,15 +125,26 @@ export default function SubscriptionScreen(props) {
   }
 
   const onCheckOutSub = async (type = 'visa') => {
+    console.log(selectedItem)
+    if (!selectedItem) return
     const { price } = selectedItem
-    const payload = {
+    var payload = {
       entityId: HYPERPAY_CONFIG.PAYMENT_TYPE.VISA.entityId,
       amount: price,
       currency: 'SAR',
       paymentType: 'DB'
     }
+    
+    if (type == 'mada') {
+      payload = {
+        entityId: HYPERPAY_CONFIG.PAYMENT_TYPE.MADA.entityId,
+        amount: price,
+        currency: 'SAR',
+        paymentType: 'DB'
+      }
+    }
     var qs = require('qs');
-    qs.stringify(payload)
+    const resp = await checkoutPayment(qs.stringify(payload))
     console.log('@resp', resp)
     if (resp.result.code == "000.200.100") {
       _openWebBrowser(resp.id, type)

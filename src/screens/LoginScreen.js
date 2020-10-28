@@ -130,7 +130,7 @@ export default function LoginScreen(props) {
           })
         }} text={`تسجيل الدخول`} style={{ marginTop: 24 }} /> : <ActivityIndicator />}
         {/* <Button onPress={() => navigate('Home')} text={`ﺖﺴﺠﻴﻟ ﺎﻟﺪﺧﻮﻟ`} style={{ marginTop: 24 }} /> */}
-        <Text onPress={() => navigate('Register')} style={{ color: Colors.primaryBlue, ...Fonts.fontRegular, marginTop: 12 }}>
+        <Text onPress={() => navigate('Terms_', { show: true })} style={{ color: Colors.primaryBlue, ...Fonts.fontRegular, marginTop: 12 }}>
           {` تسجيل جديد `}
           <Text style={{ fontWeight: '500' }}>{`ليس لديك حساب؟ `}</Text>
         </Text>

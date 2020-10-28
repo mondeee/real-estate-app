@@ -3,6 +3,7 @@
     "name": "Nozol",
     "slug": "nozol-real-estate",
     "privacy": "public",
+    "scheme": "nozolapp",
     "platforms": [
       "ios",
       "android"
