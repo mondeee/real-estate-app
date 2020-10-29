@@ -325,7 +325,7 @@ export default function UpdatePropertyScreen(props) {
     onCompleted: e => {
       console.log('@Complete UPDATE PRIVATE', e)
       Toast.show({
-        text: 'property successfully updated',
+        text: 'تم اضافة القسم بنجاح',
         type: 'success'
       })
       navigate('Home', { refresh: true })

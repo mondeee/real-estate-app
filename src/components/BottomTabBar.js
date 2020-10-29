@@ -103,7 +103,7 @@ export default function BottomTabBar(props) {
       <TouchableOpacity onPress={() => {
         if (!token) {
           Toast.show({
-            text: 'User is not Logged In',
+            text: 'يرجى تسجيل الدخول',
             type: 'danger'
           })
           return

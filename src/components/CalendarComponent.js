@@ -440,7 +440,7 @@ export default function CalendarComponent(props) {
 
               if (seasonal && !final) {
                 if (marked[selectedDay]) {
-                  Alert.alert('Error', 'That date is already taken')
+                  Alert.alert('Error', 'هذا التاريخ غير متوفر')
                   return
                 }
                 if (fdate) {
@@ -538,7 +538,7 @@ export default function CalendarComponent(props) {
               <TouchableOpacity onPress={() => {
                 if (current_price == 0) {
                   Toast.show({
-                    text: 'Please add price',
+                    text: 'الرجاء إضافة الأسعار العامة.',
                     type: 'danger'
                   })
                   return
@@ -644,7 +644,7 @@ export default function CalendarComponent(props) {
               if (!final) {
                 if (fdate) {
                   if (marked[selectedDay]) {
-                    Alert.alert('Error', 'date is already taken')
+                    Alert.alert('Error', 'هذا التاريخ غير متوفر')
                     return
                   }
                   setFromDate(selectedDay)
@@ -652,7 +652,7 @@ export default function CalendarComponent(props) {
                   setfDate(false)
                 } else {
                   if (marked[selectedDay] && selectedDay != fromDate) {
-                    Alert.alert('Error', 'date is already taken')
+                    Alert.alert('Error', 'هذا التاريخ غير متوفر')
                     return
                   }
                   console.log('onselect ffromday')

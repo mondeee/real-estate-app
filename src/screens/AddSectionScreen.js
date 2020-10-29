@@ -260,7 +260,7 @@ export default function AddSectionScreen(props) {
     if (!payload) {
       validate = false
       Toast.show({
-        text: 'Please check all the fields',
+        text: 'الرجاء إضافة بعض المرافق   .',
         type: 'danger'
       })
       return validate
@@ -277,7 +277,7 @@ export default function AddSectionScreen(props) {
 
     if (!photos) {
       Toast.show({
-        text: 'Please upload some photos',
+        text: 'الرجاء تحميل بعض الصور',
         type: 'danger'
       })
       validate = false

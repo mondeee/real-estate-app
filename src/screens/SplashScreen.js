@@ -62,7 +62,7 @@ export default function SplashScreen(props) {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
       Toast.show({
-        text: 'Location permission not granted',
+        text: `لم يتم منح إذن الحصول على معلومات موقعك  `,
         type: 'danger'
       })
     }

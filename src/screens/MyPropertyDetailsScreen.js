@@ -150,7 +150,7 @@ export default function MyPropertyDetailsScreen(props) {
             <TouchableOpacity onPress={() => {
               if (!userData) {
                 Toast.show({
-                  text: 'User is not Logged In',
+                  text: 'يرجى تسجيل الدخول',
                   type: 'danger'
                 })
               } else {
@@ -242,7 +242,7 @@ export default function MyPropertyDetailsScreen(props) {
 
   const onCreateChat = id => {
     if (id == userData.id) {
-      Alert.alert('Error', 'You cannot message your ownself')
+      Alert.alert('Error', 'لايمكنك مراسلة نفسك')
       setLoading(false)
       return
     }

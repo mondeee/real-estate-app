@@ -31,31 +31,10 @@ import { checkoutPayment } from '../services/api/checkout_request';
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
-const SAMPLE_LIST = [
-  {
-    "id": "1",
-    "name": "1 Month",
-    "description": "1 Month Subscription; 10 Adding Property Limit",
-    "duration": 1,
-    "limit": 10,
-    "price": 100,
-    "unli": false
-  },
-  {
-    "id": "2",
-    "name": "1 Month Unli",
-    "description": "1 Month Subscription; Unlimited Adding Property Limit",
-    "duration": 1,
-    "limit": -1,
-    "price": 500,
-    "unli": true
-  }
-]
-
 export default function SubscriptionScreen(props) {
   const { navigate, goBack } = props.navigation
   const [page, setPage] = useState(0)
-  const [subs, setSubs] = useState(SAMPLE_LIST)
+  const [subs, setSubs] = useState([])
   const [upload, setUpload] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const { loading, error, data } = useQuery(GET_SUBS)
@@ -111,15 +90,15 @@ export default function SubscriptionScreen(props) {
   }
 
   const confirmAlert = (item) => {
-    Alert.alert('Confirm', `are you sure you want to subscribe to ${item.name}`,
+    Alert.alert('تأكيد', ` هل انت متأكد انك تريد الاشتراك في  ${item.name}':`,
       [
         {
-          text: "Cancel",
+          text: "الغاء",
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "Pay via Visa/MasterCard", onPress: () => onCheckOutSub('visa') },
-        { text: "Pay via Mada", onPress: () => onCheckOutSub('mada') }
+        { text: "الدفع عن طريق فيزا او ماستر كارد", onPress: () => onCheckOutSub('visa') },
+        { text: "الدفع عن طريق مدى", onPress: () => onCheckOutSub('mada') }
       ],
     )
   }
@@ -149,7 +128,7 @@ export default function SubscriptionScreen(props) {
     if (resp.result.code == "000.200.100") {
       _openWebBrowser(resp.id, type)
     } else {
-      Alert.alert('', 'Request checkout Failed')
+      Alert.alert('', 'فشلت العملية يرجى المحاولة مرة اخرى')
     }
   }
 

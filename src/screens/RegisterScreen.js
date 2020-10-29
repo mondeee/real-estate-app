@@ -86,7 +86,7 @@ export default function RegisterScreen(props) {
 
     if (verCodeError) {
       console.log('CODE ERROR', verCodeError)
-      Alert.alert('', 'Failed.')
+      Alert.alert('', 'فشل في عملية إعادة الارسال ، يرجى المحاولة مرة اخرى.')
     }
   }, [verCodeData, verCodeError])
 
@@ -168,15 +168,11 @@ export default function RegisterScreen(props) {
 
   const onVerifyCode = async () => {
     try {
-      console.log(verificationCode, '\n', code, '\n', local_verification_code)
       if (code == verificationCode) {
-        console.log('TRUE')
+        verifyUser()
       } else {
-        Alert.alert('', 'Wrong Code')
-        console.log('FALSE')
+        Alert.alert('', 'رمز التفعيل غير صحيح')
       }
-
-      // verifyUser()
     } catch (err) {
       // showMessage({ text: `Error: ${err.message}`, color: "red" });
       console.log('error in verify', err.message)
@@ -233,7 +229,7 @@ export default function RegisterScreen(props) {
         <Button disabled={countdown > 0} style={{ marginTop: 12, width: 177, backGroundColor: countdown == 0 ? Colors.primaryYellow : Colors.gray }} onPress={() => {
           setCountDown(10)
           sendVerificationCode()
-        }} text={`Resend Code (${countdown})`} />
+        }} text={`إعادة إرسال (${countdown})`} />
       </View>
     )
   }

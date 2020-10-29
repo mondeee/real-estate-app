@@ -130,7 +130,7 @@ export default function HomeScreen(props) {
 
     if (properyError) {
       Toast.show({
-        text: 'User Token has Expired, Please Login again',
+        text: 'انتهت الجلسة ، يرجى تسجيل الدخول ',
         type: 'danger'
       })
       deleteToken()

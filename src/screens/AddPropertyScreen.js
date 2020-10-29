@@ -432,7 +432,7 @@ export default function AddPropertyScreen(props) {
 
     if (!facilities) {
       Toast.show({
-        text: 'Please add some facilities and details.',
+        text: 'الرجاء إضافة بعض المرافق   .',
         type: 'danger'
       })
       validate = false

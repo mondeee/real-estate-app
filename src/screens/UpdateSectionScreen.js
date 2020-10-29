@@ -282,7 +282,7 @@ export default function UpdateSectionScreen(props) {
     if (!payload) {
       validate = false
       Toast.show({
-        text: 'Please check all the fields',
+        text: 'الرجاء إضافة بعض المرافق   .',
         type: 'danger'
       })
       return validate
@@ -299,7 +299,7 @@ export default function UpdateSectionScreen(props) {
 
     if (!photos) {
       Toast.show({
-        text: 'Please upload some photos',
+        text: 'الرجاء تحميل بعض الصور',
         type: 'danger'
       })
       validate = false
@@ -335,7 +335,7 @@ export default function UpdateSectionScreen(props) {
 
     if (!generalPrice) {
       Toast.show({
-        text: 'Please add some general prices.',
+        text: 'الرجاء إضافة الأسعار العامة.',
         type: 'danger'
       })
       validate = false
