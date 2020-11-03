@@ -215,7 +215,7 @@ export default function MyPropertyDetailsScreen(props) {
           onCreateChat(owner.id)
         }} style={{ alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name={'message'} size={40} color={Colors.primaryBlue} />
-          <Text style={{ ...Fonts.FontMed, fontSize: 18, marginTop: 8 }}>Chat</Text>
+          <Text style={{ ...Fonts.FontMed, fontSize: 18, marginTop: 8 }}>{`المحادثة`}</Text>
         </TouchableOpacity>
         <View style={{ alignItems: 'flex-end' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>

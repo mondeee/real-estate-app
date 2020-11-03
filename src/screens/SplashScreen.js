@@ -104,7 +104,7 @@ export default function SplashScreen(props) {
   renderSkipButton = () => {
     return (
       <Button
-        onPress={() => hasToken ? navigate('Home') : navigate('Login')}
+        onPress={() => navigate('Home')}
         text={`ابدأ`}
         style={{ width: 177 }}
         textStyle={{ fontFamily: 'tajawal_med' }}

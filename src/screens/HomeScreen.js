@@ -275,12 +275,12 @@ export default function HomeScreen(props) {
               }, 500)
             }
             } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8, marginTop: 16, }}>
-              <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{` اﻷﺳﻌﺎر العامة`}</Text>
+              <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{` أيام ا لمواسم`}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               showmainPriceModal(false)
               setTimeout(() => {
-                showAvailabilityModal(true)
+                showGeneralPriceModal(true)
               }, 500)
             }
             } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8 }}>

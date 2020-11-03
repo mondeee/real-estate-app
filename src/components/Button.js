@@ -19,9 +19,27 @@ export default function Button(props) {
     text,
     disabled
   } = props
+  const [onPressStatus, setOnPressStatus] = useState(false)
+  const [disable, setDisable] = useState(disabled)
+
+  useEffect(() => {
+    if (onPressStatus) {
+      setDisable(true)
+    } else {
+      setDisable(false)
+    }
+  }, [onPressStatus])
 
   return (
-    <TouchableOpacity onPress={() => onPress()} style={{ ...styles.button, ...style, backgroundColor: disabled ? Colors.darkGray : Colors.primaryYellow }}>
+    <TouchableOpacity
+      disabled={disable}
+      onPress={() => {
+        setOnPressStatus(true)
+        onPress()
+        setTimeout(() => {
+          setOnPressStatus(false)
+        }, 800)
+      }} style={{ ...styles.button, ...style, backgroundColor: disabled ? Colors.darkGray : onPressStatus ? Colors.gray : Colors.primaryYellow, }}>
       <Text style={{ ...styles.text, ...textStyle }}>{text || `Button`}</Text>
     </TouchableOpacity >
   )

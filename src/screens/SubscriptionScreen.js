@@ -36,30 +36,35 @@ export default function SubscriptionScreen(props) {
   const [page, setPage] = useState(0)
   const [subs, setSubs] = useState([])
   const [upload, setUpload] = useState(false)
+  const [checkoutId, setCheckoutId] = useState(null)
+  const [callbackURL, setCallbackURL] = useState(null)
   const [selectedItem, setSelectedItem] = useState(null)
   const { loading, error, data } = useQuery(GET_SUBS)
   const [receipt, setReceipt] = useState(null)
   const [isGalleryVisible, setGalleryVisible] = useState(false)
+  const [paymentDone, setPaymentDone] = useState(false)
 
   const [addSubscription, { data: subData, error: subError }] = useMutation(ADD_SUBSCRIPTION, {
     onCompleted: e => {
       console.log('@results', e)
       Toast.show({
-        text: 'Subscription Added',
+        text: 'تم الاضافة بنجاح',
         type: 'success'
       })
     }
   })
 
   useState(() => {
-    console.log(subError, subData)
+    console.log(subError, '\n', subData)
   }, [subError, subData])
 
-  const onAddSubsciption = id => {
+  const onAddSubsciption = () => {
+
     const payload = {
       variables: {
         "input": {
-          "subscription_id": id
+          "checkout_id": checkoutId,
+          "subscription_id": selectedItem.id
         }
       }
     }
@@ -79,14 +84,36 @@ export default function SubscriptionScreen(props) {
   }, [data])
 
   useEffect(() => {
-    // WebBrowser.dismissBrowser();
-    Linking.addEventListener('url', handleOpenURL)
+    if (selectedItem) {
+      confirmAlert(selectedItem)
+    }
+  }, [selectedItem])
+
+  useEffect(() => {
+    if (paymentDone) {
+      onAddSubsciption()
+    }
+  }, [paymentDone])
+
+  useEffect(() => {
+    getInitialURL()
+    Linking.addEventListener('url', () => {
+      console.log('@@@@\n', selectedItem, '\n', checkoutId)
+      handleOpenURL(selectedItem, checkoutId)
+    })
     return () => Linking.removeEventListener('url', handleOpenURL)
   }, [])
+
+  const getInitialURL = async () => {
+    const initialURL = await Linking.getInitialURL()
+    console.log('@INITIAL URL', initialURL)
+    setCallbackURL(initialURL)
+  }
 
   const handleOpenURL = (event) => {
     WebBrowser.dismissBrowser()
     console.log('LINKING LISTENER', event)
+    setPaymentDone(true)
   }
 
   const confirmAlert = (item) => {
@@ -97,13 +124,13 @@ export default function SubscriptionScreen(props) {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "الدفع عن طريق فيزا او ماستر كارد", onPress: () => onCheckOutSub('visa') },
-        { text: "الدفع عن طريق مدى", onPress: () => onCheckOutSub('mada') }
+        { text: "الدفع عن طريق فيزا او ماستر كارد", onPress: () => onCheckOutSub('visa', item) },
+        { text: "الدفع عن طريق مدى", onPress: () => onCheckOutSub('mada', item) }
       ],
     )
   }
 
-  const onCheckOutSub = async (type = 'visa') => {
+  const onCheckOutSub = async (type = 'visa', item) => {
     console.log(selectedItem)
     if (!selectedItem) return
     const { price } = selectedItem
@@ -113,7 +140,7 @@ export default function SubscriptionScreen(props) {
       currency: 'SAR',
       paymentType: 'DB'
     }
-    
+
     if (type == 'mada') {
       payload = {
         entityId: HYPERPAY_CONFIG.PAYMENT_TYPE.MADA.entityId,
@@ -126,6 +153,7 @@ export default function SubscriptionScreen(props) {
     const resp = await checkoutPayment(qs.stringify(payload))
     console.log('@resp', resp)
     if (resp.result.code == "000.200.100") {
+      setCheckoutId(resp.id)
       _openWebBrowser(resp.id, type)
     } else {
       Alert.alert('', 'فشلت العملية يرجى المحاولة مرة اخرى')
@@ -133,8 +161,7 @@ export default function SubscriptionScreen(props) {
   }
 
   const _openWebBrowser = async (id, type = 'visa') => {
-    const checkoutId = `B68467EE48879BE9269477EA23C6CF6A.uat01-vm-tx01`
-    const url = encodeURI(`https://app.nozolsa.com/payments/hyperpay2?checkout_id=${id}&brand=${type}`)
+    const url = encodeURI(`https://app.nozolsa.com/payments/hyperpay2?checkout_id=${id}&brand=${type}&type=subscription&cburl=${callbackURL}`)
     try {
       await WebBrowser.openBrowserAsync(url)
     } catch (e) {
@@ -208,8 +235,7 @@ export default function SubscriptionScreen(props) {
         {renderIndicator()}
         <Button onPress={() => {
           setSelectedItem(i)
-          // setUpload(true)
-          confirmAlert(i)
+          // confirmAlert(i)
         }} style={{ marginVertical: 12 }} text={`اشترك الأن`} />
       </View>
     )

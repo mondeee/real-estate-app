@@ -26,7 +26,7 @@
     "ios": {
       "userInterfaceStyle": "light",
       "supportsTablet": true,
-      "buildNumber": "14",
+      "buildNumber": "17",
       "bundleIdentifier": "owner.nozol.app",
       "infoPlist": {
         "NSCameraUsageDescription": "App uses the camera to take pictures for profile setup.",

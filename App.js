@@ -41,6 +41,11 @@ export default function App() {
   }
   const client = new ApolloClient({
     cache,
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+      }
+    },
     link: new createUploadLink(
       {
         uri: 'https://app.nozolsa.com/graphql',

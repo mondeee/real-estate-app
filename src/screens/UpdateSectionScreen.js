@@ -477,7 +477,7 @@ export default function UpdateSectionScreen(props) {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input value={payload.description} multiline={true} onChangeText={e => {
+        <Input value={payload.description} maxLength={600} multiline={true} onChangeText={e => {
           const item = { ...payload }
           item.description = e
           setPayload(item)

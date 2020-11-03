@@ -101,7 +101,7 @@ const COMMERCIAL_DATA = [
   },
   {
     id: 10,
-    name: 'ةيجراخ ةحاس ',
+    name: 'ساحة خارجية ',
     value: 0,
     image: require('../../assets/yard.png'),
   },
@@ -412,9 +412,9 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!photos) {
+    if (!photos || photos?.length < 6) {
       Toast.show({
-        text: 'يرجى رفع الصور',
+        text: 'الحد الاعلى لرفع الصور ٦ صور',
         type: 'danger'
       })
       validate = false
@@ -507,7 +507,7 @@ export default function AddPropertyScreen(props) {
     data.category_id = 1
     data.proof_of_commercial_license = registration[0]
     data.proof_of_operation_license = license[0]
-    data.images = photos && photos.length > 0 ? photos : []
+    data.images = photos && photos.length < 6 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
     delete data.contact_name
@@ -683,13 +683,14 @@ export default function AddPropertyScreen(props) {
         }
       }} style={{ alignSelf: 'center', width: 177, marginVertical: 12, }} text={`إضافة`} />
     )
+
   }
 
   const renderDescription = () => {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input maxLength={300} value={payload.description} onChangeText={e => {
+        <Input maxLength={600} value={payload.description} onChangeText={e => {
           const i = { ...payload }
           i.description = e
           setPayload(i)

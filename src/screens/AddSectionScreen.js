@@ -458,7 +458,7 @@ export default function AddSectionScreen(props) {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input multiline={true} onChangeText={e => {
+        <Input maxLength={600} multiline={true} onChangeText={e => {
           const item = { ...payload }
           item.description = e
           setPayload(item)

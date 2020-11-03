@@ -238,7 +238,7 @@ export default function SectionListScreen(props) {
         }}
       >
         <View style={{ flex: 1, padding: 12, }}>
-          <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
+          <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}</Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <TouchableOpacity
@@ -256,7 +256,7 @@ export default function SectionListScreen(props) {
               setSeasonalPrice(item?.seasonal_prices)
               showmainPriceModal(true)
             }}>
-              {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`${item.price_average} `}<FontAwesome name={'money'} /></Text>}
+              {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`الأسعار`}<FontAwesome name={'money'} /></Text>}
             </TouchableOpacity>
           </View>
         </View>

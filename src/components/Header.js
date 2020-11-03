@@ -77,7 +77,7 @@ export default function Header(props) {
         {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
           <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
         </TouchableOpacity>}
-        <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`ﺎﻠﻤﻠﻓ ﺎﻠﺸﺨﺼﻳ`}</Text>
+        <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`الملف الشخصي`}</Text>
       </SafeAreaView>
     )
   }

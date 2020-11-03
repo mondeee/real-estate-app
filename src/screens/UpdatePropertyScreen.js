@@ -708,7 +708,7 @@ export default function UpdatePropertyScreen(props) {
     return (
       <View>
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
-        <Input maxLength={300} onChangeText={e => {
+        <Input maxLength={600} onChangeText={e => {
           const i = { ...payload }
           i.description = e
           setPayload(i)
