@@ -371,9 +371,9 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!photos) {
+    if (!photos || photos?.length < 6) {
       Toast.show({
-        text: 'يرجى رفع الصور ',
+        text: 'يرجى رفع الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
       })
       validate = false
@@ -441,9 +441,9 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!photos) {
+    if (!photos || photos?.length < 6) {
       Toast.show({
-        text: 'يرجى رفع الصور',
+        text: 'الحد الاعلى لرفع الصور ٦ صور',
         type: 'danger'
       })
       validate = false

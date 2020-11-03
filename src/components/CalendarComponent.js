@@ -406,7 +406,7 @@ export default function CalendarComponent(props) {
       <Modal isVisible={isVisible} style={{ alignItems: 'flex-end' }}>
         <View style={{ width: '100%', height: '80%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, padding: 12, paddingHorizontal: 24, }}>
           <ScrollView>
-            <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`تحديد اسعار ايام المواسم `}</Text>
+            <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر العامة `}</Text>
             {/* DATE SECTION */}
             {!general && renderDateSection()}
             <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
@@ -507,7 +507,7 @@ export default function CalendarComponent(props) {
       <Modal isVisible={isVisible} style={{ alignItems: 'flex-end' }}>
         <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, padding: 12, paddingHorizontal: 24, }}>
           <ScrollView>
-            <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`ﺗﺤﺪaﻳﺪ أﺳﻌﺎر أيام المواسم `}</Text>
+            <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`تحديد اسعار ايام المواسم `}</Text>
             {renderDateSection()}
             <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
             <View style={{ alignSelf: 'flex-end', width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>

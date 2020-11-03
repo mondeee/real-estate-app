@@ -47,6 +47,10 @@ export default function SubscriptionScreen(props) {
   const [addSubscription, { data: subData, error: subError }] = useMutation(ADD_SUBSCRIPTION, {
     onCompleted: e => {
       console.log('@results', e)
+      setCheckoutId(null)
+      setCallbackURL(null)
+      setSelectedItem(null)
+      goBack()
       Toast.show({
         text: 'تم الاضافة بنجاح',
         type: 'success'

@@ -29,7 +29,6 @@ import CalendarComponent from '../components/CalendarComponent';
 import * as Permissions from "expo-permissions";
 import { Toast } from 'native-base';
 import FacilitiesSelectionComponent from '../components/FacilitiesSelectionComponent';
-import { ReactNativeFile } from 'apollo-upload-client'
 
 const TYPES = [
   {
@@ -343,32 +342,14 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!photos) {
+    if (!photos || photos?.length < 6) {
       Toast.show({
-        text: 'يرجى رفع الصور ',
+        text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
       })
       validate = false
       return validate
     }
-
-    // if (!registration) {
-    //   Toast.show({
-    //     text: 'Please provide some Registration info.',
-    //     type: 'danger'
-    //   })
-    //   validate = false
-    //   return validate
-    // }
-
-    // if (!facilities) {
-    //   Toast.show({
-    //     text: 'Please add some facilities and details.',
-    //     type: 'danger'
-    //   })
-    //   validate = false
-    //   return validate
-    // }
 
     if (!license) {
       Toast.show({

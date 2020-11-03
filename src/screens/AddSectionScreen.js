@@ -275,9 +275,9 @@ export default function AddSectionScreen(props) {
     //   return validate
     // }
 
-    if (!photos) {
+    if (!photos || photos?.length < 6) {
       Toast.show({
-        text: 'الرجاء تحميل بعض الصور',
+        text: 'الحد الاعلى لرفع الصور ٦ صور',
         type: 'danger'
       })
       validate = false

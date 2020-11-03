@@ -272,6 +272,7 @@ export default function HomeScreen(props) {
               showmainPriceModal(false)
               setTimeout(() => {
                 setShowSeasonalModal(true)
+                setShowCalendar(true)
               }, 500)
             }
             } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8, marginTop: 16, }}>
