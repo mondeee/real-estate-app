@@ -101,11 +101,6 @@ query($first: Int!, $page: Int!){
           facilities {
             id,
             value
-            facility {
-              id
-              type
-              en
-            }
           }
           availablities {
             from

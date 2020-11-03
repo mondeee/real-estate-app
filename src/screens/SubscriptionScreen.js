@@ -105,8 +105,9 @@ export default function SubscriptionScreen(props) {
   }, [])
 
   const getInitialURL = async () => {
-    const initialURL = await Linking.getInitialURL()
+    let initialURL = Linking.makeUrl('payment', { hello: 'world', goodbye: 'now' });
     console.log('@INITIAL URL', initialURL)
+    Alert.alert(initialURL)
     setCallbackURL(initialURL)
   }
 

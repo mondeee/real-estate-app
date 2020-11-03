@@ -203,7 +203,7 @@ export default function ChatScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: '10%',
+    marginBottom: '23%',
     padding: 12,
     backgroundColor: 'white',
   },

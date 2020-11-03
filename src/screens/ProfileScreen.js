@@ -57,7 +57,7 @@ export default function ProfileScreen(props) {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigate('BookingList')} style={styles.itemContainer}>
           <Text style={styles.itemText}>{`حجوزاتي`}</Text>
-          {/* <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text> */}
+          <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
           {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
         </TouchableOpacity>
       </View>

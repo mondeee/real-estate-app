@@ -55,7 +55,7 @@ export default function MyPropertyDetailsScreen(props) {
   useEffect(() => {
     setTotalPages(item.images)
     // _fetchToken()
-    console.log('@ITEM', item)
+    console.log('@ITEM', item.sections)
   }, [])
 
   const _fetchToken = async () => {
@@ -201,6 +201,7 @@ export default function MyPropertyDetailsScreen(props) {
             </Text>
           </View>
           {/* {renderContact()} */}
+          <View style={{ height: 300 }} />
         </View>
       </ScrollView>
     )
@@ -308,7 +309,7 @@ export default function MyPropertyDetailsScreen(props) {
         }
       </ViewPager>
       {renderDetails()}
-      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item})} style={{ alignSelf: 'center', width: '50%', marginBottom: 30, position: 'absolute', bottom: '10%' }} text={`الأقسام`} />}
+      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item })} style={{ alignSelf: 'center', width: '50%', marginBottom: 30, position: 'absolute', bottom: '10%' }} text={`الأقسام`} />}
     </SafeAreaView>
   );
 }
