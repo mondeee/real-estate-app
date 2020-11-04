@@ -310,6 +310,7 @@ export default function AddPropertyScreen(props) {
         text: 'تم اضافة النزل التجاري بنجاح',
         type: 'success'
       })
+      // initialState()
     }
   })
 
@@ -324,7 +325,7 @@ export default function AddPropertyScreen(props) {
   const validatePrivate = () => {
     let validate = false
     // console.log('@PAYlOAD', payload)
-    if (!payload) {
+    if (!payload || !payload?.name || !payload?.district_id || !payload?.city_id  ) {
       validate = false
       Toast.show({
         text: 'يرجى ادخال جميع البيانات المطلوبة',
@@ -342,7 +343,16 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!photos || photos?.length < 6) {
+    if (!photos) {
+      Toast.show({
+        text: 'يرجى رفع الصور ',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (photos?.length > 6) {
       Toast.show({
         text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
@@ -375,7 +385,7 @@ export default function AddPropertyScreen(props) {
   const validateCommercial = () => {
     let validate = false
     // console.log('@PAYlOAD', payload)
-    if (!payload) {
+    if (!payload || !payload?.name || !payload?.district_id || !payload?.city_id  ) {
       validate = false
       Toast.show({
         text: 'يرجى ادخال جميع البيانات المطلوبة ',
@@ -393,9 +403,18 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!photos || photos?.length < 6) {
+    if (!photos) {
       Toast.show({
-        text: 'الحد الاعلى لرفع الصور ٦ صور',
+        text: 'يرجى رفع الصور ',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (photos?.length > 6) {
+      Toast.show({
+        text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
       })
       validate = false
@@ -561,6 +580,7 @@ export default function AddPropertyScreen(props) {
         cTypes[index].selected = true
         // p.type_id = cTypes[index].id
         // setPayload(p)
+        initialState()
         setTypes(cTypes)
         setDataReload(true)
         setTimeout(() => {
@@ -774,7 +794,7 @@ export default function AddPropertyScreen(props) {
       }} isVisible={showAvailability} />
       <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />
       <ImageBrowser onClose={() => setShowLicense(false)} photos={license} setPhotos={setLicense} key={'Operating License'} isVisible={showLicense} />
-      <ImageBrowser photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
+      <ImageBrowser max={6} photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
       {isFaciVisible && <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} setFinal={setFinalFac} isVisible={isFaciVisible} />}
     </View>

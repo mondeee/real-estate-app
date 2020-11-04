@@ -197,8 +197,8 @@ export default function SectionListScreen(props) {
             <TouchableOpacity onPress={() => {
               showmainPriceModal(false)
               setTimeout(() => {
-                setShowGeneral(false)
-                showGeneralPriceModal(false)
+                setShowGeneral(true)
+                showGeneralPriceModal(true)
               }, 500)
             }
             } style={{ backgroundColor: Colors.gray, padding: 12, borderRadius: 30, margin: 8 }}>

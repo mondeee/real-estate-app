@@ -14,12 +14,15 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
 import { SafeAreaView } from 'react-navigation';
 import { CONFIG } from '../services/config';
+import { useStoreState } from 'easy-peasy';
 
 export default function ProfileScreen(props) {
   const { navigate, goBack } = props.navigation
   const [isLogin, setLogin] = useState(false)
+  const userData = useStoreState(state => state.auth.user)
 
   useEffect(() => {
+    console.log('@userdata', userData)
     getToken()
   }, [])
 
@@ -51,13 +54,13 @@ export default function ProfileScreen(props) {
           <Text style={styles.itemText}>{`الملف الشخصي `}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/usericon.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate('Subs')} style={styles.itemContainer}>
+        {userData?.is_subscription && <TouchableOpacity onPress={() => navigate('Subs')} style={styles.itemContainer}>
           <Text style={styles.itemText}>{`الاشتراكات`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} />
-        </TouchableOpacity>
+        </TouchableOpacity>}
         <TouchableOpacity onPress={() => navigate('BookingList')} style={styles.itemContainer}>
           <Text style={styles.itemText}>{`حجوزاتي`}</Text>
-          <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
+          {/* <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text> */}
           {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
         </TouchableOpacity>
       </View>

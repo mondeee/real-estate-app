@@ -297,9 +297,18 @@ export default function UpdateSectionScreen(props) {
     //   return validate
     // }
 
-    if (!photos || photos?.length < 6) {
+    if (!photos) {
       Toast.show({
-        text: 'الحد الاعلى لرفع الصور ٦ صور',
+        text: 'يرجى رفع الصور ',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (photos?.length > 6) {
+      Toast.show({
+        text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
       })
       validate = false

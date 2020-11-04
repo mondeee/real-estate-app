@@ -58,6 +58,7 @@ export default function ImageBrowser(props) {
   const [hasNextPage, setHasNextPage] = useState(true)
   const [loading, setLoading] = useState(false)
   const [finalPhotos, setFinalPhotos] = useState([])
+  var timer = null
 
   useEffect(() => {
     if (requestPermission) {
@@ -66,6 +67,17 @@ export default function ImageBrowser(props) {
     }
     // _requestPermission()
   }, [])
+
+  useEffect(() => {
+    console.log('@SELECTED', selected, finalPhotos)
+    if (selected) {
+      processSelectedPhotos()
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => {
+        processSelectedPhotos()
+      }, 1500)
+    }
+  }, [selected])
 
   const closeModal = () => {
     setSelected([])
@@ -123,6 +135,7 @@ export default function ImageBrowser(props) {
 
   const selectImage = (index) => {
     let newSelected = []
+    console.log(index)
     if (multiple) {
       newSelected = Array.from(selected);
     }
@@ -131,17 +144,19 @@ export default function ImageBrowser(props) {
       newSelected.push(index)
     } else {
       const deleteIndex = newSelected.indexOf(index)
+      console.log(selected, deleteIndex)
       newSelected.splice(deleteIndex, 1)
     }
     if (newSelected.length > props.max) return;
     if (!newSelected) newSelected = [];
+
     setSelected(newSelected)
 
   }
 
   const processSelectedPhotos = async () => {
     const items = []
-    const resizedPhotos = finalPhotos
+    const resizedPhotos = []
     selected.forEach(i => items.push(photos[i]))
     await items.forEach(async i => {
       const resizedPhoto = await ImageManipulator.manipulateAsync(
@@ -174,6 +189,8 @@ export default function ImageBrowser(props) {
       //   // props.navigation.goBack()
       //   setLoading(false)
       // }, 3000)
+    } else {
+      props.setPhotos([])
     }
   }
 

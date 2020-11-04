@@ -108,6 +108,7 @@ const HomeBottomBar = createAppContainer(
       headerMode: 'none',
       // backBehavior: 'none',
       // initialRouteName: 'Home',
+      resetOnBlur: true,
       drawerPosition: 'right',
       contentComponent: async ({ navigation }) => {
         const token = await AsyncStorage.getItem('token')

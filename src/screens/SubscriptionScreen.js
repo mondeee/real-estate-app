@@ -101,24 +101,29 @@ export default function SubscriptionScreen(props) {
 
   useEffect(() => {
     getInitialURL()
-    Linking.addEventListener('url', () => {
-      console.log('@@@@\n', selectedItem, '\n', checkoutId)
-      handleOpenURL(selectedItem, checkoutId)
-    })
+    Linking.addEventListener('url', handleOpenURL)
     return () => Linking.removeEventListener('url', handleOpenURL)
   }, [])
 
   const getInitialURL = async () => {
-    let initialURL = Linking.makeUrl('payment', { hello: 'world', goodbye: 'now' });
+    let initialURL = Linking.makeUrl('payment');
     console.log('@INITIAL URL', initialURL)
-    Alert.alert(initialURL)
     setCallbackURL(initialURL)
   }
 
   const handleOpenURL = (event) => {
     WebBrowser.dismissBrowser()
     console.log('LINKING LISTENER', event)
-    setPaymentDone(true)
+    const { path, queryParams } = Linking.parse(event.url)
+    if (event.url.includes('200')) {
+      console.log("@SUCCESS PAYMENT")
+      setPaymentDone(true)
+    } else {
+      console.log("@FAILED PAYMENT")
+      setSelectedItem(null)
+      console.log('@PARSE', queryParams)
+      Alert.alert("Error", `Payment Failed\n${JSON.stringify(queryParams)}`)
+    }
   }
 
   const confirmAlert = (item) => {
@@ -126,7 +131,7 @@ export default function SubscriptionScreen(props) {
       [
         {
           text: "الغاء",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => setSelectedItem(null),
           style: "cancel"
         },
         { text: "الدفع عن طريق فيزا او ماستر كارد", onPress: () => onCheckOutSub('visa', item) },
@@ -239,6 +244,7 @@ export default function SubscriptionScreen(props) {
         <Text style={{ ...styles.textlabel, fontSize: 19, marginVertical: 8, marginHorizontal: '10%', textAlign: 'center' }}>{i.description}</Text>
         {renderIndicator()}
         <Button onPress={() => {
+          console.log('ONPRESS')
           setSelectedItem(i)
           // confirmAlert(i)
         }} style={{ marginVertical: 12 }} text={`اشترك الأن`} />

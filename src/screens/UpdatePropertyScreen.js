@@ -232,6 +232,7 @@ export default function UpdatePropertyScreen(props) {
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
+  const storedDistricts = useStoreState(state => state.auth.districts)
   const [load, setLoaded] = useState(false)
 
 
@@ -371,9 +372,18 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!photos || photos?.length < 6) {
+    if (!photos) {
       Toast.show({
-        text: 'يرجى رفع الحد الاعلى لرفع الصور ٦ صور ',
+        text: 'يرجى رفع الصور ',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (photos?.length > 6) {
+      Toast.show({
+        text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
       })
       validate = false
@@ -441,9 +451,18 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!photos || photos?.length < 6) {
+    if (!photos) {
       Toast.show({
-        text: 'الحد الاعلى لرفع الصور ٦ صور',
+        text: 'يرجى رفع الصور ',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (photos?.length > 6) {
+      Toast.show({
+        text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
       })
       validate = false
@@ -785,11 +804,16 @@ export default function UpdatePropertyScreen(props) {
           setPayload(item)
         }} value={payload.name} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
-          <Input value={payload.district} onChangeText={e => {
+          {/* <Input value={payload.district} onChangeText={e => {
             const item = { ...payload }
             item.district = e
             setPayload(item)
-          }} style={{ width: 140 }} placeholder={`الحي`} />
+          }} style={{ width: 140 }} placeholder={`الحي`} /> */}
+          <Dropdown data={storedDistricts} onChangeText={(e) => {
+            const item = { ...payload }
+            item.district = e
+            setPayload(item)
+          }} data={cities} style={{ width: 140 }} placeholder={`الحي`} />
           <Dropdown onChangeText={(e) => {
             const item = { ...payload }
             item.city_id = e.id

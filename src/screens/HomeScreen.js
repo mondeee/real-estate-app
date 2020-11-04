@@ -162,10 +162,7 @@ export default function HomeScreen(props) {
 
     const navFocusListener = navigation.addListener('didFocus', () => {
       setLoading(true)
-      if (storedUserState && !firstRun) {
-        console.log('refetch')
-        refetch()
-      }
+      fetchProperties()
       setTimeout(() => {
         setLoading(false)
       }, 1500)

@@ -344,6 +344,7 @@ query{
      avatar
      name
      is_verified
+     is_subscription
      phone
      email
      notifications{
