@@ -4,7 +4,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Alert
+  Alert,
+  Dimensions
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -23,8 +24,9 @@ import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { Toast } from 'native-base';
 import { ActivityIndicator } from 'react-native';
-
-
+const { height, width } = Dimensions.get( 'window' );
+const LATITUDE_DELTA = 0.04
+const LONGITUDE_DELTA = LATITUDE_DELTA * (width / height);
 export default function MapComponent(props) {
   const {
     style,
@@ -32,12 +34,17 @@ export default function MapComponent(props) {
     onPress,
     child,
     text,
-    initialValue,
     isVisible,
     onClose,
   } = props
   const [region, setRegion] = useState(null)
   const [fetching, setFetching] = useState(true)
+  const [initialValue, setInitialValue] = useState({
+    latitude: props.initialValue.latitude,
+		longitude: props.initialValue.longitude,
+		latitudeDelta: LATITUDE_DELTA,
+		longitudeDelta: LONGITUDE_DELTA
+  })
   const [location_name, setLocationName] = useState(null)
   var timer = null
 
@@ -75,22 +82,41 @@ export default function MapComponent(props) {
   return (
     <Modal style={styles.container} isVisible={isVisible}>
       <View style={styles.viewContainer}>
-        <MapView 
-        initialRegion={initialValue}
-        onRegionChange={e => {
-          if (timer) clearTimeout(timer)
-          timer = setTimeout(() => {
-            setRegion(e)
-          }, 1500)
-        }} style={{ flex: 1, borderRadius: 15 }} />
+        <MapView
+          initialRegion={initialValue}
+          region={region}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          onRegionChange={e => {
+            if (timer) clearTimeout(timer)
+            timer = setTimeout(() => {
+              setRegion(e)
+            }, 1500)
+          }} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
           {fetching ? <ActivityIndicator /> : <Button onPress={() => {
             const item = { ...region }
             item.location = location_name
             onPress(item)
             onClose()
-          }} style={{ backgroundColor: Colors.primaryBlue }} textStyle={{ color: Colors.primaryYellow }} text={`تحديد`} />}
+          }} style={{ backgroundColor: Colors.primaryBlue, }} textStyle={{ color: Colors.primaryBlue }} text={`تحديد`} />}
         </View>
+        <TouchableOpacity style={{
+          position: 'absolute',
+          bottom: 50,
+          right: 10,
+          backgroundColor: Colors.primaryYellow,
+          width: 40, height: 40,
+          borderRadius: 20,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }} onPress={() => {
+          console.log(initialValue)
+          setRegion(initialValue)
+        }
+        }>
+          <MaterialIcons name={'my-location'} size={25} color={Colors.primaryBlue} />
+        </TouchableOpacity>
         <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => {
           if (region && location_name) {
             onClose()

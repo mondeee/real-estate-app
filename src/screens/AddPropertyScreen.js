@@ -204,13 +204,13 @@ export default function AddPropertyScreen(props) {
   //CALENDARS
   const [general, setGeneral] = useState(true)
   const [generalPrice, setGeneralPrice] = useState({
-    monday: 0,
-    tuesday: 0,
-    wednesday: 0,
-    thursday: 0,
-    friday: 0,
-    saturday: 0,
-    sunday: 0
+    monday: 1,
+    tuesday: 1,
+    wednesday: 1,
+    thursday: 1,
+    friday: 1,
+    saturday: 1,
+    sunday: 1
   })
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
@@ -325,10 +325,64 @@ export default function AddPropertyScreen(props) {
   const validatePrivate = () => {
     let validate = false
     // console.log('@PAYlOAD', payload)
-    if (!payload || !payload?.name || !payload?.district_id || !payload?.city_id  ) {
+    if (!payload) {
       validate = false
       Toast.show({
         text: 'يرجى ادخال جميع البيانات المطلوبة',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.type_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار نوع النزل .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال الاسم .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.city_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار المدينة',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.district_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار الحي',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.contact_no || !payload?.contact_name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال معلومات المالك',
         type: 'danger'
       })
       return validate
@@ -385,10 +439,64 @@ export default function AddPropertyScreen(props) {
   const validateCommercial = () => {
     let validate = false
     // console.log('@PAYlOAD', payload)
-    if (!payload || !payload?.name || !payload?.district_id || !payload?.city_id  ) {
+    if (!payload) {
       validate = false
       Toast.show({
         text: 'يرجى ادخال جميع البيانات المطلوبة ',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.type_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار نوع النزل .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال الاسم .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.city_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار المدينة',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.district_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار الحي',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.contact_no) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال معلومات المالك',
         type: 'danger'
       })
       return validate

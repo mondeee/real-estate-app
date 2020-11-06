@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
   AsyncStorage,
 } from 'react-native';
 import Header from '../components/Header';
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 21,
-    height: '50%',
+    height: Platform.OS == 'android' ? '60%' :'50%',
     width: '90%',
     shadowOffset: { height: 2, },
     shadowColor: 'black',

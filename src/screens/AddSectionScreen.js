@@ -266,6 +266,24 @@ export default function AddSectionScreen(props) {
       return validate
     }
 
+    if (!payload?.name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال الاسم .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      return validate
+    }
+
     // if (!location) {
     //   Toast.show({
     //     text: 'Location is unknown',

@@ -115,14 +115,14 @@ export default function SubscriptionScreen(props) {
     WebBrowser.dismissBrowser()
     console.log('LINKING LISTENER', event)
     const { path, queryParams } = Linking.parse(event.url)
-    if (event.url.includes('200')) {
+    if (queryParams.status == 200) {
       console.log("@SUCCESS PAYMENT")
       setPaymentDone(true)
     } else {
       console.log("@FAILED PAYMENT")
       setSelectedItem(null)
       console.log('@PARSE', queryParams)
-      Alert.alert("Error", `Payment Failed\n${JSON.stringify(queryParams)}`)
+      Alert.alert("Error", `${queryParams.message}`)
     }
   }
 

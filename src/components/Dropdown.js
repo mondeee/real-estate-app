@@ -46,15 +46,22 @@ export default function Dropdown(props) {
   const [pass, setPass] = useState(password)
   const [value, setValue] = useState(props.value ? props.value : '')
   useEffect(() => {
+    // console.log("value", value)
     if (!value) setValue(placeholder)
   }, [data])
+
+  useEffect(() => {
+    // const arr = data.filter(i => i.id == props.value)
+    // console.log(props.key, arr[0], '\n', props.value)
+    // if (arr) setValue(arr[0]?.label)
+  }, [])
 
   return (
     <View style={{ ...style, ...styles.buttonContainer }}>
       <ModalSelector
         style={{ flex: 4, height: 20, borderWidth: 0, borderColor: 'white', justifyContent: 'center' }}
         data={data || sample_data}
-        initValue={placeholder}
+        initValue={placeholder || value}
         cancelButtonAccessibilityLabel={'Cancel Button'}
         onChange={(option) => {
           onChangeText(option)

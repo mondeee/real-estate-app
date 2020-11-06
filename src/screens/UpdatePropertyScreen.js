@@ -208,7 +208,7 @@ export default function UpdatePropertyScreen(props) {
     type_id: item.type.id,
     name: item.name || '',
     description: item.description || '',
-    district: item.district || '',
+    district_id: item.district.id || '',
     contact_no: item.contact_no || '',
     contact_name: item.contact_name || ''
   })
@@ -238,6 +238,7 @@ export default function UpdatePropertyScreen(props) {
 
   useEffect(() => {
     // _requestPermission()
+    console.log('@@@ ITEM', item)
     setData()
   }, [])
 
@@ -809,12 +810,12 @@ export default function UpdatePropertyScreen(props) {
             item.district = e
             setPayload(item)
           }} style={{ width: 140 }} placeholder={`الحي`} /> */}
-          <Dropdown data={storedDistricts} onChangeText={(e) => {
+          <Dropdown key={'districts'} value={item.district.ar} data={storedDistricts} onChangeText={(e) => {
             const item = { ...payload }
-            item.district = e
+            item.district_id = e
             setPayload(item)
           }} data={cities} style={{ width: 140 }} placeholder={`الحي`} />
-          <Dropdown onChangeText={(e) => {
+          <Dropdown key={'cities'} value={item.city.ar} onChangeText={(e) => {
             const item = { ...payload }
             item.city_id = e.id
             setPayload(item)

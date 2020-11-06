@@ -9,7 +9,8 @@ import {
   View,
   Platform
 } from 'react-native';
-import { AppLoading, Updates } from "expo";
+import { AppLoading } from "expo";
+import * as Updates from "expo-updates";
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Root } from 'native-base'
@@ -58,16 +59,21 @@ export default function App() {
           return fetch(uri, options)
         },
       }),
-    
+
   });
 
-  useEffect(() => {
-    const isRTLAndroid = Platform.OS === 'android' && I18nManager.isRTL;
+  async function toggleRTL() {
+    const isRTLAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+    // Updates.reloadAsync()
     if (isRTLAndroid) {
       I18nManager.allowRTL(false)
       I18nManager.forceRTL(false)
-      Updates.reload()
+      Updates.reloadAsync()
     }
+  }
+
+  useEffect(() => {
+    toggleRTL()
     if (Platform.OS !== 'ios') {
       StatusBar.setTranslucent(true)
       StatusBar.setBackgroundColor('black')

@@ -133,6 +133,7 @@ query($first: Int!, $page: Int!){
           ar
         }
         city {
+          id,
           ar,
           en
         }
@@ -371,9 +372,10 @@ query{
        en
      }
      city {
-       id
-       en
-     }
+      id,
+      ar,
+      en
+    }
    }
 }
 `)
@@ -695,6 +697,7 @@ mutation($input: UpdateUserInput!){
      city {
        id
        en
+       ar
      }
    }
 }

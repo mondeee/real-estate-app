@@ -297,17 +297,30 @@ export default function CalendarComponent(props) {
   const onFinalizeData = () => {
     // finalizeMarker()
     const data = {}
+    let validate = true
 
     weekendData.forEach(i => {
+      if (!i.value || i.value == 0) validate = false
       data[i.en] = i.value || "0"
     })
 
     weekdaysData.forEach(i => {
+      if (!i.value || i.value == 0) validate = false
       data[i.en] = i.value || "0"
     })
 
     if (!general) {
       //ADD DATE
+    }
+
+    if (!validate) {
+      Toast.show({
+        text: `يرجى ادخال الاسعار العامة`,
+        buttonText: 'OK',
+        type: "danger",
+        duration: 3000,
+      })
+      return
     }
 
     if (seasonal) {
