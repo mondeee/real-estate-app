@@ -6,14 +6,16 @@ import {
   Image,
   ImageBackground,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  I18nManager,
+  Platform
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
 import { Toast } from 'native-base';
 
-
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function BottomTabBar(props) {
   const { navigate } = props.navigation
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     // paddingHorizontal: 24,
-    flexDirection: 'row',
+    flexDirection: isAndroid ? 'row-reverse' : 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
@@ -149,7 +151,8 @@ const styles = StyleSheet.create({
     width: '104%',
     position: 'absolute',
     bottom: -8,
-    left: -8,
+    left: isAndroid ? 0 : -8,
+    right: isAndroid ? -8 : 0
   },
   middleButton: {
     backgroundColor: Colors.primaryBlue,

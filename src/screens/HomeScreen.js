@@ -9,7 +9,7 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
-  I18nManager,
+  I18nManager
 } from 'react-native';
 
 import Header from '../components/Header'
@@ -328,7 +328,7 @@ export default function HomeScreen(props) {
         <View style={{ flex: 1, padding: 12, }}>
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
+          <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <View />
             {item.category.id == 2 ?
               <TouchableOpacity

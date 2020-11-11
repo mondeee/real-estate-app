@@ -66,10 +66,13 @@ export default function EditProfileScreen(props) {
 
   const getPermissionAsync = async () => {
     if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
       if (status !== 'granted') {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
+
+
     }
   };
 

@@ -20,7 +20,7 @@ const navList = [
   // { label: 'Booking', key: 2, route: 'BookingList' },
   { label: 'الشروط والأحكام \n وسياسة الخصوصية', key: 3, route: 'Terms' },
   { label: 'الأسئلة الشائعة', key: 4, route: 'FAQ' },
-  { label: 'ﺃأعطنا رأﻳﻚ ﻋﻦ اﻟﺘﻄﺒﻴﻖ', key: 5, route: '' },
+  { label: 'أعطنا رأيك عن التطبيق', key: 5, route: '' },
   { label: 'تواصل معنا', key: 6, route: 'Contact' },
   // { label: CONFIG.BUILD_VERSION, key: 6, route: '' }
 ]

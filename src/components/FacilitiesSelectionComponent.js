@@ -4,7 +4,9 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Platform,
+  I18nManager,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -18,6 +20,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import Button from './Button';
 
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function FacilitiesSelectionComponent(props) {
   const {
@@ -56,7 +59,7 @@ export default function FacilitiesSelectionComponent(props) {
 
   const renderItem = (i, index) => {
     return (
-      <TouchableOpacity onPress={() => onSelect(index)} key={index} style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '100%', justifyContent: 'flex-end', padding: 8, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: Colors.lightestGray }}>
+      <TouchableOpacity onPress={() => onSelect(index)} key={index} style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', height: 40, width: '100%', justifyContent: 'flex-end', padding: 8, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: Colors.lightestGray }}>
         {i.value > 0 ? <MaterialIcons name={'check'} size={20} color={Colors.primaryBlue} /> : <View style={{ width: '10%' }} />}
         <View style={{ width: '10%' }} />
         < Text style={{ ...Fonts.fontRegular, width: '30%' }}>{i.name || `faciname`}</Text>
@@ -67,7 +70,7 @@ export default function FacilitiesSelectionComponent(props) {
   return (
     <Modal isVisible={isVisible}>
       <View style={{ width: '100%', height: '60%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, paddingTop: 24, padding: 16, justifyContent: 'space-between' }}>
-        <TouchableOpacity onPress={() => onClose()} style={{ position: 'absolute', top: 10, right: 10 }}>
+        <TouchableOpacity onPress={() => onClose()} style={{ position: 'absolute', top: 10, right: isAndroid ? 0 : 10, left: isAndroid ? 10 : 0 }}>
           <MaterialIcons name={'close'} size={20} color={Colors.primaryBlue} />
         </TouchableOpacity>
         <Text style={{ ...Fonts.FontMed, textAlign: 'center', fontSize: 18 }}>{`المرافق`}</Text>

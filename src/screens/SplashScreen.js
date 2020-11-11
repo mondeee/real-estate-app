@@ -24,6 +24,7 @@ import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { GET_DISTRICT, GET_SETTINGS, GET_USER_DETAILS } from '../services/graphql/queries';
 import * as Notifications from 'expo-notifications';
 import * as Updates from "expo-updates";
+import * as ImagePicker from 'expo-image-picker';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
@@ -101,6 +102,13 @@ export default function SplashScreen(props) {
     notifsub = Notifications.addListener(onReceiveNotif)
   }
 
+  const setupCamerPermission = async () => {
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+    }
+  }
+
   const setUpLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
@@ -130,21 +138,23 @@ export default function SplashScreen(props) {
   useEffect(() => {
     setUpLocation()
     setUpNotif()
+    setupCamerPermission()
+    fetchToken()
     // fetchToken()
-  //   Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
-  //   [
-  //     {
-  //       text: "OK",
-  //       onPress: async () => {
-  //         await I18nManager.allowRTL(false)
-  //         await I18nManager.forceRTL(false)
-  //         await Updates.reloadAsync()
-  //         setLoading(false)
-  //       },
-  //       style: "cancel"
-  //     }
-  //   ],
-  // )
+    //   Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
+    //   [
+    //     {
+    //       text: "OK",
+    //       onPress: async () => {
+    //         await I18nManager.allowRTL(false)
+    //         await I18nManager.forceRTL(false)
+    //         await Updates.reloadAsync()
+    //         setLoading(false)
+    //       },
+    //       style: "cancel"
+    //     }
+    //   ],
+    // )
   }, [])
 
   useEffect(() => {
@@ -212,7 +222,7 @@ export default function SplashScreen(props) {
       <SafeAreaView style={styles.container} key="3">
         <Text style={styles.titleText}>{` مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`وﻭاﺳﺘﻤﺘﻊ`}</Text>
+        <Text style={styles.textlabel}>{`واستمتع`}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>

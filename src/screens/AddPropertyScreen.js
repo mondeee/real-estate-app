@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Platform,
+  I18nManager
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -29,6 +31,8 @@ import CalendarComponent from '../components/CalendarComponent';
 import * as Permissions from "expo-permissions";
 import { Toast } from 'native-base';
 import FacilitiesSelectionComponent from '../components/FacilitiesSelectionComponent';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 const TYPES = [
   {
@@ -694,7 +698,7 @@ export default function AddPropertyScreen(props) {
         setTimeout(() => {
           setDataReload(false)
         }, 500)
-      }} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+      }} style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
         <Text>{item.label}</Text>
         <View style={styles.selectionCircle}>
           {item.selected && <View style={styles.selectedCircle} />}
@@ -710,7 +714,7 @@ export default function AddPropertyScreen(props) {
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
             <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25} />
           </View>
         </View>
@@ -722,7 +726,7 @@ export default function AddPropertyScreen(props) {
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
             value={item.value.toString()}
@@ -743,12 +747,12 @@ export default function AddPropertyScreen(props) {
   const renderDetails = () => {
     return (
       <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
             <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق (+ Add)`}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
           {selectedFac && selectedFac.map((i, index) => renderFaci(i, index))}
         </View>
       </View>
@@ -759,7 +763,7 @@ export default function AddPropertyScreen(props) {
 
     if (types[0].selected == true) {
       return (
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => {
             if (commercial_data) {
               // console.log(commercial_data.addCommercialPropety.property_id)
@@ -815,7 +819,7 @@ export default function AddPropertyScreen(props) {
           setPayload(i)
         }} style={{ marginBottom: 12, marginTop: types[0].selected ? 12 : 0 }} placeholder={'رقم التواصل'} />
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>}
-        {types[1].selected && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        {types[1].selected && <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
               setShowCalendar(true)
@@ -854,7 +858,7 @@ export default function AddPropertyScreen(props) {
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
           {/* {renderSelection()} */}
           {types.map((i, index) => renderSelection(i, index))}
         </View>
@@ -868,7 +872,7 @@ export default function AddPropertyScreen(props) {
           item.name = e
           setPayload(item)
         }} value={payload.name || null} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
           {/* <Input onChangeText={e => {
             const item = { ...payload }
             item.district = e
@@ -933,7 +937,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryYellow,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: isAndroid ? 'row-reverse' : 'row',
     marginVertical: 12,
     marginHorizontal: 5,
     padding: 12,

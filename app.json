@@ -51,7 +51,23 @@
         "googleMaps": {
           "apiKey": "AIzaSyAk0RrkM930YLRbVpE1UpksFTj64VyI4Fs"
         }
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.nozolapp.*",
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
     }
   }
 }

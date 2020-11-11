@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  I18nManager,
+  I18nManager
 } from 'react-native';
 
 import BottomTabBar from '../components/BottomTabBar'
@@ -92,8 +92,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.gray,
     width: '100%',
     borderBottomWidth: 1,
-    // flexDirection: isAndroid ? 'row-reverse' : 'row',
-    flexDirection: 'row',
+    flexDirection: isAndroid ? 'row-reverse' : 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     margin: 8,

@@ -112,8 +112,8 @@ export default function SubscriptionScreen(props) {
   }
 
   const handleOpenURL = (event) => {
-    WebBrowser.dismissBrowser()
     console.log('LINKING LISTENER', event)
+    WebBrowser.dismissBrowser()
     const { path, queryParams } = Linking.parse(event.url)
     if (queryParams.status == 200) {
       console.log("@SUCCESS PAYMENT")

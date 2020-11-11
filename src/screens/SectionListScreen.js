@@ -281,8 +281,8 @@ export default function SectionListScreen(props) {
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34, marginBottom: 20 }} source={require('../../assets/additem.png')} />
-        <Text style={styles.text}>{`ﻻ ﻳﻮجدﺩﻟﺪﻳﻚ نزل بعد `}</Text>
-        <Text style={styles.text}>{`أضفﺇنزلك الأن`}</Text>
+        <Text style={styles.text}>{`ﻻ ﻳﻮجد ﻟﺪﻳﻚ نزل بع`}</Text>
+        <Text style={styles.text}>{`أضف نزلك الان`}</Text>
       </TouchableOpacity>
     )
   }
