@@ -67,6 +67,7 @@ export default function ProfileScreen(props) {
           {/* <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text> */}
           {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
         </TouchableOpacity>
+        <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
       </View>
     )
   }

@@ -5,8 +5,10 @@ import {
   StyleSheet,
   Text,
   View,
+  Platform,
   TouchableOpacity,
-  Dimensions, Alert
+  Dimensions,
+  Alert
 } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
@@ -102,16 +104,26 @@ export default function SubscriptionScreen(props) {
   useEffect(() => {
     getInitialURL()
     Linking.addEventListener('url', handleOpenURL)
-    return () => Linking.removeEventListener('url', handleOpenURL)
+    // return () => Linking.removeEventListener('url', handleOpenURL)
   }, [])
 
   const getInitialURL = async () => {
-    let initialURL = Linking.makeUrl('payment');
-    console.log('@INITIAL URL', initialURL)
-    setCallbackURL(initialURL)
+    try {
+      let initialURL = Linking.makeUrl('payment');
+      console.log('@INITIAL URL', initialURL)
+      setCallbackURL(initialURL)
+    } catch (e) {
+      Alert.alert('Error', JSON.stringify(e))
+    }
   }
 
   const handleOpenURL = (event) => {
+<<<<<<< HEAD
+=======
+    if (Platform.OS === 'ios') {
+      WebBrowser.dismissBrowser()
+    }
+>>>>>>> no css layout with ifxes
     console.log('LINKING LISTENER', event)
     WebBrowser.dismissBrowser()
     const { path, queryParams } = Linking.parse(event.url)
@@ -173,7 +185,11 @@ export default function SubscriptionScreen(props) {
   const _openWebBrowser = async (id, type = 'visa') => {
     const url = encodeURI(`https://app.nozolsa.com/payments/hyperpay2?checkout_id=${id}&brand=${type}&type=subscription&cburl=${callbackURL}`)
     try {
+      // if (Platform.OS === 'android') {
+      //   await Linking.openURL(url)
+      // } else {
       await WebBrowser.openBrowserAsync(url)
+      // }
     } catch (e) {
       console.log('@ERROR', e)
     }

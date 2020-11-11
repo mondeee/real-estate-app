@@ -90,6 +90,14 @@ export default function SplashScreen(props) {
     }
   }
 
+  const setupCameraPermission = async () => {
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (status !== 'granted') {
+      // alert('Sorry, we need camera roll permissions to make this work!');
+      alert('يرجى إعطاء الأذن للدخول للصور من الإعدادات')
+    }
+  }
+
   const setUpNotif = async () => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (status !== 'granted') {
@@ -138,6 +146,7 @@ export default function SplashScreen(props) {
   useEffect(() => {
     setUpLocation()
     setUpNotif()
+<<<<<<< HEAD
     setupCamerPermission()
     fetchToken()
     // fetchToken()
@@ -155,6 +164,10 @@ export default function SplashScreen(props) {
     //     }
     //   ],
     // )
+=======
+    setupCameraPermission()
+    fetchToken()
+>>>>>>> no css layout with ifxes
   }, [])
 
   useEffect(() => {
@@ -169,13 +182,13 @@ export default function SplashScreen(props) {
   }, [error, data])
 
   renderSkipButton = () => {
-    // if (userLoading || loading) {
-    //   return <ActivityIndicator color={Colors.primaryBlue} />
-    // }
+    if (userLoading || loading) {
+      return <ActivityIndicator color={Colors.primaryBlue} />
+    }
     return (
       <Button
         onPress={async () => {
-          await toggleRTL()
+          // await toggleRTL()
           if (isTokenValid) {
             navigate('Home')
           } else {

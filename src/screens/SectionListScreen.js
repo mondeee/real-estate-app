@@ -247,7 +247,7 @@ export default function SectionListScreen(props) {
                 setShowAvailability(true)
               }}
             >
-              <Text style={{ ...Fonts.fontRegular }}>{`الأوقات المتاحة `}<FontAwesome name={'calendar'} /></Text>
+              <Text style={{ ...Fonts.fontRegular, writingDirection: 'ltr' }}>{`الأوقات المتاحة  `}<FontAwesome name={'calendar'} /></Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               console.log('ONPRESS SET DATA', item.general_price, item.availablities, seasonalPrice)
@@ -257,7 +257,7 @@ export default function SectionListScreen(props) {
               setSeasonalPrice(item?.seasonal_prices)
               showmainPriceModal(true)
             }}>
-              {item.general_price && < Text style={{ ...Fonts.fontRegular }}>{`الأسعار`}<FontAwesome name={'money'} /></Text>}
+              {item.general_price && < Text style={{ ...Fonts.fontRegular, writingDirection: 'ltr' }}>{`الأسعار  `}<FontAwesome name={'money'} /></Text>}
             </TouchableOpacity>
           </View>
         </View>

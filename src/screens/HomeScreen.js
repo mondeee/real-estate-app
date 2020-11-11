@@ -304,7 +304,8 @@ export default function HomeScreen(props) {
         shadowOffset: { height: 3, width: -2, },
         shadowColor: 'black',
         shadowOpacity: 0.1,
-        flexDirection: isAndroid ? 'row-reverse' : 'row',
+        // flexDirection: isAndroid ? 'row-reverse' : 'row',
+        flexDirection: 'row',
         elevation: 3,
       }}
         onPress={() => {
@@ -326,7 +327,11 @@ export default function HomeScreen(props) {
         }}
       >
         <View style={{ flex: 1, padding: 12, }}>
-          <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
+          {/* <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text> */}
+          <Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14, writingDirection: 'ltr' }}>
+            {item.type.ar + '   '}
+            <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAliwaitgn: 'right' }}>{`${item.name} `}</Text>
+          </Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <View />
@@ -336,17 +341,23 @@ export default function HomeScreen(props) {
                   setShowAvailability(true)
                 }}
                 style={{
-                  padding: 8
+                  padding: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
                 }}>
-                <Text style={{ ...Fonts.fontRegular }}>{`الأوقات المتاحة `}<FontAwesome name={'calendar'} /></Text>
+                <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأوقات المتاحة `}</Text>
+                <FontAwesome name={'calendar'} color={Colors.primaryBlue} />
               </TouchableOpacity>
               :
               <TouchableOpacity
                 onPress={() => navigate('SectionList', { items: item.sections.reverse(), item, })}
                 style={{
-                  padding: 8
+                  padding: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
                 }}>
-                <Text style={{ ...Fonts.fontRegular }}>{`الأقسام `}<FontAwesome name={'calendar'} /></Text>
+                <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأقسام `}</Text>
+                <FontAwesome name={'calendar'} color={Colors.primaryBlue} />
               </TouchableOpacity>
             }
             {item.category.id == 2 ?
@@ -363,9 +374,12 @@ export default function HomeScreen(props) {
                   }
                 }}
                 style={{
-                  padding: 8
+                  padding: 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
                 }}>
-                <Text style={{ ...Fonts.fontRegular }}>{`الأسعار `}<FontAwesome name={'money'} /></Text>
+                <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأسعار `}</Text>
+                <FontAwesome name={'money'} color={Colors.primaryBlue} />
               </TouchableOpacity> : null}
           </View>
         </View>
@@ -406,7 +420,7 @@ export default function HomeScreen(props) {
   const renderList = () => <FlatList
     data={items}
     extraData={propertiesdata}
-    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '5%' : '5%' }}
+    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '5%' : '5%', paddingBottom: 120 }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => `${item.id}${item.name}`}
     renderItem={({ item }) => renderItem(item)}
