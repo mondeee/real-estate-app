@@ -8,7 +8,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  I18nManager,
 } from 'react-native';
 
 import Header from '../components/Header'
@@ -28,6 +29,7 @@ import { ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import CalendarComponent from '../components/CalendarComponent';
 
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function HomeScreen(props) {
   const { navigate, goBack, state: { params } } = props.navigation
@@ -302,7 +304,7 @@ export default function HomeScreen(props) {
         shadowOffset: { height: 3, width: -2, },
         shadowColor: 'black',
         shadowOpacity: 0.1,
-        flexDirection: 'row',
+        flexDirection: isAndroid ? 'row-reverse' : 'row',
         elevation: 3,
       }}
         onPress={() => {
@@ -326,7 +328,7 @@ export default function HomeScreen(props) {
         <View style={{ flex: 1, padding: 12, }}>
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
-          <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <View />
             {item.category.id == 2 ?
               <TouchableOpacity

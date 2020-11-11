@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   Image,
   Platform,
-  StatusBar
+  StatusBar,
+  I18nManager,
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
 import { SafeAreaView } from 'react-navigation';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function Header(props) {
   const {
@@ -27,6 +30,7 @@ export default function Header(props) {
     openDrawer,
     MapHeader,
   } = props
+
 
   renderMainHeader = () => {
     return (
@@ -74,7 +78,7 @@ export default function Header(props) {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: Colors.primaryBlue }}>
         <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryYellow }} source={require(`../../assets/usericon.png`)} />
-        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
+        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={styles.backButtonbackButton}>
           <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
         </TouchableOpacity>}
         <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`الملف الشخصي`}</Text>
@@ -101,7 +105,7 @@ export default function Header(props) {
         <TouchableOpacity onPress={() => leftButton()} style={styles.leftButton}>
           <MaterialIcons size={30} color={Colors.primaryBlue} name={'search'} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPressBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={() => onPressBack()} style={istyles.backButton}>
           <MaterialIcons size={30} color={Colors.primaryBlue} name={'close'} />
         </TouchableOpacity>
       </SafeAreaView>

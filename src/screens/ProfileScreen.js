@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {
   AsyncStorage,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  I18nManager,
 } from 'react-native';
 
 import BottomTabBar from '../components/BottomTabBar'
@@ -15,6 +17,8 @@ import Fonts from '../styles/Fonts';
 import { SafeAreaView } from 'react-navigation';
 import { CONFIG } from '../services/config';
 import { useStoreState } from 'easy-peasy';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function ProfileScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -88,6 +92,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.gray,
     width: '100%',
     borderBottomWidth: 1,
+    // flexDirection: isAndroid ? 'row-reverse' : 'row',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',

@@ -7,7 +7,8 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Platform
 } from 'react-native';
 
 import { Notifications } from 'expo';
@@ -22,7 +23,7 @@ import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from
 import { SafeAreaView } from 'react-navigation';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
-
+const isAndroid = Platform.OS === 'android'
 export default function NotificationScreen() {
   const [items, setItems] = useState(SAMPLE_LIST)
   const [loading, setLoading] = useState(false)

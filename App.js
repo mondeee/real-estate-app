@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   AppRegistry,
   AsyncStorage,
-  I18nManager,
   StatusBar,
   StyleSheet,
   Text,
@@ -62,18 +61,7 @@ export default function App() {
 
   });
 
-  async function toggleRTL() {
-    const isRTLAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
-    // Updates.reloadAsync()
-    if (isRTLAndroid) {
-      I18nManager.allowRTL(false)
-      I18nManager.forceRTL(false)
-      Updates.reloadAsync()
-    }
-  }
-
   useEffect(() => {
-    toggleRTL()
     if (Platform.OS !== 'ios') {
       StatusBar.setTranslucent(true)
       StatusBar.setBackgroundColor('black')

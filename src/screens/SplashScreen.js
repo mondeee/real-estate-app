@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   I18nManager,
   StatusBar,
   Image,
@@ -7,7 +8,9 @@ import {
   Text,
   View,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import ViewPager from '@react-native-community/viewpager';
 import Button from '../components/Button';
@@ -17,9 +20,13 @@ import Fonts from '../styles/Fonts';
 import { useStoreActions } from 'easy-peasy';
 import * as Permissions from "expo-permissions";
 import * as Location from 'expo-location';
-import { useQuery } from '@apollo/react-hooks';
-import { GET_DISTRICT, GET_SETTINGS } from '../services/graphql/queries';
+import { useLazyQuery, useQuery } from '@apollo/react-hooks';
+import { GET_DISTRICT, GET_SETTINGS, GET_USER_DETAILS } from '../services/graphql/queries';
 import * as Notifications from 'expo-notifications';
+import * as Updates from "expo-updates";
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
   const [page, setPage] = useState(0)
@@ -27,22 +34,58 @@ export default function SplashScreen(props) {
   const storeLocation = useStoreActions(actions => actions.auth.setLocation)
   const storeDistricts = useStoreActions(actions => actions.auth.setDistricts)
   const storeSettings = useStoreActions(actions => actions.auth.setSettings)
+  const storeUser = useStoreActions(actions => actions.auth.setUser)
   var hasToken = false
+  var isTokenValid = false
+  const [loading, setLoading] = useState(false)
   const { error, data } = useQuery(GET_DISTRICT)
   const { data: settings_data } = useQuery(GET_SETTINGS)
+  const [fetchUser, { data: userdata, error: userError, loading: userLoading }] = useLazyQuery(GET_USER_DETAILS)
+
+  const toggleRTL = async () => {
+    setLoading(true)
+    const isRTLAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+    if (isRTLAndroid) {
+      Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
+        [
+          {
+            text: "OK",
+            onPress: async () => {
+              await I18nManager.allowRTL(false)
+              await I18nManager.forceRTL(false)
+              await Updates.reloadAsync()
+              setLoading(false)
+            },
+            style: "cancel"
+          }
+        ],
+      )
+    }
+  }
 
   useEffect(() => {
-
     if (settings_data) {
       storeSettings(settings_data.allSettings)
     }
 
   }, [settings_data])
 
+  useEffect(() => {
+    console.log(userError, '\n', userdata)
+    if (userError) {
+      isTokenValid = false
+    }
+
+    if (userdata) {
+      isTokenValid = true
+    }
+  }, [userdata, userError])
+
   const fetchToken = async () => {
     const token = await AsyncStorage.getItem('token')
     if (token && token?.length > 0) {
       hasToken = true
+      fetchUser()
     }
   }
 
@@ -87,7 +130,21 @@ export default function SplashScreen(props) {
   useEffect(() => {
     setUpLocation()
     setUpNotif()
-    fetchToken()
+    // fetchToken()
+  //   Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
+  //   [
+  //     {
+  //       text: "OK",
+  //       onPress: async () => {
+  //         await I18nManager.allowRTL(false)
+  //         await I18nManager.forceRTL(false)
+  //         await Updates.reloadAsync()
+  //         setLoading(false)
+  //       },
+  //       style: "cancel"
+  //     }
+  //   ],
+  // )
   }, [])
 
   useEffect(() => {
@@ -102,9 +159,19 @@ export default function SplashScreen(props) {
   }, [error, data])
 
   renderSkipButton = () => {
+    // if (userLoading || loading) {
+    //   return <ActivityIndicator color={Colors.primaryBlue} />
+    // }
     return (
       <Button
-        onPress={() => navigate('Home')}
+        onPress={async () => {
+          await toggleRTL()
+          if (isTokenValid) {
+            navigate('Home')
+          } else {
+            navigate('Login')
+          }
+        }}
         text={`ابدأ`}
         style={{ width: 177 }}
         textStyle={{ fontFamily: 'tajawal_med' }}

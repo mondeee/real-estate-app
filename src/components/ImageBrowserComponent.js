@@ -91,7 +91,8 @@ export default function ImageBrowser(props) {
   }, [isMediaAllowed])
 
   const _requestPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
     if (status === 'granted') {
       // console.log('@GRANED call fetch')
       setAllowMedia(true)
