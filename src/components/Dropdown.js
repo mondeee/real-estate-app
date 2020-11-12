@@ -5,12 +5,16 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Platform,
+  I18nManager
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
 import ModalSelector from 'react-native-modal-selector'
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 const sample_data = [
   {
@@ -68,7 +72,7 @@ export default function Dropdown(props) {
           setValue(option.label)
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
           <Image style={{ height: 10, width: 15, alignSelf: 'center' }} source={require('../../assets/chevrondown.png')} />
           <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
             // onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
@@ -93,7 +97,7 @@ export default function Dropdown(props) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: isAndroid ? 'row-reverse' : 'row',
     padding: 12,
     paddingHorizontal: 12,
     // maxWidth: 282,

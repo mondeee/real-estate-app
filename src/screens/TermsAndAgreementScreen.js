@@ -65,7 +65,7 @@ export default function TermsAndAgreementScreen(props) {
 .ﻖﻴﺒﻄﺘﻟا اﺬﻫ ﻲﻓ ﻪﺿﺮﻌﺗ ﺎﻣ`}</Text> */}
           <View style={{ height: 300 }} />
         </ScrollView>
-        {params?.show && <View style={{ height: '10%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: '15%' }}>
+        {params?.show && <View style={{ height: '10%', flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: '15%' }}>
           {/* <Button onPress={() => navigate('Login')} style={{ minWidth: 100 }} text={`لا أوﺎﻔﻗ`} /> */}
           <Button onPress={() => navigate('Register')} style={{ minWidth: 100 }} text={`أوافق`} />
         </View>}

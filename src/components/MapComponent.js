@@ -5,7 +5,9 @@ import {
   View,
   TouchableOpacity,
   Alert,
-  Dimensions
+  Dimensions,
+  Platform,
+  I18nManager
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -24,9 +26,12 @@ import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { Toast } from 'native-base';
 import { ActivityIndicator } from 'react-native';
-const { height, width } = Dimensions.get( 'window' );
+
+const { height, width } = Dimensions.get('window');
 const LATITUDE_DELTA = 0.04
 const LONGITUDE_DELTA = LATITUDE_DELTA * (width / height);
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+
 export default function MapComponent(props) {
   const {
     style,
@@ -41,9 +46,9 @@ export default function MapComponent(props) {
   const [fetching, setFetching] = useState(true)
   const [initialValue, setInitialValue] = useState({
     latitude: props.initialValue.latitude,
-		longitude: props.initialValue.longitude,
-		latitudeDelta: LATITUDE_DELTA,
-		longitudeDelta: LONGITUDE_DELTA
+    longitude: props.initialValue.longitude,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
   })
   const [location_name, setLocationName] = useState(null)
   var timer = null
@@ -104,9 +109,11 @@ export default function MapComponent(props) {
         <TouchableOpacity style={{
           position: 'absolute',
           bottom: 50,
-          right: 10,
+          right: isAndroid ? 0 : 10,
+          left: isAndroid ? 10 : 0,
           backgroundColor: Colors.primaryYellow,
-          width: 40, height: 40,
+          width: 40, 
+          height: 40,
           borderRadius: 20,
           alignItems: 'center',
           justifyContent: 'center'

@@ -50,7 +50,7 @@ export default function SectionDetailsScreen(props) {
 
   renderIndicator = () => {
     return (
-      <View style={{ flexDirection: 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0 }}>
+      <View style={{ flexDirection: global.isAndroid ? 'row' : 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0 }}>
         {item.images && item.images.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
       </View>
     )
@@ -58,8 +58,8 @@ export default function SectionDetailsScreen(props) {
 
   renderTopButtons = () => {
     return (
-      <View style={{ position: 'absolute', top: 0, padding: 12, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '100%', }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ position: 'absolute', top: 0, padding: 12, flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '100%', }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
           <TouchableOpacity>
             <Image style={{ height: 27, resizeMode: 'contain', marginRight: 20, marginBottom: 10 }} source={require('../../assets/uploadicon.png')} />
           </TouchableOpacity>
@@ -82,7 +82,7 @@ export default function SectionDetailsScreen(props) {
     }
     // console.log('@RATINGS', ratings)
     return (
-      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: 'row-reverse', }}>
+      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: global.isAndroid ? 'row' : 'row-reverse', }}>
         {/* {rating.forEach(i => <FontAwesome name='star' color={Colors.primaryYellow} />)} */}
         {ratings}
       </View>
@@ -99,7 +99,7 @@ export default function SectionDetailsScreen(props) {
           <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
             <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{item.name}</Text>
           </View>
-          <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
             {/* <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{i.value}</Text> */}
             {/* <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={item.image} /> */}
             <MaterialIcons color={Colors.primaryBlue} name={'check'} size={20} />
@@ -113,7 +113,7 @@ export default function SectionDetailsScreen(props) {
         <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
           <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{item.name}</Text>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
           <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{i.value}</Text>
           <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={item.image} />
         </View>
@@ -125,17 +125,17 @@ export default function SectionDetailsScreen(props) {
     return (
       <ScrollView style={{ flex: 1, }} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ justifyContent: "flex-end", }}>
-          <View style={{ flexDirection: 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
             <TouchableOpacity onPress={() => navigate('UpdateSection', { item })} style={{ ...Styles.center, height: 50, width: 50, borderRadius: 100, backgroundColor: Colors.primaryYellow, }}>
               <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
             </TouchableOpacity>
             <View style={{ alignItems: 'flex-end', }}>
-              <View style={{ alignItems: 'center', flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
+              <View style={{ alignItems: 'center', flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
                 {renderStars()}
                 <Text style={{ ...Fonts.FontMed, fontSize: 23, flexWrap: 'wrap', paddingTop: 8 }}>{item.name}</Text>
               </View>
               {/* <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text> */}
-              <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+              <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginVertical: 8 }}>
                 <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district.ar}`}</Text>
                 <EvilIcons name='location' />
               </View>
@@ -152,7 +152,7 @@ export default function SectionDetailsScreen(props) {
               {`${item.price_average} ر.س/ ﻞﻠﻴﻟة `}
             </Text>
           </View> */}
-          <View style={{ flexDirection: 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {item.facilities.map(i => renderFeatureItem(i))}
           </View>
           <View style={{ alignItems: 'flex-end', margin: 24 }}>

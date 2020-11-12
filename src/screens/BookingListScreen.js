@@ -5,7 +5,9 @@ import {
   Text,
   View,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform,
+  I18nManager
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -16,6 +18,8 @@ import { IMAGE_URL } from '../services/api/url'
 import { GET_OWNER_BOOKINGS } from '../services/graphql/queries'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { FlatList } from 'react-native';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 const SAMPLE = [
   {
@@ -94,7 +98,7 @@ export default function BookingListScreen(props) {
         shadowOffset: { height: 3, width: 0, },
         shadowColor: 'black',
         shadowOpacity: 0.3,
-        flexDirection: 'row',
+        flexDirection: isAndroid ? 'row-reverse' : 'row',
         elevation: 3,
       }}>
         <View style={{ width: '65%', padding: 12, }}>
@@ -106,7 +110,7 @@ export default function BookingListScreen(props) {
           </Text>
           <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 5 }} />
           {/* FIRST PART */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`المبلغ \n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
@@ -122,7 +126,7 @@ export default function BookingListScreen(props) {
           </View>
           <View style={{ height: 10 }} />
           {/* SECOND PARD */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', }}>
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`حالة الحجز\n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
@@ -136,7 +140,7 @@ export default function BookingListScreen(props) {
               </Text>
             </Text>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 12 }}>
             <TouchableOpacity style={{
               marginVertical: 8,
               borderRadius: 11,
@@ -147,7 +151,7 @@ export default function BookingListScreen(props) {
               shadowOffset: { height: 3, width: 0, },
               shadowColor: 'black',
               shadowOpacity: 0.3,
-              flexDirection: 'row',
+              flexDirection: isAndroid ? 'row-reverse' : 'row',
               elevation: 3,
               padding: 5,
               paddingHorizontal: 8,
@@ -165,7 +169,7 @@ export default function BookingListScreen(props) {
               shadowOffset: { height: 3, width: 0, },
               shadowColor: 'black',
               shadowOpacity: 0.3,
-              flexDirection: 'row',
+              flexDirection: isAndroid ? 'row-reverse' : 'row',
               elevation: 3,
               padding: 5,
               paddingHorizontal: 8,

@@ -622,7 +622,7 @@ export default function UpdatePropertyScreen(props) {
         // p.type_id = cTypes[index].id
         // setPayload(p)
         // setTypes(cTypes)
-      }} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+      }} style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
         <Text>{item.label || item.name}</Text>
         <View style={styles.selectionCircle}>
           {item.selected && <View style={styles.selectedCircle} />}
@@ -638,7 +638,7 @@ export default function UpdatePropertyScreen(props) {
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
             <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25} />
           </View>
         </View>
@@ -650,7 +650,7 @@ export default function UpdatePropertyScreen(props) {
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
             value={item.value.toString()}
@@ -671,13 +671,13 @@ export default function UpdatePropertyScreen(props) {
   const renderDetails = () => {
     return (
       <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق`}</Text>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
             <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  Add + `}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
           {selectedFac && selectedFac.map((i, index) => renderFaci(i, index))}
         </View>
       </View>
@@ -688,7 +688,7 @@ export default function UpdatePropertyScreen(props) {
 
     if (types[0].selected == true) {
       return (
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => {
             navigate('SectionList', { items: item.sections, item, update: true })
             // if (commercial_data) {
@@ -744,7 +744,7 @@ export default function UpdatePropertyScreen(props) {
           setPayload(i)
         }} style={{ marginBottom: 12, marginTop: types[0].selected ? 12 : 0 }} placeholder={'رقم التواصل'} />
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>}
-        {types[1].selected && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        {types[1].selected && <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
               setShowCalendar(true)
@@ -791,7 +791,7 @@ export default function UpdatePropertyScreen(props) {
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
           {!!types && types.map((i, index) => renderSelection(i, index))}
         </View>
         {/* <Dropdown onChangeText={e => {
@@ -804,7 +804,7 @@ export default function UpdatePropertyScreen(props) {
           item.name = e
           setPayload(item)
         }} value={payload.name} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
           {/* <Input value={payload.district} onChangeText={e => {
             const item = { ...payload }
             item.district = e
@@ -869,7 +869,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryYellow,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: global.isAndroid ? 'row-reverse' : 'row',
     marginVertical: 12,
     marginHorizontal: 5,
     padding: 12,

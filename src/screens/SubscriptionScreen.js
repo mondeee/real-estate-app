@@ -118,12 +118,9 @@ export default function SubscriptionScreen(props) {
   }
 
   const handleOpenURL = (event) => {
-<<<<<<< HEAD
-=======
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser()
     }
->>>>>>> no css layout with ifxes
     console.log('LINKING LISTENER', event)
     WebBrowser.dismissBrowser()
     const { path, queryParams } = Linking.parse(event.url)
@@ -198,7 +195,7 @@ export default function SubscriptionScreen(props) {
 
   const renderIndicator = () => {
     return (
-      <View style={{ flexDirection: 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', }}>
+      <View style={{ flexDirection: global.isAndroid ? 'row' : 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', }}>
         {subs && subs.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
       </View>
     )
@@ -252,7 +249,7 @@ export default function SubscriptionScreen(props) {
         ...styles.viewPager,
       }} key={index}>
         <Text style={styles.titleText}>{i.name}</Text>
-        <View style={{ flexDirection: 'row', height: '40%', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', height: '40%', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={styles.mainText}>{i.duration}</Text>
           <Image style={{ height: 50, width: 50, }} source={require('../../assets/subiconlarge.png')} />
         </View>

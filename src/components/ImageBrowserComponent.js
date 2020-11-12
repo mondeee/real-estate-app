@@ -8,6 +8,8 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Platform,
+  I18nManager
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -28,8 +30,9 @@ import * as ImagePicker from 'expo-image-picker';
 
 import * as Permissions from "expo-permissions";
 import { ReactNativeFile } from 'apollo-upload-client'
-const width = Dimensions.get('window').width * 0.9;
 
+const width = Dimensions.get('window').width * 0.9;
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function ImageBrowser(props) {
   const {
@@ -238,7 +241,7 @@ export default function ImageBrowser(props) {
   return (
     <Modal ref={container} isVisible={isVisible}>
       <View style={{ maxHeight: '65%', width: '100%', backgroundColor: 'white', borderRadius: 15, paddingVertical: 8, }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', wdith: '100%', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', wdith: '100%', justifyContent: 'space-between' }}>
           <Text style={{ ...Fonts.FontMed, marginLeft: 10 }}>{`Gallery`}</Text>
           <TouchableOpacity style={{ alignSelf: 'flex-end', marginRight: 10, }} onPress={() => closeModal()}>
             <Text>Close</Text>

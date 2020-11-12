@@ -305,7 +305,7 @@ export default function HomeScreen(props) {
         shadowColor: 'black',
         shadowOpacity: 0.1,
         // flexDirection: isAndroid ? 'row-reverse' : 'row',
-        flexDirection: 'row',
+        flexDirection: global.isAndroid ? 'row-reverse' : 'row',
         elevation: 3,
       }}
         onPress={() => {
@@ -333,7 +333,7 @@ export default function HomeScreen(props) {
             <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAliwaitgn: 'right' }}>{`${item.name} `}</Text>
           </Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
-          <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <View />
             {item.category.id == 2 ?
               <TouchableOpacity
@@ -342,7 +342,7 @@ export default function HomeScreen(props) {
                 }}
                 style={{
                   padding: 8,
-                  flexDirection: 'row',
+                  flexDirection: global.isAndroid ? 'row-reverse' : 'row',
                   justifyContent: 'space-between'
                 }}>
                 <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأوقات المتاحة `}</Text>
@@ -353,7 +353,7 @@ export default function HomeScreen(props) {
                 onPress={() => navigate('SectionList', { items: item.sections.reverse(), item, })}
                 style={{
                   padding: 8,
-                  flexDirection: 'row',
+                  flexDirection: global.isAndroid ? 'row-reverse' : 'row',
                   justifyContent: 'space-between'
                 }}>
                 <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأقسام `}</Text>
@@ -375,7 +375,7 @@ export default function HomeScreen(props) {
                 }}
                 style={{
                   padding: 8,
-                  flexDirection: 'row',
+                  flexDirection: global.isAndroid ? 'row-reverse' : 'row',
                   justifyContent: 'space-between'
                 }}>
                 <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأسعار `}</Text>

@@ -245,7 +245,7 @@ export default function RegisterScreen(props) {
           onPressRegister()
         }} text={`تسجيل`} style={{ width: 177 }} />
         {/* {onPressRegister()} */}
-        <View style={{ flexDirection: 'row', marginTop: 12 }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginTop: 12 }}>
           <View style={{ width: 4 }} />
           <Text onPress={() => navigate('Login')} style={{ color: Colors.primaryBlue, ...Fonts.fontRegular }}>
             {`  لديك حساب مسبقا؟  `}

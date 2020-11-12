@@ -6,7 +6,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform,
+  I18nManager
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -17,6 +19,8 @@ import Header from '../components/Header';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_QUESTIONS } from '../services/graphql/queries';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 const FAQ_ITEMS = [
   {
@@ -68,13 +72,13 @@ export default function FAQScreen(props) {
         }}>
         <TouchableOpacity onPress={() => onPressItem(index)} style={{
           width: '100%',
-          flexDirection: 'row',
+          flexDirection: isAndroid ? 'row-reverse' : 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
           minHeight: 60,
         }}>
           <Image style={{ height: 8, width: 12, }} source={require('../../assets/chevrondown.png')} />
-          <View style={{ flexDirection: 'row', }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', }}>
             <Text style={{ ...Fonts.fontRegular, marginRight: 8 }}>{item.question}</Text>
             <Image style={{ height: 17, width: 17 }} source={require('../../assets/faqicon.png')} />
           </View>

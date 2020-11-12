@@ -393,7 +393,7 @@ export default function UpdateSectionScreen(props) {
         cTypes.forEach(i => i.selected = false)
         cTypes[index].selected = true
         setTypes(cTypes)
-      }} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+      }} style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
         <Text>{item.label}</Text>
         <View style={styles.selectionCircle}>
           {item.selected && <View style={styles.selectedCircle} />}
@@ -409,7 +409,7 @@ export default function UpdateSectionScreen(props) {
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
             <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25} />
           </View>
         </View>
@@ -421,7 +421,7 @@ export default function UpdateSectionScreen(props) {
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
             value={item.value.toString()}
@@ -442,13 +442,13 @@ export default function UpdateSectionScreen(props) {
   const renderDetails = () => {
     return (
       <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق`}</Text>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
             <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  Add + `}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
           {selectedFac && selectedFac.map(i => renderFaci(i))}
         </View>
       </View>
@@ -495,7 +495,7 @@ export default function UpdateSectionScreen(props) {
         {/* <Input style={{ marginVertical: 12 }} placeholder={'اسم المالك'} /> */}
         {/* <Input style={{ marginBottom: 12, }} placeholder={'رقم التواصل'} /> */}
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
               setShowCalendar(true)
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryYellow,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: global.isAndroid ? 'row-reverse' : 'row',
     marginVertical: 12,
     marginHorizontal: 5,
     padding: 12,

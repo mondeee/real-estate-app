@@ -5,11 +5,15 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Platform,
+  I18nManager
 } from 'react-native';
 import Header from '../components/Header';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function ContactScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -24,7 +28,7 @@ export default function ContactScreen(props) {
         <FontAwesome color={Colors.primaryBlue} name={'phone'} size={57} />
         <Text style={{ ...Fonts.FontMed, fontSize: 30, margin: 12 }}>{`للتواصل`}</Text>
         <Text style={{ ...Fonts.fontRegular, fontSize: 30, marginBottom: 12, }}>{`011 4000000`}</Text>
-        <View style={{ flexDirection: 'row', padding: 24, justifyContent: 'space-between', width: '80%' }}>
+        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', padding: 24, justifyContent: 'space-between', width: '80%' }}>
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={styles.circleStyle}>
               <FontAwesome color={Colors.primaryBlue} size={25} name='linkedin' />

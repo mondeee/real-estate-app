@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  I18nManager,
   AsyncStorage,
 } from 'react-native';
 import Header from '../components/Header';
@@ -23,6 +24,8 @@ import {
   useStoreState,
   useStoreActions,
 } from 'easy-peasy'
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function LoginScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -100,7 +103,7 @@ export default function LoginScreen(props) {
         <TouchableOpacity style={{ width: '75%', marginBottom: 10 }}>
           <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right', textDecorationLine: 'underline' }}>{`نسيت كلمة المرور؟`}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: 'row' }}>
+        <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: isAndroid ? 'row-reverse' : 'row' }}>
           <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right' }}>{`أوافق على الشروط و الأحكام`}</Text>
           <View style={{
             borderRadius: 30,

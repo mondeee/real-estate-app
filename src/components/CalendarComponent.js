@@ -355,7 +355,7 @@ export default function CalendarComponent(props) {
     // }
 
     return (
-      <View key={index} style={{ alignSelf: 'flex-end', width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
+      <View key={index} style={{ alignSelf: 'flex-end', width: '80%', flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
         <View />
         <TextInput value={item.value} onChangeText={(e) => _onChangeInput(e, index, type)} style={{ height: 33, width: 103, borderRadius: 25, borderWidth: 1, padding: 8, textAlign: 'right', borderColor: Colors.gray }} placeholder={`ر.س`} />
         <Text style={{ ...Fonts.fontLight, width: 50 }}>{item.label || 'text'}</Text>
@@ -384,7 +384,7 @@ export default function CalendarComponent(props) {
 
   const renderDateSection = () => {
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
+      <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
         <TouchableOpacity onPress={() => {
           // if (fdate) {
           setShowCalendar(true)
@@ -489,7 +489,7 @@ export default function CalendarComponent(props) {
             markingType={'period'}
           />
           <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 8 }} />
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
             <TouchableOpacity onPress={() => {
               if (calendar) {
                 onClose()
@@ -523,7 +523,7 @@ export default function CalendarComponent(props) {
             <Text style={{ ...Fonts.FontMed, textAlign: 'center', marginVertical: 12, fontSize: 19 }}>{`تحديد اسعار ايام المواسم `}</Text>
             {renderDateSection()}
             <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 12 }} />
-            <View style={{ alignSelf: 'flex-end', width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
+            <View style={{ alignSelf: 'flex-end', width: '80%', flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 8, }}>
               <View />
               <TextInput value={String(current_price)} onChangeText={(e) => {
                 // sitem.price = e
@@ -536,7 +536,7 @@ export default function CalendarComponent(props) {
             <View style={{ minHeight: 100, marginTop: 12 }}>
               {sPrices && sPrices.map(i => {
                 return (
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-around', borderWidth: 1, borderColor: Colors.gray, padding: 4, paddingTop: 8, }}>
+                  <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-around', borderWidth: 1, borderColor: Colors.gray, padding: 4, paddingTop: 8, }}>
                     <Text style={{ ...Fonts.fontRegular, fontSize: 16 }}>{i.from}</Text>
                     <Text style={{ ...Fonts.fontRegular, fontSize: 16 }}>{i.to}</Text>
                     <Text style={{ ...Fonts.fontRegular, fontSize: 16 }}>{i.price}</Text>
@@ -544,7 +544,7 @@ export default function CalendarComponent(props) {
                 )
               })}
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '70%', alignSelf: 'center', marginBottom: 12 }}>
+            <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', width: '70%', alignSelf: 'center', marginBottom: 12 }}>
               <TouchableOpacity onPress={() => onFinalizeData()} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`حفظ` || `Close`}</Text>
               </TouchableOpacity >
@@ -679,7 +679,7 @@ export default function CalendarComponent(props) {
             markingType={'period'}
           />
           <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 8 }} />
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
             <TouchableOpacity onPress={() => {
               setFromDate(null)
               setToDate(null)

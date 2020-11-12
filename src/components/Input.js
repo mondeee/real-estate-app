@@ -5,11 +5,15 @@ import {
   View,
   TouchableOpacity,
   Image,
-  TextInput
+  TextInput,
+  Platform,
+  I18nManager
 } from 'react-native';
 import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
+
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function Input(props) {
   const {
@@ -39,7 +43,7 @@ export default function Input(props) {
     if (upload) {
       return (
         <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
             <Image style={{ height: 20, width: 16, alignSelf: 'center' }} source={require('../../assets/uploadfileicon.png')} />
             {!value && <Text style={{ ...Fonts.fontRegular, color: Colors.darkGray, marginLeft: 24, }}>{`PDF ,JPG ,PNG`}</Text>}
           </View>
@@ -102,7 +106,7 @@ export default function Input(props) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: isAndroid ? 'row-reverse' : 'row',
     padding: 12,
     paddingHorizontal: 12,
     // maxWidth: 282,

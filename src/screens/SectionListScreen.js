@@ -223,7 +223,7 @@ export default function SectionListScreen(props) {
         shadowOffset: { height: 3, width: -2, },
         shadowColor: 'black',
         shadowOpacity: 0.1,
-        flexDirection: 'row',
+        flexDirection: global.isAndroid ? 'row-reverse' : 'row',
         elevation: 3,
       }}
         onPress={() => {
@@ -241,7 +241,7 @@ export default function SectionListScreen(props) {
         <View style={{ flex: 1, padding: 12, }}>
           <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}</Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
-          <View style={{ flexDirection: 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
             <TouchableOpacity
               onPress={() => {
                 setShowAvailability(true)

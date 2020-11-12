@@ -27,6 +27,7 @@ import * as Updates from "expo-updates";
 import * as ImagePicker from 'expo-image-picker';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+global.isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
@@ -146,7 +147,6 @@ export default function SplashScreen(props) {
   useEffect(() => {
     setUpLocation()
     setUpNotif()
-<<<<<<< HEAD
     setupCamerPermission()
     fetchToken()
     // fetchToken()
@@ -164,10 +164,6 @@ export default function SplashScreen(props) {
     //     }
     //   ],
     // )
-=======
-    setupCameraPermission()
-    fetchToken()
->>>>>>> no css layout with ifxes
   }, [])
 
   useEffect(() => {
@@ -204,7 +200,7 @@ export default function SplashScreen(props) {
 
   renderIndicator = () => {
     return (
-      <View style={{ flexDirection: 'row', alignSelf: 'center', padding: 24, paddingTop: 0, alignContent: 'center', justifyContent: 'center' }}>
+      <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignSelf: 'center', padding: 24, paddingTop: 0, alignContent: 'center', justifyContent: 'center' }}>
         <View style={{ ...styles.indicatorStyle, backgroundColor: page == 2 ? Colors.primaryYellow : Colors.gray }} />
         <View style={{ ...styles.indicatorStyle, marginHorizontal: 4, backgroundColor: page == 1 ? Colors.primaryYellow : Colors.gray }} />
         <View style={{ ...styles.indicatorStyle, backgroundColor: page == 0 ? Colors.primaryYellow : Colors.gray }} />

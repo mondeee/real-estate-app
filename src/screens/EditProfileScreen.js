@@ -10,6 +10,8 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  Platform,
+  I18nManager
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
@@ -32,7 +34,7 @@ import { ReactNativeFile } from 'apollo-upload-client'
 import ActionComponent from '../components/ActionComponent';
 import { IMAGE_URL } from '../services/api/url';
 
-
+const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function EditProfileScreen(props) {
   const { navigate, goBack } = props.navigation
@@ -195,7 +197,7 @@ export default function EditProfileScreen(props) {
           <Input value={name} onChangeText={setName} placeholder={`خالد`} style={{ marginTop: 20, marginBottom: 12 }} rightIcon={'user'} />
           <Input value={email} onChangeText={setEmail} placeholder={`الإيميل الإلكتروني `} style={{ marginBottom: 12 }} rightIcon={'envelope'} />
           <Input value={phone} maxLength={10} onChangeText={setPhone} placeholder={`0555555555`} style={{ marginBottom: 12 }} rightIcon={'phone'} />
-          <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', }}>
+          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', width: '100%', alignItems: 'center', }}>
             <Dropdown value={location} data={cities} onChangeText={setLocation} placeholder={`المدينة`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/locationicon.png')} />
             <View style={{ width: 12 }} />
             <Dropdown value={gender} data={genderchoices} onChangeText={setGender} placeholder={`الجنس`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/gendericon.png')} />
