@@ -79,7 +79,7 @@ export default function MyPropertyDetailsScreen(props) {
   const renderTopButtons = () => {
     return (
       <View style={{ position: 'absolute', top: 0, padding: 12, flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'flex-end', justifyContent: 'space-between', width: '100%', }}>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
           <TouchableOpacity>
             <Image style={{ height: 27, resizeMode: 'contain', marginRight: 20, marginBottom: 10 }} source={require('../../assets/uploadicon.png')} />
           </TouchableOpacity>
@@ -102,7 +102,7 @@ export default function MyPropertyDetailsScreen(props) {
     }
     // console.log('@RATINGS', ratings)
     return (
-      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: isAndroid ? 'row' : 'row-reverse', }}>
+      <View style={{ ...Styles.center, marginLeft: 8, marginBottom: 5, flexDirection: global.isAndroid ? 'row' : 'row-reverse', }}>
         {/* {rating.forEach(i => <FontAwesome name='star' color={Colors.primaryYellow} />)} */}
         {ratings}
       </View>
@@ -124,7 +124,7 @@ export default function MyPropertyDetailsScreen(props) {
           <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
             <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{item.name}</Text>
           </View>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
             {/* <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{i.value}</Text> */}
             {/* <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={item.image} /> */}
             <MaterialIcons name={'check'} color={Colors.primaryBlue} size={30} />
@@ -138,7 +138,7 @@ export default function MyPropertyDetailsScreen(props) {
         <View style={{ padding: 4, borderRadius: 5, backgroundColor: Colors.gray, minWidth: 80 }}>
           <Text style={{ ...Fonts.fontLight, fontSize: 10, textAlign: 'center' }} >{item.name}</Text>
         </View>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginTop: 12, alignItems: 'flex-end', justifyContent: 'center' }}>
           <Text style={{ ...Fonts.fontRegular, fontSize: 17 }}>{i.value}</Text>
           <Image style={{ height: 20, width: 29, marginLeft: 8, }} source={item.image} />
         </View>
@@ -150,7 +150,7 @@ export default function MyPropertyDetailsScreen(props) {
     return (
       <ScrollView style={{ flex: 1, }} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ justifyContent: "flex-end", }}>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', paddingHorizontal: 24, paddingVertical: 24, alignItems: 'flex-start', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: Colors.gray }}>
             <TouchableOpacity onPress={() => {
               if (!userData) {
                 Toast.show({
@@ -165,12 +165,12 @@ export default function MyPropertyDetailsScreen(props) {
               <Text style={{ ...Fonts.fontRegular }}>{`تعديل`}</Text>
             </TouchableOpacity>
             <View style={{ alignItems: 'flex-end', }}>
-              <View style={{ alignItems: 'center', flexDirection: isAndroid ? 'row-reverse' : 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
+              <View style={{ alignItems: 'center', flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginVertical: 8, flexWrap: 'wrap', width: '90%' }}>
                 {renderStars()}
                 <Text style={{ ...Fonts.FontMed, fontSize: 23, flexWrap: 'wrap', paddingTop: 8 }}>{item.name}</Text>
               </View>
               {/* <Text style={{ ...Fonts.fontLight, fontSize: 12, }}>{`523م2`}</Text> */}
-              <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', marginVertical: 8 }}>
+              <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginVertical: 8 }}>
                 <Text style={{ ...Fonts.fontLight, fontSize: 12, color: Colors.darkestGray }}>{`${item.city.ar},${item.district.ar}`}</Text>
                 <EvilIcons name='location' />
               </View>
@@ -193,7 +193,7 @@ export default function MyPropertyDetailsScreen(props) {
               <FontAwesome name='calendar' color={Colors.primaryBlue} />
             </TouchableOpacity>
           </View> */}
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {item.facilities.map(i => renderFeatureItem(i))}
           </View>
           <View style={{ alignItems: 'flex-end', margin: 24 }}>
@@ -214,7 +214,7 @@ export default function MyPropertyDetailsScreen(props) {
   const renderContact = () => {
     const owner = item.owner
     return (
-      <View style={{ padding: 12, paddingHorizontal: 20, flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <View style={{ padding: 12, paddingHorizontal: 20, flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <TouchableOpacity onPress={() => {
           setLoading(true)
           onCreateChat(owner.id)
@@ -223,11 +223,11 @@ export default function MyPropertyDetailsScreen(props) {
           <Text style={{ ...Fonts.FontMed, fontSize: 18, marginTop: 8 }}>{`المحادثة`}</Text>
         </TouchableOpacity>
         <View style={{ alignItems: 'flex-end' }}>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', marginBottom: 8 }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', marginBottom: 8 }}>
             <Text style={{ ...Fonts.fontLight, marginRight: 12, }}>{owner.name}</Text>
             <MaterialIcons name='person' size={25} color={Colors.primaryBlue} />
           </View>
-          <TouchableOpacity style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
+          <TouchableOpacity style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
             <Text style={{ ...Fonts.fontLight, marginRight: 12, }}>{owner.phone}</Text>
             <MaterialIcons name='phone' size={25} color={Colors.primaryBlue} />
           </TouchableOpacity>

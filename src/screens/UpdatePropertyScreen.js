@@ -536,7 +536,10 @@ export default function UpdatePropertyScreen(props) {
     }
     console.log('@FINALPAYLOAD', fpayload)
     updatePrivateProperty(fpayload).catch(e => {
-      onError(e)
+      const relog = onError(e)
+      if (relog) {
+        // navigate('Login')
+      }
     })
   }
 
@@ -564,7 +567,10 @@ export default function UpdatePropertyScreen(props) {
     console.log('@payload', fpayload)
     // return
     updateCommercialProperty(fpayload).catch(e => {
-      onError(e)
+      const relog = onError(e)
+      if (relog) {
+        // navigate('Login')
+      }
     })
   }
 
@@ -600,9 +606,10 @@ export default function UpdatePropertyScreen(props) {
           value={location}
           style={{
             flex: 4,
-            textAlign: 'right',
+            textAlign: global.isAndroid ? 'left' : 'right',
             paddingTop: 4,
-            paddingRight: 8,
+            paddingRight: global.isAndroid ? 0 : 8,
+            paddingLeft: global.isAndroid ? 8 : 0,
             fontSize: 14,
             ...Fonts.fontRegular,
           }}
@@ -672,7 +679,7 @@ export default function UpdatePropertyScreen(props) {
     return (
       <View>
         <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق`}</Text>
+          <Text style={{ width: '100%', textAlign: global.isAndroid ? 'left' : 'right', ...Fonts.FontMed }}>{`المرافق`}</Text>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
             <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  Add + `}</Text>
           </TouchableOpacity>
@@ -853,7 +860,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selectionCircle: {
-    marginLeft: 8,
+    marginLeft: global.isAndroid ? 0 : 8,
+    marginRight: global.isAndroid ? 8 : 0,
     borderWidth: 2,
     borderColor: Colors.primaryBlue,
     width: 20,

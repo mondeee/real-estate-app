@@ -98,7 +98,7 @@ export default function BookingListScreen(props) {
         shadowOffset: { height: 3, width: 0, },
         shadowColor: 'black',
         shadowOpacity: 0.3,
-        flexDirection: isAndroid ? 'row-reverse' : 'row',
+        flexDirection: global.isAndroid ? 'row-reverse' : 'row',
         elevation: 3,
       }}>
         <View style={{ width: '65%', padding: 12, }}>
@@ -110,7 +110,7 @@ export default function BookingListScreen(props) {
           </Text>
           <View style={{ ...Styles.lineDividerHorizontal, marginVertical: 5 }} />
           {/* FIRST PART */}
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`المبلغ \n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
@@ -126,7 +126,7 @@ export default function BookingListScreen(props) {
           </View>
           <View style={{ height: 10 }} />
           {/* SECOND PARD */}
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', }}>
             <Text style={{ ...Fonts.fontLight, marginRight: 4, textAlign: 'center' }}>
               {`حالة الحجز\n`}
               <Text style={{ ...Fonts.fontBold, textAlign: 'center' }}>
@@ -140,7 +140,7 @@ export default function BookingListScreen(props) {
               </Text>
             </Text>
           </View>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 12 }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 12 }}>
             <TouchableOpacity style={{
               marginVertical: 8,
               borderRadius: 11,
@@ -151,7 +151,7 @@ export default function BookingListScreen(props) {
               shadowOffset: { height: 3, width: 0, },
               shadowColor: 'black',
               shadowOpacity: 0.3,
-              flexDirection: isAndroid ? 'row-reverse' : 'row',
+              flexDirection: global.isAndroid ? 'row-reverse' : 'row',
               elevation: 3,
               padding: 5,
               paddingHorizontal: 8,
@@ -169,7 +169,7 @@ export default function BookingListScreen(props) {
               shadowOffset: { height: 3, width: 0, },
               shadowColor: 'black',
               shadowOpacity: 0.3,
-              flexDirection: isAndroid ? 'row-reverse' : 'row',
+              flexDirection: global.isAndroid ? 'row-reverse' : 'row',
               elevation: 3,
               padding: 5,
               paddingHorizontal: 8,

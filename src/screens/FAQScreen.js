@@ -72,13 +72,13 @@ export default function FAQScreen(props) {
         }}>
         <TouchableOpacity onPress={() => onPressItem(index)} style={{
           width: '100%',
-          flexDirection: isAndroid ? 'row-reverse' : 'row',
+          flexDirection: global.isAndroid ? 'row-reverse' : 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
           minHeight: 60,
         }}>
           <Image style={{ height: 8, width: 12, }} source={require('../../assets/chevrondown.png')} />
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', }}>
             <Text style={{ ...Fonts.fontRegular, marginRight: 8 }}>{item.question}</Text>
             <Image style={{ height: 17, width: 17 }} source={require('../../assets/faqicon.png')} />
           </View>

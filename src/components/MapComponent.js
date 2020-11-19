@@ -109,10 +109,10 @@ export default function MapComponent(props) {
         <TouchableOpacity style={{
           position: 'absolute',
           bottom: 50,
-          right: isAndroid ? 0 : 10,
-          left: isAndroid ? 10 : 0,
+          right: global.isAndroid ? 0 : 10,
+          left: global.isAndroid ? 10 : 0,
           backgroundColor: Colors.primaryYellow,
-          width: 40, 
+          width: 40,
           height: 40,
           borderRadius: 20,
           alignItems: 'center',
@@ -124,7 +124,7 @@ export default function MapComponent(props) {
         }>
           <MaterialIcons name={'my-location'} size={25} color={Colors.primaryBlue} />
         </TouchableOpacity>
-        <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => {
+        <TouchableOpacity style={global.isAndroid ? { position: 'absolute', top: 10, left: 10 } : { position: 'absolute', top: 10, right: 10 }} onPress={() => {
           if (region && location_name) {
             onClose()
           }
@@ -132,7 +132,7 @@ export default function MapComponent(props) {
         }>
           <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
         </TouchableOpacity>
-        <Text style={{ position: 'absolute', top: 10, left: 10 }}>{location_name}</Text>
+        <Text style={global.isAndroid ? { position: 'absolute', top: 10, right: 10 } : { position: 'absolute', top: 10, left: 10 }}>{location_name}</Text>
         <View style={{ position: 'absolute', top: '47%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name={'location-on'} size={35} color={Colors.primaryBlue} />
         </View>

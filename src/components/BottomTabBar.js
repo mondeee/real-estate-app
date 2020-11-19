@@ -74,7 +74,7 @@ export default function BottomTabBar(props) {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/footer2x.png')} resizeMode={'cover'} style={styles.image} />
+      <Image source={require('../../assets/footer2x.png')} resizeMode={'cover'} style={global.isAndroid ? styles.imageRight : styles.imageLeft} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => setSelectedTab(3)} style={styles.navButton}>
           {/* <FontAwesome color={tabColor(3)} size={25} name={'user'} /> */}
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     // paddingHorizontal: 24,
-    flexDirection: isAndroid ? 'row-reverse' : 'row',
+    flexDirection: global.isAndroid ? 'row-reverse' : 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
@@ -151,8 +151,21 @@ const styles = StyleSheet.create({
     width: '104%',
     position: 'absolute',
     bottom: -8,
-    left: isAndroid ? 0 : -8,
-    right: isAndroid ? -8 : 0
+    left: -8,
+  },
+  imageLeft: {
+    height: 112,
+    width: '104%',
+    position: 'absolute',
+    bottom: -8,
+    left: -8,
+  },
+  imageRight: {
+    height: 112,
+    width: '104%',
+    position: 'absolute',
+    bottom: -8,
+    right: -8,
   },
   middleButton: {
     backgroundColor: Colors.primaryBlue,
@@ -162,7 +175,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     height: 68,
     width: 68,
-    marginLeft: 2,
+    marginLeft: global.isAndroid ? 0 : 2,
+    marginRight: global.isAndroid ? 2 : 0,
     borderRadius: 140,
   }
 })

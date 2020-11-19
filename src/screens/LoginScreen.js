@@ -38,8 +38,6 @@ export default function LoginScreen(props) {
 
   const [loginViaPhone, { data, loading, error }] = useMutation(LOGIN)
 
-
-
   // if (data) {
   //   AsyncStorage.setItem('token', data.loginViaPhone.token)
   //   navigate('Home')
@@ -101,10 +99,10 @@ export default function LoginScreen(props) {
         <Input maxLength={10} onChangeText={setPhone} placeholder={`رقم الجوال`} style={{ marginBottom: 25, marginTop: 40 }} rightIcon='phone' />
         <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 25 }} password rightIcon='lock' />
         <TouchableOpacity style={{ width: '75%', marginBottom: 10 }}>
-          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right', textDecorationLine: 'underline' }}>{`نسيت كلمة المرور؟`}</Text>
+          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: global.isAndroid ? 'left' : 'right', textDecorationLine: 'underline' }}>{`نسيت كلمة المرور؟`}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: isAndroid ? 'row-reverse' : 'row' }}>
-          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: 'right' }}>{`أوافق على الشروط و الأحكام`}</Text>
+        <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: global.isAndroid ? 'row-reverse' : 'row' }}>
+          <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: global.isAndroid ? 'left' : 'right' }}>{`أوافق على الشروط و الأحكام`}</Text>
           <View style={{
             borderRadius: 30,
             height: 14,
@@ -113,7 +111,8 @@ export default function LoginScreen(props) {
             borderColor: Colors.primaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
-            marginLeft: 8
+            marginLeft: global.isAndroid ? 0 : 8,
+            marginRight: global.isAndroid ? 8 : 0,
           }}>
             {agree && <View style={{ borderRadius: 30, height: 10, width: 10, backgroundColor: Colors.primaryBlue }} />}
           </View>
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 21,
-    height: Platform.OS == 'android' ? '60%' :'50%',
+    height: Platform.OS == 'android' ? '60%' : '50%',
     width: '90%',
     shadowOffset: { height: 2, },
     shadowColor: 'black',

@@ -72,7 +72,7 @@ export default function Dropdown(props) {
           setValue(option.label)
         }}
       >
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
           <Image style={{ height: 10, width: 15, alignSelf: 'center' }} source={require('../../assets/chevrondown.png')} />
           <TextInput placeholder={placeholder || ''} secureTextEntry={pass}
             // onChangeText={e => onChangeText ? onChangeText(e) : console.log(e)}
@@ -81,9 +81,10 @@ export default function Dropdown(props) {
             maxLength={maxLength ? maxLength : 24}
             keyboardType={keyboardType || 'default'}
             style={{
-              textAlign: 'right',
+              textAlign: global.isAndroid ? 'left' : 'right',
               paddingTop: 4,
-              paddingRight: 8,
+              paddingRight: global.isAndroid ? 0 : 8,
+              paddingLeft: global.isAndroid ? 8 : 0,
               ...Fonts.fontRegular,
               ...textStyle,
             }}
@@ -97,7 +98,7 @@ export default function Dropdown(props) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: isAndroid ? 'row-reverse' : 'row',
+    flexDirection: global.isAndroid ? 'row-reverse' : 'row',
     padding: 12,
     paddingHorizontal: 12,
     // maxWidth: 282,

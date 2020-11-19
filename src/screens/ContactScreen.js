@@ -28,7 +28,7 @@ export default function ContactScreen(props) {
         <FontAwesome color={Colors.primaryBlue} name={'phone'} size={57} />
         <Text style={{ ...Fonts.FontMed, fontSize: 30, margin: 12 }}>{`للتواصل`}</Text>
         <Text style={{ ...Fonts.fontRegular, fontSize: 30, marginBottom: 12, }}>{`011 4000000`}</Text>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', padding: 24, justifyContent: 'space-between', width: '80%' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', padding: 24, justifyContent: 'space-between', width: '80%' }}>
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={styles.circleStyle}>
               <FontAwesome color={Colors.primaryBlue} size={25} name='linkedin' />

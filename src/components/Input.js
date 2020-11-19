@@ -45,14 +45,16 @@ export default function Input(props) {
         <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
           <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
             <Image style={{ height: 20, width: 16, alignSelf: 'center' }} source={require('../../assets/uploadfileicon.png')} />
-            {!value && <Text style={{ ...Fonts.fontRegular, color: Colors.darkGray, marginLeft: 24, }}>{`PDF ,JPG ,PNG`}</Text>}
+            {!value && <Text style={{ ...Fonts.fontRegular, color: Colors.darkGray, marginLeft: global.isAndroid ? 0 : 24, marginRight: global.isAndroid ? 24 : 0 }}>{`PDF ,JPG ,PNG`}</Text>}
           </View>
           <Text style={{
             paddingTop: 4,
-            paddingRight: 8,
+            paddingRight: global.isAndroid ? 0 : 8,
+            paddingLeft: global.isAndroid ? 8 : 0,
             fontSize: 14,
             flex: 1,
             ...Fonts.fontRegular,
+            textAlign: global.isAndroid ? 'left' : 'right',
             color: value ? Colors.primaryBlue : Colors.darkGray,
           }}>{value ? `${value.length} images` : placeholder}</Text>
         </TouchableOpacity>
@@ -64,10 +66,12 @@ export default function Input(props) {
         <Image style={{ height: 16, width: 16 }} source={require('../../assets/addlocation.png')} />
         <Text style={{
           paddingTop: 4,
-          paddingRight: 8,
+          paddingRight: global.isAndroid ? 0 : 8,
+          paddingLeft: global.isAndroid ? 8 : 0,
           fontSize: 14,
           flex: 1,
           ...Fonts.fontRegular,
+          textAlign: global.isAndroid ? 'left' : 'right',
           color: value ? Colors.primaryBlue : Colors.darkGray,
         }}>{value ? `${value.location}` : placeholder}</Text>
       </TouchableOpacity>
@@ -89,9 +93,10 @@ export default function Input(props) {
         value={value}
         style={{
           flex: 4,
-          textAlign: 'right',
+          textAlign: global.isAndroid ? 'left' : 'right',
           paddingTop: 4,
-          paddingRight: 8,
+          paddingRight: global.isAndroid ? 0 : 8,
+          paddingLeft: global.isAndroid ? 8 : 0,
           fontSize: 14,
           ...Fonts.fontRegular,
           ...textStyle,

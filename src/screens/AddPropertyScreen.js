@@ -419,14 +419,23 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!license) {
+    if (!facilities || !finalFac) {
       Toast.show({
-        text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
+        text: 'الرجاء إضافة بعض المرافق   .',
         type: 'danger'
       })
       validate = false
       return validate
     }
+
+    // if (!license) {
+    //   Toast.show({
+    //     text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     if (!generalPrice) {
       Toast.show({
@@ -449,6 +458,7 @@ export default function AddPropertyScreen(props) {
         text: 'يرجى ادخال جميع البيانات المطلوبة ',
         type: 'danger'
       })
+      console.log('1')
       return validate
     }
 
@@ -458,6 +468,7 @@ export default function AddPropertyScreen(props) {
         text: 'يرجى إختيار نوع النزل .',
         type: 'danger'
       })
+      console.log('2 type')
       return validate
     }
 
@@ -467,15 +478,7 @@ export default function AddPropertyScreen(props) {
         text: 'يرجى إدخال الاسم .',
         type: 'danger'
       })
-      return validate
-    }
-
-    if (!payload?.description) {
-      validate = false
-      Toast.show({
-        text: 'يرجى كتابة الوصف',
-        type: 'danger'
-      })
+      console.log('3 name')
       return validate
     }
 
@@ -485,6 +488,7 @@ export default function AddPropertyScreen(props) {
         text: 'يرجى إختيار المدينة',
         type: 'danger'
       })
+      console.log('5 city')
       return validate
     }
 
@@ -494,15 +498,7 @@ export default function AddPropertyScreen(props) {
         text: 'يرجى إختيار الحي',
         type: 'danger'
       })
-      return validate
-    }
-
-    if (!payload?.contact_no) {
-      validate = false
-      Toast.show({
-        text: 'يرجى إدخال معلومات المالك',
-        type: 'danger'
-      })
+      console.log('6 district')
       return validate
     }
 
@@ -512,6 +508,37 @@ export default function AddPropertyScreen(props) {
         type: 'danger'
       })
       validate = false
+      console.log('8 loc')
+      return validate
+    }
+
+    if (!facilities || !finalFac) {
+      Toast.show({
+        text: 'الرجاء إضافة بعض المرافق   .',
+        type: 'danger'
+      })
+      validate = false
+      console.log('10 facilities')
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      console.log('4 desc')
+      return validate
+    }
+
+    if (!payload?.contact_no) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال معلومات المالك',
+        type: 'danger'
+      })
+      console.log('7 contact')
       return validate
     }
 
@@ -521,6 +548,7 @@ export default function AddPropertyScreen(props) {
         type: 'danger'
       })
       validate = false
+      console.log('9 photos')
       return validate
     }
 
@@ -530,35 +558,27 @@ export default function AddPropertyScreen(props) {
         type: 'danger'
       })
       validate = false
+      console.log('9 photos length')
       return validate
     }
 
-    if (!registration) {
-      Toast.show({
-        text: 'يرجي رفع صورة رخصة التشيل',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!registration) {
+    //   Toast.show({
+    //     text: 'يرجي رفع صورة رخصة التشيل',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
-    if (!facilities) {
-      Toast.show({
-        text: 'الرجاء إضافة بعض المرافق   .',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
-
-    if (!license) {
-      Toast.show({
-        text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
-        type: 'danger'
-      })
-      validate = false
-      return validate
-    }
+    // if (!license) {
+    //   Toast.show({
+    //     text: 'يرجى رفع صورة اثبات الملكية او السجل التجاري',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   return validate
+    // }
 
     // if (!generalPrice) {
     //   Toast.show({
@@ -600,7 +620,10 @@ export default function AddPropertyScreen(props) {
     console.log('@PRIVATE', fpayload)
     // return
     addPrivateProperty(fpayload).catch(e => {
-      onError(e)
+      const relog = onError(e)
+      // if (relog) {
+      //   navigate('Login')
+      // }
     })
   }
 
@@ -617,8 +640,8 @@ export default function AddPropertyScreen(props) {
     const data = { ...payload }
     data.facilities = finalFac
     data.category_id = 1
-    data.proof_of_commercial_license = registration[0]
-    data.proof_of_operation_license = license[0]
+    data.proof_of_commercial_license = registration && registration.length > 0 ? registration[0] : null
+    data.proof_of_operation_license = license && license.length > 0 ? license[0] : null
     data.images = photos && photos.length < 6 ? photos : []
     data.latitude = location.latitude
     data.longitude = location.longitude
@@ -672,9 +695,10 @@ export default function AddPropertyScreen(props) {
           value={location}
           style={{
             flex: 4,
-            textAlign: 'right',
+            textAlign: global.isAndroid ? 'left' : 'right',
             paddingTop: 4,
-            paddingRight: 8,
+            paddingRight: global.isAndroid ? 0 : 8,
+            paddingLeft: global.isAndroid ? 8 : 0,
             fontSize: 14,
             ...Fonts.fontRegular,
           }}
@@ -698,7 +722,7 @@ export default function AddPropertyScreen(props) {
         setTimeout(() => {
           setDataReload(false)
         }, 500)
-      }} style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+      }} style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
         <Text>{item.label}</Text>
         <View style={styles.selectionCircle}>
           {item.selected && <View style={styles.selectedCircle} />}
@@ -714,7 +738,7 @@ export default function AddPropertyScreen(props) {
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
             <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25} />
           </View>
         </View>
@@ -726,7 +750,7 @@ export default function AddPropertyScreen(props) {
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
             value={item.value.toString()}
@@ -736,7 +760,12 @@ export default function AddPropertyScreen(props) {
               setSeelectedFac(facis)
             }}
             keyboardType={'numeric'}
-            style={{ borderColor: 'gray', borderBottomWidth: 1, width: 17, marginRight: 4, fontSize: 12, }}
+            style={{
+              borderColor: 'gray', borderBottomWidth: 1, width: 17,
+              marginRight: global.isAndroid ? 0 : 4,
+              marginLeft: global.isAndroid ? 4 : 0,
+              fontSize: 12,
+            }}
           />
           <Image style={{ height: 20, width: 20 }} source={item.image || require(`../../assets/bedicon.png`)} />
         </View>
@@ -747,12 +776,12 @@ export default function AddPropertyScreen(props) {
   const renderDetails = () => {
     return (
       <View>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
-            <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق (+ Add)`}</Text>
+            <Text style={{ width: '100%', textAlign: global.isAndroid ? 'left' : 'right', ...Fonts.FontMed }}>{`المرافق (+ Add)`}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
           {selectedFac && selectedFac.map((i, index) => renderFaci(i, index))}
         </View>
       </View>
@@ -763,7 +792,7 @@ export default function AddPropertyScreen(props) {
 
     if (types[0].selected == true) {
       return (
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => {
             if (commercial_data) {
               // console.log(commercial_data.addCommercialPropety.property_id)
@@ -802,7 +831,7 @@ export default function AddPropertyScreen(props) {
   const renderDescription = () => {
     return (
       <View>
-        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
+        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12, textAlign: global.isAndroid ? 'left' : 'right' }}>{`الوصف و اﻟﻤﻤﻴﺰات`}</Text>
         <Input maxLength={600} value={payload.description} onChangeText={e => {
           const i = { ...payload }
           i.description = e
@@ -819,7 +848,7 @@ export default function AddPropertyScreen(props) {
           setPayload(i)
         }} style={{ marginBottom: 12, marginTop: types[0].selected ? 12 : 0 }} placeholder={'رقم التواصل'} />
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>}
-        {types[1].selected && <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        {types[1].selected && <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
               setShowCalendar(true)
@@ -838,9 +867,9 @@ export default function AddPropertyScreen(props) {
         {types[1].selected && <TouchableOpacity onPress={() => setShowAvailability(true)} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
           <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  الأوقات المتاحة `}</Text>
         </TouchableOpacity>}
-        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد الأقسام`}</Text>
+        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12, textAlign: global.isAndroid ? 'left' : 'right' }}>{`عدد الأقسام`}</Text>
         <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} />
-        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
+        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12, textAlign: global.isAndroid ? 'left' : 'right' }}>{`الصور`}</Text>
         {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
         <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} />
         <Input style={{ marginVertical: 12 }} value={photos} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
@@ -858,7 +887,7 @@ export default function AddPropertyScreen(props) {
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
           {/* {renderSelection()} */}
           {types.map((i, index) => renderSelection(i, index))}
         </View>
@@ -872,7 +901,7 @@ export default function AddPropertyScreen(props) {
           item.name = e
           setPayload(item)
         }} value={payload.name || null} style={{ marginVertical: 12 }} placeholder={`اسم النزل`} />
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 6, }}>
           {/* <Input onChangeText={e => {
             const item = { ...payload }
             item.district = e
@@ -921,7 +950,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selectionCircle: {
-    marginLeft: 8,
+    marginLeft: global.isAndroid ? 0 : 8,
+    marginRight: global.isAndroid ? 8 : 0,
     borderWidth: 2,
     borderColor: Colors.primaryBlue,
     width: 20,
@@ -937,7 +967,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryYellow,
   },
   buttonContainer: {
-    flexDirection: isAndroid ? 'row-reverse' : 'row',
+    flexDirection: global.isAndroid ? 'row-reverse' : 'row',
     marginVertical: 12,
     marginHorizontal: 5,
     padding: 12,

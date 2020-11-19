@@ -288,20 +288,21 @@ export default function AddSectionScreen(props) {
       return validate
     }
 
-    // if (!location) {
-    //   Toast.show({
-    //     text: 'Location is unknown',
-    //     type: 'danger'
-    //   })
-    //   validate = false
-    //   return validate
-    // }
+    if (!finalFac || finalFac.length == 0) {
+      validate = false
+      Toast.show({
+        text: 'الرجاء إضافة بعض المرافق   .',
+        type: 'danger'
+      })
+      return validate
+    }
 
     if (!photos) {
       Toast.show({
         text: 'يرجى رفع الصور ',
         type: 'danger'
       })
+      console.log('@NO PHOTO')
       validate = false
       return validate
     }
@@ -381,12 +382,16 @@ export default function AddSectionScreen(props) {
         "input": data
       }
     }
-    console.log('@finalPayload', fpayload)
+    // console.log('@finalPayload', fpayload)
     addSectionProperty(fpayload)
-    // .catch(e => {
-    //   console.log('@error', JSON.stringify(e))
-    //   onError(e)
-    // })
+      .catch(e => {
+        console.log('@error', JSON.stringify(e))
+        onError(e)
+        const relog = onError(e)
+        if (relog) {
+          // navigate('Login')
+        }
+      })
   }
 
   const renderSelection = (item, index) => {
@@ -396,7 +401,7 @@ export default function AddSectionScreen(props) {
         cTypes.forEach(i => i.selected = false)
         cTypes[index].selected = true
         setTypes(cTypes)
-      }} style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+      }} style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
         <Text>{item.label}</Text>
         <View style={styles.selectionCircle}>
           {item.selected && <View style={styles.selectedCircle} />}
@@ -412,7 +417,7 @@ export default function AddSectionScreen(props) {
           <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
             <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
             <MaterialIcons name={item.value > 0 ? 'check' : 'close'} color={Colors.primaryBlue} size={25} />
           </View>
         </View>
@@ -424,7 +429,7 @@ export default function AddSectionScreen(props) {
         <TouchableOpacity style={{ borderRadius: 5, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 4, paddingHorizontal: 8, alignSelf: 'flex-end', marginVertical: 12, }}>
           <Text style={{ ...Fonts.fontLight, textAlign: 'center', fontSize: 12 }}>{item.name || `facility name`}</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput
             maxLength={2}
             value={item.value.toString()}
@@ -445,13 +450,13 @@ export default function AddSectionScreen(props) {
   const renderDetails = () => {
     return (
       <View>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Text style={{ width: '100%', textAlign: 'right', ...Fonts.FontMed }}>{`المرافق`}</Text>
           <TouchableOpacity onPress={() => setFaciVisible(true)}>
             <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  Add + `}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
           {selectedFac && selectedFac.map(i => renderFaci(i))}
         </View>
       </View>
@@ -498,7 +503,7 @@ export default function AddSectionScreen(props) {
         {/* <Input style={{ marginVertical: 12 }} placeholder={'اسم المالك'} /> */}
         {/* <Input style={{ marginBottom: 12, }} placeholder={'رقم التواصل'} /> */}
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷﺳﻌﺎر `}</Text>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
               setShowCalendar(true)
@@ -602,7 +607,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryYellow,
   },
   buttonContainer: {
-    flexDirection: isAndroid ? 'row-reverse' : 'row',
+    flexDirection: global.isAndroid ? 'row-reverse' : 'row',
     marginVertical: 12,
     marginHorizontal: 5,
     padding: 12,

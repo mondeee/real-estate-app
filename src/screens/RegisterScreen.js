@@ -212,7 +212,7 @@ export default function RegisterScreen(props) {
         }
       }
     }).catch(e => {
-      onError(e)
+      const relog = onError(e)
     });
 
   }
@@ -225,7 +225,7 @@ export default function RegisterScreen(props) {
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 18 }} >{`تم إرسال رمز التفعيل لجوالك`}</Text>
         <Input maxLength={5} onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24 }} />
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 13 }}>{`إعادة الإرسال`}</Text>
-        <Button style={{ marginTop: 30, width: 177 }} onPress={() => onVerifyCode()} text={`التالي`} />
+        <Button style={{ marginTop: 20, width: 177 }} onPress={() => onVerifyCode()} text={`التالي`} />
         <Button disabled={countdown > 0} style={{ marginTop: 12, width: 177, backGroundColor: countdown == 0 ? Colors.primaryYellow : Colors.gray }} onPress={() => {
           setCountDown(10)
           sendVerificationCode()
@@ -241,7 +241,7 @@ export default function RegisterScreen(props) {
         <Input onChangeText={setPhone} placeholder={`رقم الجوال`} style={{ marginBottom: 30 }} rightIcon={'phone'} maxLength={10} keyboardType={'numeric'} />
         <Input onChangeText={setPass} password placeholder={`كلمة المرور`} style={{ marginBottom: 30 }} rightIcon={'lock'} />
         <Input onChangeText={setConfirmPass} password placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 25 }} rightIcon={'lock'} />
-        <Button onPress={() => {
+        <Button disabled={(!name || !password || !phone || !confirmPassword)} onPress={() => {
           onPressRegister()
         }} text={`تسجيل`} style={{ width: 177 }} />
         {/* {onPressRegister()} */}
@@ -269,7 +269,8 @@ export default function RegisterScreen(props) {
       setVerify(false)
       return
     }
-    navigate('Home', { refresh: false })
+    // navigate('Home', { refresh: false })
+    navigate('Login')
   }
 
   return (

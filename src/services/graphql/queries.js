@@ -1,8 +1,9 @@
 import gql from 'graphql-tag';
-import { Alert } from 'react-native'
+import { Alert, AsyncStorage } from 'react-native'
 
-export const onError = (error, pass) => {
+export const onError = async (error, pass) => {
   let error_msg = ''
+  let relog = false
   error.graphQLErrors.map(({ message, extensions }, i) => {
     console.log('Login Error', message)
     error_msg = error_msg + message + '\n'
@@ -15,6 +16,10 @@ export const onError = (error, pass) => {
       }
     }
   })
+  if (error_msg.includes('Internal server')) {
+    relog = true
+    await AsyncStorage.removeItem('token')
+  }
   Alert.alert('Error', error_msg, [
     {
       text: 'OK', onPress: () => {
@@ -22,6 +27,7 @@ export const onError = (error, pass) => {
       }
     }
   ])
+  return relog
 }
 
 export const CREATE_ROOM = gql(`
@@ -71,6 +77,7 @@ query{
     contact_us
     instructions
     cancellation_policy
+    is_subscription
   }
 }
 `)

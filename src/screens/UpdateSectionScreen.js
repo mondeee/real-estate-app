@@ -382,7 +382,10 @@ export default function UpdateSectionScreen(props) {
     console.log('@finalPayload', fpayload)
     // return
     updateSectionProperty(fpayload).catch(e => {
-      onError(e)
+      const relog = onError(e)
+      if (relog) {
+        // navigate('Login')
+      }
     })
   }
 

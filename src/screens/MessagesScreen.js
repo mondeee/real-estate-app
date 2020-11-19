@@ -117,7 +117,7 @@ export default function MessagesScreen(props) {
           borderBottomWidth: 1,
           borderColor: Colors.gray,
         }}>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', height: '100%' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', height: '100%' }}>
           <View style={{ height: '100%', justifyContent: 'space-between' }}>
             <View style={{
               height: 24,
@@ -132,7 +132,7 @@ export default function MessagesScreen(props) {
             </View>
             <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.created_at || `الأن`}</Text>
           </View>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>
             <View>
               <Text style={{ ...Fonts.fontRegular, }}>{!item.isOwner ? item.participants.creator.name : item.participants.receiver.name}</Text>
               <Text style={{ ...Fonts.fontLight, maxWidth: 150 }} numberOfLines={1}>{item.messages && item.messages.length > 0 ? item.messages[item.messages.length - 1].text : ` ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ ﻣﺤﺎدﺛﺔ `}</Text>
@@ -155,7 +155,8 @@ export default function MessagesScreen(props) {
           width: 46,
           borderRadius: 100,
           backgroundColor: Colors.primaryBlue,
-          marginLeft: 8,
+          marginLeft: global.isAndroid ? 0 : 8,
+          marginRight: global.isAndroid ? 8 : 0,
           alignItems: 'center',
           justifyContent: 'center'
         }}>
@@ -163,9 +164,15 @@ export default function MessagesScreen(props) {
         </View>
       )
 
-    return <Image source={{ uri: IMAGE_URL + item.avatar }} style={{ height: 46, width: 46, borderRadius: 100, marginLeft: 8, backgroundColor: Colors.primaryBlue, }} />
+    return <Image source={{ uri: IMAGE_URL + item.avatar }} style={{
+      height: 46,
+      width: 46,
+      borderRadius: 100,
+      marginLeft: global.isAndroid ? 0 : 8,
+      marginRight: global.isAndroid ? 8 : 0,
+      backgroundColor: Colors.primaryBlue,
+    }} />
   }
-
 
   renderEmpty = () => {
     if (loading) {

@@ -25,9 +25,14 @@ import { GET_DISTRICT, GET_SETTINGS, GET_USER_DETAILS } from '../services/graphq
 import * as Notifications from 'expo-notifications';
 import * as Updates from "expo-updates";
 import * as ImagePicker from 'expo-image-picker';
+import { CONFIG } from '../services/config';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 global.isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+// global.isAndroid = true
+// Alert.alert('RTL ' +  global.isAndroid,
+// '@GLOBAL' + global.isAndroid + Platform.OS === 'android', I18nManager?.isRTL
+// )
 
 export default function SplashScreen(props) {
   const { navigation: { navigate } } = props
@@ -44,26 +49,26 @@ export default function SplashScreen(props) {
   const { data: settings_data } = useQuery(GET_SETTINGS)
   const [fetchUser, { data: userdata, error: userError, loading: userLoading }] = useLazyQuery(GET_USER_DETAILS)
 
-  const toggleRTL = async () => {
-    setLoading(true)
-    const isRTLAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
-    if (isRTLAndroid) {
-      Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
-        [
-          {
-            text: "OK",
-            onPress: async () => {
-              await I18nManager.allowRTL(false)
-              await I18nManager.forceRTL(false)
-              await Updates.reloadAsync()
-              setLoading(false)
-            },
-            style: "cancel"
-          }
-        ],
-      )
-    }
-  }
+  // const toggleRTL = async () => {
+  //   setLoading(true)
+  //   const isRTLAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+  //   if (isRTLAndroid) {
+  //     Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
+  //       [
+  //         {
+  //           text: "OK",
+  //           onPress: async () => {
+  //             await I18nManager.allowRTL(false)
+  //             await I18nManager.forceRTL(false)
+  //             await Updates.reloadAsync()
+  //             setLoading(false)
+  //           },
+  //           style: "cancel"
+  //         }
+  //       ],
+  //     )
+  //   }
+  // }
 
   useEffect(() => {
     if (settings_data) {
@@ -91,14 +96,6 @@ export default function SplashScreen(props) {
     }
   }
 
-  const setupCameraPermission = async () => {
-    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (status !== 'granted') {
-      // alert('Sorry, we need camera roll permissions to make this work!');
-      alert('يرجى إعطاء الأذن للدخول للصور من الإعدادات')
-    }
-  }
-
   const setUpNotif = async () => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (status !== 'granted') {
@@ -111,12 +108,16 @@ export default function SplashScreen(props) {
     notifsub = Notifications.addListener(onReceiveNotif)
   }
 
-  const setupCamerPermission = async () => {
+  const setupCameraPermission = async () => {
     const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
+    if (status === 'granted') {
+      // alert('Sorry, we need camera roll permissions to make this work!');
+
+    } else {
+      alert('يرجى إعطاء الأذن للدخول للصور من الإعدادات')
     }
   }
+
 
   const setUpLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -147,7 +148,7 @@ export default function SplashScreen(props) {
   useEffect(() => {
     setUpLocation()
     setUpNotif()
-    setupCamerPermission()
+    // setupCameraPermission()
     fetchToken()
     // fetchToken()
     //   Alert.alert('Android RTL is detected', 'The App will need restart after you press the button',
@@ -184,7 +185,7 @@ export default function SplashScreen(props) {
     return (
       <Button
         onPress={async () => {
-          // await toggleRTL()
+          setupCameraPermission()
           if (isTokenValid) {
             navigate('Home')
           } else {

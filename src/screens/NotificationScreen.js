@@ -51,7 +51,7 @@ export default function NotificationScreen() {
         borderBottomWidth: 1,
         borderColor: Colors.gray,
       }}>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' :'row', justifyContent: 'space-between', height: '100%' }}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' :'row', justifyContent: 'space-between', height: '100%' }}>
           <View style={{ height: '100%', justifyContent: 'space-between' }}>
             <View style={{
               height: 24,
@@ -66,7 +66,7 @@ export default function NotificationScreen() {
             </View>
             <Text style={{ ...Fonts.fontRegular, color: '#979797' }}>{item.created_at || `الأن`}</Text>
           </View>
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' :'row' }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' :'row' }}>
             <View>
               <Text style={{ ...Fonts.fontRegular, }}>{item.message || `ﻗﺎربﺏاﺷﺘﺮاككﻙﻋﻠﻰ اﻻﻧﺘﻬﺎء`}</Text>
               <Text style={{ ...Fonts.fontLight, }}>{item.sublabel || ``}</Text>

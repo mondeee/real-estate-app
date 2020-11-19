@@ -77,7 +77,10 @@ export default function SubscriptionScreen(props) {
 
     console.log('@PAYLOAD', payload)
     addSubscription(payload).catch(e => {
-      onError(e)
+      const relog = onError(e)
+      if (relog) {
+        // navigate('Login')
+      }
       // onError(subError)
     })
   }
@@ -182,11 +185,11 @@ export default function SubscriptionScreen(props) {
   const _openWebBrowser = async (id, type = 'visa') => {
     const url = encodeURI(`https://app.nozolsa.com/payments/hyperpay2?checkout_id=${id}&brand=${type}&type=subscription&cburl=${callbackURL}`)
     try {
-      // if (Platform.OS === 'android') {
-      //   await Linking.openURL(url)
-      // } else {
-      await WebBrowser.openBrowserAsync(url)
-      // }
+      if (Platform.OS === 'android') {
+        await Linking.openURL(url)
+      } else {
+        await WebBrowser.openBrowserAsync(url)
+      }
     } catch (e) {
       console.log('@ERROR', e)
     }

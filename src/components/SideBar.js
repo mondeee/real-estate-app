@@ -78,10 +78,10 @@ export default function SideBar(props) {
               <Text
                 style={{
                   paddingVertical: 13,
-                  alignSelf: 'flex-end',
+                  alignSelf: global.isAndroid ? 'flex-start' : 'flex-end',
                   color: Colors.primaryBlue,
                   fontSize: 16,
-                  textAlign: 'right',
+                  textAlign: global.isAndroid ? 'left' : 'right',
                   ...Fonts.fontRegular
                 }} key={i.key}>{i.label}
               </Text>

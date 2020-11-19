@@ -127,7 +127,10 @@ export default function EditProfileScreen(props) {
     }
     console.log('data', data)
     updateUser(data).catch(e => {
-      onError(e)
+      const relog = onError(e)
+      if (relog) {
+        // navigate('Login')
+      }
     })
   }
 
@@ -179,7 +182,6 @@ export default function EditProfileScreen(props) {
           backgroundColor: '#fff',
           width: '100%',
           alignItems: 'center',
-          paddingBottom: 100,
         }}
         style={{
           backgroundColor: '#fff',
@@ -197,7 +199,7 @@ export default function EditProfileScreen(props) {
           <Input value={name} onChangeText={setName} placeholder={`خالد`} style={{ marginTop: 20, marginBottom: 12 }} rightIcon={'user'} />
           <Input value={email} onChangeText={setEmail} placeholder={`الإيميل الإلكتروني `} style={{ marginBottom: 12 }} rightIcon={'envelope'} />
           <Input value={phone} maxLength={10} onChangeText={setPhone} placeholder={`0555555555`} style={{ marginBottom: 12 }} rightIcon={'phone'} />
-          <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', width: '100%', alignItems: 'center', }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', width: '100%', alignItems: 'center', }}>
             <Dropdown value={location} data={cities} onChangeText={setLocation} placeholder={`المدينة`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/locationicon.png')} />
             <View style={{ width: 12 }} />
             <Dropdown value={gender} data={genderchoices} onChangeText={setGender} placeholder={`الجنس`} style={{ flex: 1, marginBottom: 12 }} rightIcon={require('../../assets/gendericon.png')} />
@@ -205,7 +207,7 @@ export default function EditProfileScreen(props) {
           <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           <Input onChangeText={setConfirmPass} placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           {!loading ? <Button onPress={() => _onUpdateUser()} style={{ width: '80%', alignSelf: 'center', marginTop: 12 }} text={`حفظ`} /> : <ActivityIndicator size={'large'} color={Colors.primaryBlue} />}
-          <View style={{ height: 300, }} />
+          <View style={{ height: 100, }} />
         </KeyboardAvoidingView>
       </ScrollView>
       <ActionComponent success={true} isVisible={message} onClose={() => setMessage(false)} />

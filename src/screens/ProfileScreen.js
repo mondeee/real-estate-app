@@ -24,9 +24,10 @@ export default function ProfileScreen(props) {
   const { navigate, goBack } = props.navigation
   const [isLogin, setLogin] = useState(false)
   const userData = useStoreState(state => state.auth.user)
+  const settings = useStoreState(state => state.auth.settings)
 
   useEffect(() => {
-    console.log('@userdata', userData)
+    console.log('@settings', settings)
     getToken()
   }, [])
 
@@ -58,7 +59,7 @@ export default function ProfileScreen(props) {
           <Text style={styles.itemText}>{`الملف الشخصي `}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/usericon.png')} />
         </TouchableOpacity>
-        {userData?.is_subscription && <TouchableOpacity onPress={() => navigate('Subs')} style={styles.itemContainer}>
+        {settings?.is_subscription && <TouchableOpacity onPress={() => navigate('Subs')} style={styles.itemContainer}>
           <Text style={styles.itemText}>{`الاشتراكات`}</Text>
           <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} />
         </TouchableOpacity>}
@@ -67,7 +68,7 @@ export default function ProfileScreen(props) {
           {/* <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text> */}
           {/* <Image style={{ height: 16, width: 16 }} source={require('../../assets/subicon.png')} /> */}
         </TouchableOpacity>
-        <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text>
+        {/* <Text style={styles.itemText}>{`Build Version ${CONFIG.BUILD_VERSION}`}</Text> */}
       </View>
     )
   }
@@ -102,7 +103,8 @@ const styles = StyleSheet.create({
   itemText: {
     ...Fonts.FontMed,
     height: '100%',
-    marginRight: 12,
+    marginRight: global.isAndroid ? 0 : 12,
+    marginLeft: global.isAndroid ? 12 : 0,
     textAlignVertical: 'center',
     fontSize: 17
   }

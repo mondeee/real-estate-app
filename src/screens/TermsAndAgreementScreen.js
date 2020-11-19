@@ -25,7 +25,7 @@ export default function TermsAndAgreementScreen(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header onPressBack={() => goBack()} />
+      <Header onPressBack={() => navigate('Login')} />
       <View style={{ flex: 1 }}>
         {/* <Text style={{ ...Fonts.FontMed, marginTop: 20, textAlign: 'center' }}>{`الشروط والأحكام و سياسة الخصوصية`}</Text> */}
         <Text style={{ ...Fonts.FontMed, marginVertical: 20, textAlign: 'center' }}>{`الشروط والأحكام و سياسة الخصوصية`}</Text>

@@ -36,7 +36,7 @@ export default function Header(props) {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer }}>
         <Image style={{ height: 99, width: 68, alignSelf: 'center', }} source={require(`../../assets/headericon.png`)} />
-        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={isAndroid ? styles.leftButton : styles.backButton}>
+        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
           <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
         </TouchableOpacity>}
         <Text style={{ textAlign: 'center', alignSelf: 'center', marginVertical: 12, ...Fonts.FontMed, fontSize: 20 }}>{name || ''}</Text>
@@ -50,7 +50,7 @@ export default function Header(props) {
         <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: 'white' }}>
           {/* <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryBlue }} source={require(`../../assets/usericon.png`)} /> */}
           <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`الغرف`}</Text>
-          {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={isAndroid ? styles.leftButton : styles.backButton}>
+          {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
             <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
           </TouchableOpacity>}
           <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, textAlign: 'center', marginTop: 12, fontSize: 19 }}>{section.name}</Text>
@@ -67,7 +67,7 @@ export default function Header(props) {
             <MaterialIcons size={30} color={Colors.gray} name={'search'} />
           </TouchableOpacity>
         </View> */}
-        <TouchableOpacity onPress={() => openDrawer()} style={styles.backButton}>
+        <TouchableOpacity onPress={() => openDrawer()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
           <Image style={{ height: 36, width: 49, alignSelf: 'center', }} source={require(`../../assets/options.png`)} />
         </TouchableOpacity>
       </SafeAreaView>
@@ -78,7 +78,7 @@ export default function Header(props) {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: Colors.primaryBlue }}>
         <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryYellow }} source={require(`../../assets/usericon.png`)} />
-        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={isAndroid ? styles.leftButton : styles.backButtonbackButton}>
+        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
           <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
         </TouchableOpacity>}
         <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`الملف الشخصي`}</Text>
@@ -90,7 +90,7 @@ export default function Header(props) {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer, backgroundColor: Colors.primaryBlue }}>
         <Image style={{ height: 23, width: 23, alignSelf: 'center', tintColor: Colors.primaryYellow }} source={require(`../../assets/subicon.png`)} />
-        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={isAndroid ? styles.leftButton : styles.backButton}>
+        {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
           <MaterialIcons size={40} color={'white'} name={'chevron-right'} />
         </TouchableOpacity>}
         <Text style={{ ...Fonts.FontMed, color: 'white', textAlign: 'center', marginTop: 12, fontSize: 19 }}>{`إضافة إعلان`}</Text>
@@ -102,10 +102,10 @@ export default function Header(props) {
   const renderMap = () => {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer, height: '13%' }}>
-        <TouchableOpacity onPress={() => leftButton()} style={isAndroid ? styles.backButton : styles.leftButton}>
+        <TouchableOpacity onPress={() => leftButton()} style={global.isAndroid ? styles.backButton : styles.leftButton}>
           <MaterialIcons size={30} color={Colors.primaryBlue} name={'search'} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPressBack()} style={isAndroid ? styles.leftButton : styles.backButton}>
+        <TouchableOpacity onPress={() => onPressBack()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
           <MaterialIcons size={30} color={Colors.primaryBlue} name={'close'} />
         </TouchableOpacity>
       </SafeAreaView>

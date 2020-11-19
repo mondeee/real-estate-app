@@ -97,7 +97,6 @@ export default function ImageBrowser(props) {
     // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
     const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
     if (status === 'granted') {
-      // console.log('@GRANED call fetch')
       setAllowMedia(true)
     } else {
       setAllowMedia(false)
@@ -241,9 +240,13 @@ export default function ImageBrowser(props) {
   return (
     <Modal ref={container} isVisible={isVisible}>
       <View style={{ maxHeight: '65%', width: '100%', backgroundColor: 'white', borderRadius: 15, paddingVertical: 8, }}>
-        <View style={{ flexDirection: isAndroid ? 'row-reverse' : 'row', alignItems: 'center', wdith: '100%', justifyContent: 'space-between' }}>
-          <Text style={{ ...Fonts.FontMed, marginLeft: 10 }}>{`Gallery`}</Text>
-          <TouchableOpacity style={{ alignSelf: 'flex-end', marginRight: 10, }} onPress={() => closeModal()}>
+        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', wdith: '100%', justifyContent: 'space-between' }}>
+          <Text style={{ ...Fonts.FontMed, marginLeft: global.isAndroid ? 0 : 10, marginRight: global.isAndroid ? 10 : 0 }}>{`Gallery`}</Text>
+          <TouchableOpacity style={{
+            alignSelf: 'flex-end',
+            marginRight: global.isAndroid ? 0 : 10,
+            marginLeft: global.isAndroid ? 10 : 0
+          }} onPress={() => closeModal()}>
             <Text>Close</Text>
           </TouchableOpacity>
         </View>

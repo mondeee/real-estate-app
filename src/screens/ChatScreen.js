@@ -158,7 +158,7 @@ export default function ChatScreen(props) {
   }
 
   const renderAvatar = () => {
-    const avatar = item.isOwner ? item.participants.creator : item.participants.receiver
+    const avatar = item.isOwner ? item?.participants?.creator : item?.participants?.receiver
     if (!item.avatar || item.avatar.includes('profile'))
       return (
         <View style={{

@@ -295,6 +295,13 @@ export default function CalendarComponent(props) {
   }
 
   const onFinalizeData = () => {
+
+    if (seasonal) {
+      console.log('@FINALPRICE', sPrices)
+      props.setPrice(sPrices)
+      onClose()
+      return
+    }
     // finalizeMarker()
     const data = {}
     let validate = true
@@ -314,19 +321,13 @@ export default function CalendarComponent(props) {
     }
 
     if (!validate) {
+      console.log(weekendData, weekdaysData)
       Toast.show({
         text: `يرجى ادخال الاسعار العامة`,
         buttonText: 'OK',
         type: "danger",
         duration: 3000,
       })
-      return
-    }
-
-    if (seasonal) {
-      console.log('@FINALPRICE', sPrices)
-      props.setPrice(sPrices)
-      onClose()
       return
     }
 

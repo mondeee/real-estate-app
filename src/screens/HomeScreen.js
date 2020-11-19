@@ -22,7 +22,7 @@ import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { SafeAreaView } from 'react-navigation';
-import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_OWNED_PROPERTIES, SEND_NOTIF_TOKEN } from '../services/graphql/queries';
+import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_OWNED_PROPERTIES, SEND_NOTIF_TOKEN, onError } from '../services/graphql/queries';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Toast } from 'native-base';
 import { ActivityIndicator } from 'react-native';
@@ -30,7 +30,7 @@ import Modal from 'react-native-modal';
 import CalendarComponent from '../components/CalendarComponent';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
-
+console.log('@HOMESCREEN', global.isAndroid)
 export default function HomeScreen(props) {
   const { navigate, goBack, state: { params } } = props.navigation
   const [items, setItems] = useState([])
@@ -188,6 +188,7 @@ export default function HomeScreen(props) {
     }
 
     if (userError) {
+      // onError(userError)
       deleteToken()
     }
   }, [userdata, userError])
@@ -328,9 +329,20 @@ export default function HomeScreen(props) {
       >
         <View style={{ flex: 1, padding: 12, }}>
           {/* <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAlign: 'right' }}>{`${item.name}  `}<Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14 }}>{item.type.ar}</Text></Text> */}
-          <Text style={{ ...Fonts.fontRegular, color: "#979797", fontSize: 14, writingDirection: 'ltr' }}>
+          <Text style={{
+            ...Fonts.fontRegular,
+            alignSelf: global.isAndroid ? 'flex-start' : 'flex-end',
+            color: "#979797",
+            fontSize: 14,
+            writingDirection: 'ltr'
+          }}>
             {item.type.ar + '   '}
-            <Text style={{ ...Fonts.fontBold, fontSize: 18, width: '100%', textAliwaitgn: 'right' }}>{`${item.name} `}</Text>
+            <Text style={{
+              ...Fonts.fontBold,
+              fontSize: 18,
+              width: '100%',
+              textAlign: global.isAndroid ? 'left' : 'right'
+            }}>{`${item.name} `}</Text>
           </Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.gray }} />
           <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', padding: 12, width: '100%', justifyContent: "space-between" }}>
@@ -345,7 +357,11 @@ export default function HomeScreen(props) {
                   flexDirection: global.isAndroid ? 'row-reverse' : 'row',
                   justifyContent: 'space-between'
                 }}>
-                <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأوقات المتاحة `}</Text>
+                <Text style={{
+                  ...Fonts.fontRegular,
+                  marginRight: global.isAndroid ? 0 : 4,
+                  marginLeft: global.isAndroid ? 4 : 0
+                }}>{`الأوقات المتاحة `}</Text>
                 <FontAwesome name={'calendar'} color={Colors.primaryBlue} />
               </TouchableOpacity>
               :
@@ -356,7 +372,11 @@ export default function HomeScreen(props) {
                   flexDirection: global.isAndroid ? 'row-reverse' : 'row',
                   justifyContent: 'space-between'
                 }}>
-                <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأقسام `}</Text>
+                <Text style={{
+                  ...Fonts.fontRegular,
+                  marginRight: global.isAndroid ? 0 : 4,
+                  marginLeft: global.isAndroid ? 4 : 0
+                }}>{`الأقسام `}</Text>
                 <FontAwesome name={'calendar'} color={Colors.primaryBlue} />
               </TouchableOpacity>
             }
@@ -378,7 +398,11 @@ export default function HomeScreen(props) {
                   flexDirection: global.isAndroid ? 'row-reverse' : 'row',
                   justifyContent: 'space-between'
                 }}>
-                <Text style={{ ...Fonts.fontRegular, marginRight: 4 }}>{`الأسعار `}</Text>
+                <Text style={{
+                  ...Fonts.fontRegular,
+                  marginRight: global.isAndroid ? 0 : 4,
+                  marginLeft: global.isAndroid ? 4 : 0
+                }}>{`الأسعار `}</Text>
                 <FontAwesome name={'money'} color={Colors.primaryBlue} />
               </TouchableOpacity> : null}
           </View>
@@ -420,7 +444,7 @@ export default function HomeScreen(props) {
   const renderList = () => <FlatList
     data={items}
     extraData={propertiesdata}
-    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '5%' : '5%', paddingBottom: 120 }}
+    contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingVertical: Platform.OS === 'ios' ? '5%' : '5%', paddingBottom: 300 }}
     style={{ width: '100%', alignContent: 'center', alignSelf: 'center' }}
     keyExtractor={item => `${item.id}${item.name}`}
     renderItem={({ item }) => renderItem(item)}
