@@ -177,20 +177,20 @@ export default function EditProfileScreen(props) {
   return (
     <View style={styles.container}>
       <Header profile onPressBack={() => goBack()} />
-      <ScrollView
-        contentContainerStyle={{
-          backgroundColor: '#fff',
-          width: '100%',
-          alignItems: 'center',
-        }}
-        style={{
-          backgroundColor: '#fff',
-          width: '100%',
-          paddingTop: 24,
-          paddingHorizontal: 24,
-        }}>
-        <KeyboardAvoidingView style={{ flex: 1, width: '100%' }}
-          keyboardVerticalOffset={200} behavior={"position"}>
+      <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'center', }} behavior="padding" enabled keyboardVerticalOffset={20}>
+        <ScrollView
+          contentContainerStyle={{
+            backgroundColor: '#fff',
+            width: '100%',
+            alignItems: 'center',
+          }}
+          style={{
+            backgroundColor: '#fff',
+            width: '100%',
+            paddingTop: 24,
+            paddingHorizontal: 24,
+          }}>
+
           <TouchableOpacity onPress={() => _pickImage()} style={styles.imageUploader}>
             {image ?
               <Image style={styles.imageUploader} source={{ uri: image }} /> :
@@ -207,9 +207,9 @@ export default function EditProfileScreen(props) {
           <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           <Input onChangeText={setConfirmPass} placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 12 }} password rightIcon={'lock'} />
           {!loading ? <Button onPress={() => _onUpdateUser()} style={{ width: '80%', alignSelf: 'center', marginTop: 12 }} text={`حفظ`} /> : <ActivityIndicator size={'large'} color={Colors.primaryBlue} />}
-          <View style={{ height: 100, }} />
-        </KeyboardAvoidingView>
-      </ScrollView>
+          <View style={{ height: 150, }} />
+        </ScrollView>
+      </KeyboardAvoidingView>
       <ActionComponent success={true} isVisible={message} onClose={() => setMessage(false)} />
     </View>
   );
