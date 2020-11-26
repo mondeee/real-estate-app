@@ -10,7 +10,8 @@ import {
   View,
   ScrollView,
   Platform,
-  I18nManager
+  I18nManager,
+  ActivityIndicator
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -18,8 +19,8 @@ import { NavigationActions, SafeAreaView, StackActions } from 'react-navigation'
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError } from '../services/graphql/queries'
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError, GET_DISTRICT } from '../services/graphql/queries'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Dropdown from '../components/Dropdown';
@@ -203,6 +204,7 @@ export default function AddPropertyScreen(props) {
   const [selectedFac, setSeelectedFac] = useState(null)
   const [finalFac, setFinalFac] = useState(null)
   const [facilities, setFacilities] = useState(COMMERCAL)
+  const [districtDisabled, setDistrictDisabled] = useState(false)
   //
   const [photos, setSelectedPhotos] = useState(false)
   //CALENDARS
@@ -220,12 +222,16 @@ export default function AddPropertyScreen(props) {
   const [seasonalDates, setSeasonalDates] = useState(null)
   const [availabilityDates, setAvailabilityDates] = useState([])
   const [datareload, setDataReload] = useState(false)
+  const [districts_data, setDistricts] = useState([])
+
   const categories = useStoreState(state => state.auth.categories)
   const commercial_types = useStoreState(state => state.auth.commercial_types)
   const private_types = useStoreState(state => state.auth.private_types)
   const cities = useStoreState(state => state.auth.cities)
   const storedDistricts = useStoreState(state => state.auth.districts)
   const storedLocation = useStoreState(state => state.auth.location)
+
+  const [getAllDistricts, { data: disQuery, loading: dist_loading, error: disError }] = useLazyQuery(GET_DISTRICT)
 
   const initialState = () => {
     setPayload({})
@@ -260,10 +266,20 @@ export default function AddPropertyScreen(props) {
   }, [storedLocation])
 
   useEffect(() => {
-  }, [availabilityDates])
+    if (disQuery) {
+      const items = [...disQuery.allDistrict]
+      items.forEach(i => {
+        i.key = i.id;
+        i.label = i.ar;
+      })
+      setDistricts(items)
+      setDistrictDisabled(false)
+    }
 
-  useEffect(() => {
-  }, [seasonalPrice])
+    if (disError) {
+      onError(disError)
+    }
+  }, [disQuery, disError])
 
   useEffect(() => {
     if (selectedFac) {
@@ -884,6 +900,10 @@ export default function AddPropertyScreen(props) {
         initialState()
         navigate('Home')
       }} />
+      {/* {dist_loading &&
+        <View style={{ height: ' 100%', width: '100%', backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator color={Colors.primaryBlue} />
+        </View>} */}
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
@@ -911,11 +931,13 @@ export default function AddPropertyScreen(props) {
             const item = { ...payload }
             item.district_id = e.id
             setPayload(item)
-          }} data={storedDistricts} style={{ width: 140 }} placeholder={`الحي`} />
+          }} data={districts_data} style={{ width: 140 }} placeholder={`الحي`} />
           <Dropdown onChangeText={(e) => {
             const item = { ...payload }
             item.city_id = e.id
             setPayload(item)
+            console.log('@CITY_ID', e.id)
+            getAllDistricts({ variables: { id: e.id } })
           }} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
         </View>
         <Input value={location} clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />

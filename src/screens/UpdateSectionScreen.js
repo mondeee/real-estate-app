@@ -297,11 +297,39 @@ export default function UpdateSectionScreen(props) {
     //   return validate
     // }
 
+    if (!payload?.name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال الاسم .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!finalFac || finalFac.length == 0) {
+      validate = false
+      Toast.show({
+        text: 'الرجاء إضافة بعض المرافق   .',
+        type: 'danger'
+      })
+      return validate
+    }
+
     if (!photos) {
       Toast.show({
         text: 'يرجى رفع الصور ',
         type: 'danger'
       })
+      console.log('@NO PHOTO')
       validate = false
       return validate
     }

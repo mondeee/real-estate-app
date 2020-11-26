@@ -43,7 +43,8 @@ export default function SplashScreen(props) {
   const storeSettings = useStoreActions(actions => actions.auth.setSettings)
   const storeUser = useStoreActions(actions => actions.auth.setUser)
   var hasToken = false
-  var isTokenValid = false
+  // var isTokenValid = false
+  const [isTokenValid, setTokenValid] = useState(false)
   const [loading, setLoading] = useState(false)
   const { error, data } = useQuery(GET_DISTRICT)
   const { data: settings_data } = useQuery(GET_SETTINGS)
@@ -80,11 +81,13 @@ export default function SplashScreen(props) {
   useEffect(() => {
     console.log(userError, '\n', userdata)
     if (userError) {
-      isTokenValid = false
+      // isTokenValid = false
+      setTokenValid(false)
     }
 
     if (userdata) {
-      isTokenValid = true
+      // isTokenValid = true
+      setTokenValid(true)
     }
   }, [userdata, userError])
 

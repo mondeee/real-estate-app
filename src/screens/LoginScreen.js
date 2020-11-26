@@ -94,7 +94,7 @@ export default function LoginScreen(props) {
   return (
     <SafeAreaView style={styles.container}>
       {/* <Text>Login</Text> */}
-      <Header onPressBack={() => navigate('register')} />
+      <Header />
       <View elevation={3} style={styles.loginBox}>
         <Input maxLength={10} onChangeText={setPhone} placeholder={`رقم الجوال`} style={{ marginBottom: 25, marginTop: 40 }} rightIcon='phone' />
         <Input onChangeText={setPassword} placeholder={`كلمة المرور`} style={{ marginBottom: 25 }} password rightIcon='lock' />

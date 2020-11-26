@@ -408,13 +408,15 @@ export const GET_TYPE = id => gql(
 )
 
 export const GET_DISTRICT = gql(
-  `query{
-    allDistrict{
+  `
+  query($id: Int ){
+    allDistrict(city_id: $id) {
       id
-      en
       ar
+      en
     }
-  }`
+  }
+  `
 )
 
 export const GET_CITIES = gql(`

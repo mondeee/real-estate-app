@@ -364,12 +364,75 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
+    if (!payload?.type_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار نوع النزل .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال الاسم .',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.city_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار المدينة',
+        type: 'danger'
+      })
+      return validate
+    }
+
+    if (!payload?.district_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار الحي',
+        type: 'danger'
+      })
+      return validate
+    }
+
     if (!location) {
       Toast.show({
         text: 'الموقع غير معروف',
         type: 'danger'
       })
       validate = false
+      return validate
+    }
+
+    if (!facilities || !finalFac) {
+      Toast.show({
+        text: 'الرجاء إضافة بعض المرافق   .',
+        type: 'danger'
+      })
+      validate = false
+      return validate
+    }
+
+    if (!payload?.contact_no || !payload?.contact_name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال معلومات المالك',
+        type: 'danger'
+      })
       return validate
     }
 
@@ -443,12 +506,83 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
+    if (!payload?.type_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار نوع النزل .',
+        type: 'danger'
+      })
+      console.log('2 type')
+      return validate
+    }
+
+    if (!payload?.name) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال الاسم .',
+        type: 'danger'
+      })
+      console.log('3 name')
+      return validate
+    }
+
+    if (!payload?.city_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار المدينة',
+        type: 'danger'
+      })
+      console.log('5 city')
+      return validate
+    }
+
+    if (!payload?.district_id) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إختيار الحي',
+        type: 'danger'
+      })
+      console.log('6 district')
+      return validate
+    }
+
     if (!location) {
       Toast.show({
         text: 'الموقع غير معروفn',
         type: 'danger'
       })
       validate = false
+      console.log('8 loc')
+      return validate
+    }
+
+    if (!facilities || !finalFac) {
+      Toast.show({
+        text: 'الرجاء إضافة بعض المرافق   .',
+        type: 'danger'
+      })
+      validate = false
+      console.log('10 facilities')
+      return validate
+    }
+
+    if (!payload?.description) {
+      validate = false
+      Toast.show({
+        text: 'يرجى كتابة الوصف',
+        type: 'danger'
+      })
+      console.log('4 desc')
+      return validate
+    }
+
+    if (!payload?.contact_no) {
+      validate = false
+      Toast.show({
+        text: 'يرجى إدخال معلومات المالك',
+        type: 'danger'
+      })
+      console.log('7 contact')
       return validate
     }
 
@@ -458,6 +592,7 @@ export default function UpdatePropertyScreen(props) {
         type: 'danger'
       })
       validate = false
+      console.log('9 photos')
       return validate
     }
 
@@ -467,6 +602,7 @@ export default function UpdatePropertyScreen(props) {
         type: 'danger'
       })
       validate = false
+      console.log('9 photos length')
       return validate
     }
 
