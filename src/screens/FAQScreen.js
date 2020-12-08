@@ -18,7 +18,7 @@ import Styles from '../styles/Styles';
 import Header from '../components/Header';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_QUESTIONS } from '../services/graphql/queries';
+import { COMMON_QUESTIONS, GET_QUESTIONS } from '../services/graphql/queries';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
@@ -39,13 +39,13 @@ const FAQ_ITEMS = [
 
 export default function FAQScreen(props) {
   const { navigate, goBack } = props.navigation
-  const { loading, error, data } = useQuery(GET_QUESTIONS)
+  const { loading, error, data } = useQuery(COMMON_QUESTIONS)
   const [items, setItems] = useState(data || [])
 
   useEffect(() => {
-    if (data && data.allQuestions) {
-      data.allQuestions.forEach(i => i.isVisible = false)
-      setItems(data.allQuestions)
+    if (data && data.ownerQuestions) {
+      data.ownerQuestions.data.forEach(i => i.isVisible = false)
+      setItems(data.ownerQuestions.data)
       console.log(items)
     }
   }, [data])

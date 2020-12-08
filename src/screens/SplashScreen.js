@@ -72,6 +72,7 @@ export default function SplashScreen(props) {
   // }
 
   useEffect(() => {
+    console.log('@GETSETTINGS', settings_data)
     if (settings_data) {
       storeSettings(settings_data.allSettings)
     }

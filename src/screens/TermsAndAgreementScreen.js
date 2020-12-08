@@ -23,46 +23,29 @@ export default function TermsAndAgreementScreen(props) {
     console.log('@SETTINGS', settings)
   }, [])
 
+  if (params?.aboutus) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Header onPressBack={() => goBack()} />
+        <View style={{ flex: 1 }}>
+          <Text style={{ ...Fonts.FontMed, marginVertical: 20, textAlign: 'center' }}>{`ﻣﻦ نحن`}</Text>
+          <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 22, }}>
+            <Text style={{ ...Fonts.fontLight }}>{settings.about_us}</Text>
+            <View style={{ height: 300 }} />
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header onPressBack={() => navigate('Login')} />
+      <Header onPressBack={() => params?.login ? navigate('Login') : goBack()} />
       <View style={{ flex: 1 }}>
         {/* <Text style={{ ...Fonts.FontMed, marginTop: 20, textAlign: 'center' }}>{`الشروط والأحكام و سياسة الخصوصية`}</Text> */}
         <Text style={{ ...Fonts.FontMed, marginVertical: 20, textAlign: 'center' }}>{`الشروط والأحكام و سياسة الخصوصية`}</Text>
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 22, }}>
-          <Text style={{ ...Fonts.fontLight }}>{settings.terms_and_conditions}</Text>
-          {/* <Text style={{ ...Fonts.fontLight }}>{`ﻥﺔﻴﻟوﺆﺴﻤﻟﺎﺑ ﻢﻠﻌﻟﺎﺑﺭراﺮﻗإ
-ﺰﻳﺰﻌﻟا ﺎﻨﻠﻴﻤﻋ
-
- (“راﺮﻗإلا” ﺪﻌﺑ ﺎﻤﻴﻓ ﻪﻴﻟإ راشملاﺇ) اﺬﻫ ﺔﻴﻟؤوسملا ءﻼﺧإ ﺭراﺮﻗإ   ﺔﺻﺎﺨﻟا ﺔﺤﻔﺼﻟا
-ماﺪﺨﺘﺳا و ﻖﻴﺒﻄﺘﻟا اﺬﻫ ىلإﯽلﻮﺧﺪﻟا ﻚﻟﻮﺨﻳ    ةكلمملا ﻲﻓ ﺎﻬﺑ لﻮﻤﻌﻤﻟا ﺔﻴﻧﻮﻧﺎﻘﻟا تﺎﻤﻴﻈﻨﺘﻟا ﻖﻓو ﻚﺑ
-  ﻡمﺎﻣأ ﺎﻘﺣﻻ ﺔﻴﻟوﺆﺴﻤﻟا ﻞﻣﺎﻛ ﻚﻠﻤﺤﻳ و ﺔﻳدﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا
- ﺺﺨﺗﺕتﺎﻴﻟﺎﻜﺷإﺇيأ عﻮﻗو لﺎﺣ ﺔﺼﺘﺨﻤﻟاﺕتﺎﻬﺠﻟا ﻊﻴﻤﺟ
-.ﻖﻴﺒﻄﺘﻟا اﺬﻫ ﻲﻓ ﻪﺿﺮﻌﺗ ﺎﻣ`}</Text>
-          <Text style={{ ...Fonts.fontLight }}>{`ﻥﺔﻴﻟوﺆﺴﻤﻟﺎﺑ ﻢﻠﻌﻟﺎﺑﺭراﺮﻗإ
-ﺰﻳﺰﻌﻟا ﺎﻨﻠﻴﻤﻋ
-
- (“راﺮﻗإلا” ﺪﻌﺑ ﺎﻤﻴﻓ ﻪﻴﻟإ راشملاﺇ) اﺬﻫ ﺔﻴﻟؤوسملا ءﻼﺧإ ﺭراﺮﻗإ   ﺔﺻﺎﺨﻟا ﺔﺤﻔﺼﻟا
-ماﺪﺨﺘﺳا و ﻖﻴﺒﻄﺘﻟا اﺬﻫ ىلإﯽلﻮﺧﺪﻟا ﻚﻟﻮﺨﻳ    ةكلمملا ﻲﻓ ﺎﻬﺑ لﻮﻤﻌﻤﻟا ﺔﻴﻧﻮﻧﺎﻘﻟا تﺎﻤﻴﻈﻨﺘﻟا ﻖﻓو ﻚﺑ
-  ﻡمﺎﻣأ ﺎﻘﺣﻻ ﺔﻴﻟوﺆﺴﻤﻟا ﻞﻣﺎﻛ ﻚﻠﻤﺤﻳ و ﺔﻳدﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا
- ﺺﺨﺗﺕتﺎﻴﻟﺎﻜﺷإﺇيأ عﻮﻗو لﺎﺣ ﺔﺼﺘﺨﻤﻟاﺕتﺎﻬﺠﻟا ﻊﻴﻤﺟ
-.ﻖﻴﺒﻄﺘﻟا اﺬﻫ ﻲﻓ ﻪﺿﺮﻌﺗ ﺎﻣ`}</Text>
-          <Text style={{ ...Fonts.fontLight }}>{`ﻥﺔﻴﻟوﺆﺴﻤﻟﺎﺑ ﻢﻠﻌﻟﺎﺑﺭراﺮﻗإ
-ﺰﻳﺰﻌﻟا ﺎﻨﻠﻴﻤﻋ
-
- (“راﺮﻗإلا” ﺪﻌﺑ ﺎﻤﻴﻓ ﻪﻴﻟإ راشملاﺇ) اﺬﻫ ﺔﻴﻟؤوسملا ءﻼﺧإ ﺭراﺮﻗإ   ﺔﺻﺎﺨﻟا ﺔﺤﻔﺼﻟا
-ماﺪﺨﺘﺳا و ﻖﻴﺒﻄﺘﻟا اﺬﻫ ىلإﯽلﻮﺧﺪﻟا ﻚﻟﻮﺨﻳ    ةكلمملا ﻲﻓ ﺎﻬﺑ لﻮﻤﻌﻤﻟا ﺔﻴﻧﻮﻧﺎﻘﻟا تﺎﻤﻴﻈﻨﺘﻟا ﻖﻓو ﻚﺑ
-  ﻡمﺎﻣأ ﺎﻘﺣﻻ ﺔﻴﻟوﺆﺴﻤﻟا ﻞﻣﺎﻛ ﻚﻠﻤﺤﻳ و ﺔﻳدﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا
- ﺺﺨﺗﺕتﺎﻴﻟﺎﻜﺷإﺇيأ عﻮﻗو لﺎﺣ ﺔﺼﺘﺨﻤﻟاﺕتﺎﻬﺠﻟا ﻊﻴﻤﺟ
-.ﻖﻴﺒﻄﺘﻟا اﺬﻫ ﻲﻓ ﻪﺿﺮﻌﺗ ﺎﻣ`}</Text>
-          <Text style={{ ...Fonts.fontLight }}>{`ﻥﺔﻴﻟوﺆﺴﻤﻟﺎﺑ ﻢﻠﻌﻟﺎﺑﺭراﺮﻗإ
-ﺰﻳﺰﻌﻟا ﺎﻨﻠﻴﻤﻋ
-
- (“راﺮﻗإلا” ﺪﻌﺑ ﺎﻤﻴﻓ ﻪﻴﻟإ راشملاﺇ) اﺬﻫ ﺔﻴﻟؤوسملا ءﻼﺧإ ﺭراﺮﻗإ   ﺔﺻﺎﺨﻟا ﺔﺤﻔﺼﻟا
-ماﺪﺨﺘﺳا و ﻖﻴﺒﻄﺘﻟا اﺬﻫ ىلإﯽلﻮﺧﺪﻟا ﻚﻟﻮﺨﻳ    ةكلمملا ﻲﻓ ﺎﻬﺑ لﻮﻤﻌﻤﻟا ﺔﻴﻧﻮﻧﺎﻘﻟا تﺎﻤﻴﻈﻨﺘﻟا ﻖﻓو ﻚﺑ
-  ﻡمﺎﻣأ ﺎﻘﺣﻻ ﺔﻴﻟوﺆﺴﻤﻟا ﻞﻣﺎﻛ ﻚﻠﻤﺤﻳ و ﺔﻳدﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا
- ﺺﺨﺗﺕتﺎﻴﻟﺎﻜﺷإﺇيأ عﻮﻗو لﺎﺣ ﺔﺼﺘﺨﻤﻟاﺕتﺎﻬﺠﻟا ﻊﻴﻤﺟ
-.ﻖﻴﺒﻄﺘﻟا اﺬﻫ ﻲﻓ ﻪﺿﺮﻌﺗ ﺎﻣ`}</Text> */}
+          <Text style={{ ...Fonts.fontLight }}>{settings.owner_terms_and_conditions}</Text>
           <View style={{ height: 300 }} />
         </ScrollView>
         {params?.show && <View style={{ height: '10%', flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: '15%' }}>

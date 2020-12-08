@@ -97,14 +97,22 @@ export default function EditProfileScreen(props) {
   };
 
   const _onUpdateUser = async () => {
-    if (!password || !confirmPass) {
-      Alert.alert('Error', `كلمة المرور مطلوبة `)
-      return
-    }
+    // if (!password || !confirmPass) {
+    //   Alert.alert('Error', `كلمة المرور مطلوبة `)
+    //   return
+    // }
 
-    if (password != confirmPass) {
-      Alert.alert('Error', `كلمة المرور غير متطابقة`)
-      return
+    // if (password != confirmPass) {
+    //   Alert.alert('Error', `كلمة المرور غير متطابقة`)
+    //   return
+    // }
+    if (password) {
+      // Alert.alert("Error", `كلمة المرور مطلوبة`);
+      // return;
+      if (password != confirmPass) {
+        Alert.alert("Error", `كلمة المرور غير متطابقة`);
+        return;
+      }
     }
 
     const imageFile = new ReactNativeFile({

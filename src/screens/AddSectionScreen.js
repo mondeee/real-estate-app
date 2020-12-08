@@ -343,9 +343,9 @@ export default function AddSectionScreen(props) {
     //   return validate
     // }
 
-    if (!generalPrice) {
+    if (!generalPrice || !validateGeneralPrice()) {
       Toast.show({
-        text: 'Please add some general prices.',
+        text: 'يرجى ادخال الأسعار العامة ',
         type: 'danger'
       })
       validate = false
@@ -353,6 +353,17 @@ export default function AddSectionScreen(props) {
     }
 
     return true
+  }
+
+  const validateGeneralPrice = () => {
+    var validate = true
+    Object.keys(generalPrice).forEach(e => {
+      if (generalPrice[e] < 1) {
+        validate = false
+      }
+    })
+
+    return validate
   }
 
   const onCreateSection = async () => {

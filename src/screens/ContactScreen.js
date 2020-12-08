@@ -25,9 +25,11 @@ export default function ContactScreen(props) {
     <View style={{ flex: 1 }}>
       <Header onPressBack={() => goBack()} />
       <View style={styles.container}>
-        <FontAwesome color={Colors.primaryBlue} name={'phone'} size={57} />
-        <Text style={{ ...Fonts.FontMed, fontSize: 30, margin: 12 }}>{`للتواصل`}</Text>
-        <Text style={{ ...Fonts.fontRegular, fontSize: 30, marginBottom: 12, }}>{`011 4000000`}</Text>
+        <TouchableOpacity onPress={() => Linking.openURL('tel://+966555760003')} style={{ alignSelf: 'center', alignItems: 'center' }}>
+          <FontAwesome color={Colors.primaryBlue} name={'phone'} size={57} />
+          <Text style={{ ...Fonts.FontMed, fontSize: 30, margin: 12 }}>{getString("TO_COMMUNICATE")}</Text>
+          <Text style={{ ...Fonts.fontRegular, fontSize: 30, marginBottom: 12, }}>{`+966555760003`}</Text>
+        </TouchableOpacity>
         <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', padding: 24, justifyContent: 'space-between', width: '80%' }}>
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={styles.circleStyle}>
@@ -35,11 +37,11 @@ export default function ContactScreen(props) {
             </View>
             <Text style={{ ...Fonts.fontRegular, marginTop: 4 }}>{`@nozol`}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com/nozolapp')} style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={styles.circleStyle}>
               <FontAwesome color={Colors.primaryBlue} size={25} name='instagram' />
             </View>
-            <Text style={{ ...Fonts.fontRegular, marginTop: 4 }}>{`@nozol`}</Text>
+            <Text style={{ ...Fonts.fontRegular, marginTop: 4 }}>{`@nozolapp`}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={styles.circleStyle}>

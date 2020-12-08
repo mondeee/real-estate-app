@@ -210,13 +210,13 @@ export default function AddPropertyScreen(props) {
   //CALENDARS
   const [general, setGeneral] = useState(true)
   const [generalPrice, setGeneralPrice] = useState({
-    monday: 1,
-    tuesday: 1,
-    wednesday: 1,
-    thursday: 1,
-    friday: 1,
-    saturday: 1,
-    sunday: 1
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    saturday: 0,
+    sunday: 0
   })
   const [seasonalPrice, setSeasonalPrice] = useState([])
   const [seasonalDates, setSeasonalDates] = useState(null)
@@ -408,7 +408,7 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!location) {
+    if (!location || !location?.latitude || !location?.longitude) {
       Toast.show({
         text: 'الموقع غير معروف',
         type: 'danger'
@@ -435,7 +435,7 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (!facilities || !finalFac) {
+    if (!facilities || !finalFac || facilities.length == 0 || finalFac.length == 0) {
       Toast.show({
         text: 'الرجاء إضافة بعض المرافق   .',
         type: 'danger'
@@ -453,7 +453,7 @@ export default function AddPropertyScreen(props) {
     //   return validate
     // }
 
-    if (!generalPrice) {
+    if (!generalPrice || !validateGeneralPrice()) { //ADD LOOP
       Toast.show({
         text: 'يرجى ادخال الأسعار العامة ',
         type: 'danger'
@@ -463,6 +463,17 @@ export default function AddPropertyScreen(props) {
     }
 
     return true
+  }
+
+  const validateGeneralPrice = () => {
+    var validate = true
+    Object.keys(generalPrice).forEach(e => {
+      if (generalPrice[e] < 1) {
+        validate = false
+      }
+    })
+
+    return validate
   }
 
   const validateCommercial = () => {
@@ -515,16 +526,6 @@ export default function AddPropertyScreen(props) {
         type: 'danger'
       })
       console.log('6 district')
-      return validate
-    }
-
-    if (!location) {
-      Toast.show({
-        text: 'الموقع غير معروفn',
-        type: 'danger'
-      })
-      validate = false
-      console.log('8 loc')
       return validate
     }
 

@@ -409,7 +409,7 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!location) {
+    if (!location || !location?.latitude || !location?.longitude) {
       Toast.show({
         text: 'الموقع غير معروف',
         type: 'danger'
@@ -546,17 +546,17 @@ export default function UpdatePropertyScreen(props) {
       return validate
     }
 
-    if (!location) {
-      Toast.show({
-        text: 'الموقع غير معروفn',
-        type: 'danger'
-      })
-      validate = false
-      console.log('8 loc')
-      return validate
-    }
+    // if (!location) {
+    //   Toast.show({
+    //     text: 'الموقع غير معروفn',
+    //     type: 'danger'
+    //   })
+    //   validate = false
+    //   console.log('8 loc')
+    //   return validate
+    // }
 
-    if (!facilities || !finalFac) {
+    if (!facilities || !finalFac || facilities.length == 0 || finalFac.length == 0) {
       Toast.show({
         text: 'الرجاء إضافة بعض المرافق   .',
         type: 'danger'

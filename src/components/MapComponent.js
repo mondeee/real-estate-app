@@ -93,14 +93,19 @@ export default function MapComponent(props) {
           showsUserLocation={true}
           showsMyLocationButton={true}
           onRegionChange={e => {
-            if (timer) clearTimeout(timer)
-            timer = setTimeout(() => {
-              setRegion(e)
-            }, 1500)
+            setRegion(null)
+            // if (timer) clearTimeout(timer)
+            // timer = setTimeout(() => {
+            setRegion(e)
+            // }, 1500)
           }} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-          {fetching ? <ActivityIndicator /> : <Button onPress={() => {
+          {fetching || !region ? <ActivityIndicator /> : <Button onPress={() => {
             const item = { ...region }
+            console.log(item)
+            if (!item || !item.latitude || !item.longitude) {
+              return
+            }
             item.location = location_name
             onPress(item)
             onClose()

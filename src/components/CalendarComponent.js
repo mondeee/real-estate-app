@@ -550,6 +550,20 @@ export default function CalendarComponent(props) {
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`حفظ` || `Close`}</Text>
               </TouchableOpacity >
               <TouchableOpacity onPress={() => {
+                if (!fromDate || !toDate) {
+                  Toast.show({
+                    text: 'يرجى إدخال التاريخ الصحيح.',
+                    type: 'danger'
+                  })
+                  return
+                }
+                if (isNaN(current_price)) {
+                  Toast.show({
+                    text: 'الاسعار يجب ان تكون ارقام ولا تحتوي على حروف.',
+                    type: 'danger'
+                  })
+                  return
+                }
                 if (current_price == 0) {
                   Toast.show({
                     text: 'الرجاء إضافة الأسعار العامة.',

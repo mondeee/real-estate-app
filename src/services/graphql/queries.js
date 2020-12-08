@@ -1,5 +1,7 @@
 import gql from 'graphql-tag';
 import { Alert, AsyncStorage } from 'react-native'
+import * as Updates from "expo-updates";
+import { NavigationActions, StackActions } from "react-navigation";
 
 export const onError = async (error, pass) => {
   let error_msg = ''
@@ -16,19 +18,27 @@ export const onError = async (error, pass) => {
       }
     }
   })
-  if (error_msg.includes('Internal server')) {
-    relog = true
-    await AsyncStorage.removeItem('token')
-  }
-  Alert.alert('Error', error_msg, [
+
+  console.log(JSON.stringify(error_msg))
+  Alert.alert('', error_msg, [
     {
-      text: 'OK', onPress: () => {
+      text: 'OK', onPress: async () => {
+        // await Updates.reloadAsync()
         // pass()
       }
     }
   ])
-  return relog
 }
+
+export const ADD_FFEDBACK = gql(`
+mutation($input: AddFeedbackInput!) {
+  addFeedback(input:$input) {
+    status
+    message
+  }
+}
+`)
+
 
 export const CREATE_ROOM = gql(`
 query($id:ID!){
@@ -72,12 +82,23 @@ query($id:ID!){
 export const GET_SETTINGS = gql(`
 query{
   allSettings {
-    terms_and_conditions
+    owner_terms_and_conditions
     about_us
     contact_us
     instructions
     cancellation_policy
     is_subscription
+  }
+}
+`)
+
+export const COMMON_QUESTIONS = gql(`
+query{
+  ownerQuestions(first:10){
+    data{
+      question
+      answer
+    }
   }
 }
 `)
