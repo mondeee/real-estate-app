@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.3",
+    "version": "0.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/nozol_logo_white.png",
     "splash": {
@@ -26,7 +26,7 @@
     "ios": {
       "userInterfaceStyle": "light",
       "supportsTablet": false,
-      "buildNumber": "34",
+      "buildNumber": "4",
       "bundleIdentifier": "owner.nozol.app",
       "infoPlist": {
         "NSCameraUsageDescription": "App uses the camera to take pictures for profile setup.",

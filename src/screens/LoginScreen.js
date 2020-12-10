@@ -120,6 +120,9 @@ export default function LoginScreen(props) {
         {/* {loginButton()} */}
         {!loading ? <Button onPress={() => {
           if (!phone || !password) return
+          if (phone && phone?.length <= 6) {
+            Alert.alert('', 'كلمة المرور يجب ان تقول على الاقل ٦ احرف/ارقام')
+          }
           loginViaPhone({
             variables: {
               "input": {
