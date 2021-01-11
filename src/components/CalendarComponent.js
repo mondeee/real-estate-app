@@ -545,7 +545,45 @@ export default function CalendarComponent(props) {
                 )
               })}
             </View>
-            <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', width: '70%', alignSelf: 'center', marginBottom: 12 }}>
+            {sPrices?.length ==  0 && <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'center', width: '70%', alignSelf: 'center', marginBottom: 12 }}>
+              <TouchableOpacity onPress={() => {
+                if (!fromDate || !toDate) {
+                  Toast.show({
+                    text: 'يرجى إدخال التاريخ الصحيح.',
+                    type: 'danger'
+                  })
+                  return
+                }
+                if (isNaN(current_price)) {
+                  Toast.show({
+                    text: 'الاسعار يجب ان تكون ارقام ولا تحتوي على حروف.',
+                    type: 'danger'
+                  })
+                  return
+                }
+                if (current_price == 0) {
+                  Toast.show({
+                    text: 'الرجاء إضافة الأسعار العامة.',
+                    type: 'danger'
+                  })
+                  return
+                }
+                var items = [...sPrices]
+                sitem.from = fromDate
+                sitem.to = toDate
+                sitem.price = current_price
+                items.push(sitem)
+                console.log('@SESONAL', items)
+                setsPrices(items)
+                setFromDate(null)
+                setCurrentPrice(0)
+                setFinal(false)
+                setToDate(null)
+              }} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
+                <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`إضافة`}</Text>
+              </TouchableOpacity >
+            </View>}
+            {sPrices?.length > 0 && <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-between', width: '70%', alignSelf: 'center', marginBottom: 12 }}>
               <TouchableOpacity onPress={() => onFinalizeData()} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`حفظ` || `Close`}</Text>
               </TouchableOpacity >
@@ -585,7 +623,7 @@ export default function CalendarComponent(props) {
               }} style={{ ...styles.button, ...style, alignSelf: 'center', marginTop: 24 }}>
                 <Text style={{ ...styles.text, ...textStyle, fontSize: 18 }}>{`إضافة`}</Text>
               </TouchableOpacity >
-            </View>
+            </View>}
             <TouchableOpacity onPress={() => onClose()} style={{ position: 'absolute', top: 10, right: 10 }}>
               <MaterialIcons size={25} color={Colors.primaryBlue} name={'close'} />
             </TouchableOpacity >

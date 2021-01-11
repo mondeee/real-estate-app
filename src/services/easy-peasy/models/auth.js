@@ -16,6 +16,7 @@ export default {
   location: null,
   verification_code: null,
   settings: {},
+  phone: null,
   setVerificationCode: action((state, payload) => {
     state.verification_code = payload;
   }),
@@ -57,6 +58,9 @@ export default {
   }), 
   setLocation: action((state, payload) => {
     state.location = payload;
+  }), 
+  setPhone: action((state, payload) => {
+    state.phone = payload;
   }), 
   clearAuth: action((state, payload) => {
     state.user = {};

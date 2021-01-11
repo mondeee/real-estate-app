@@ -59,7 +59,7 @@ export default function BookingListScreen(props) {
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(true)
   const [page, setPage] = useState(1)
-  const [bookingList, setBookingList] = useState(SAMPLE)
+  const [bookingList, setBookingList] = useState([])
   const { loading: fetchLoading, error, data, refetch } = useQuery(GET_OWNER_BOOKINGS, {
     variables: {
       page: page
@@ -222,7 +222,7 @@ export default function BookingListScreen(props) {
     <View style={styles.container}>
       <Header name={`الحجوزات`} onPressBack={() => goBack()} />
       <View style={{ flex: 1, width: '100%', padding: 24, }}>
-        {/* <Text>Booking List Screen</Text> */}
+        {/* {bookingList?.length == 0 && <Text style={{alignSelf: 'center'}}>{'No booking history.'}</Text>} */}
         {renderList()}
       </View>
     </View>

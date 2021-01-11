@@ -41,6 +41,7 @@ export default function Input(props) {
   if (clickable) {
     // console.log('@value', value)
     if (upload) {
+      console.log('@VALUE \n', value?.length)
       return (
         <TouchableOpacity onPress={() => clickable()} style={{ ...style, ...styles.buttonContainer, paddingHorizontal: 15, }}>
           <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center' }}>

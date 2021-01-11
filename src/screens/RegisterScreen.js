@@ -7,11 +7,14 @@ import {
   StyleSheet,
   Text,
   View,
+  Platform,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
 import Header from '../components/Header';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, StackActions, NavigationActions } from 'react-navigation';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
@@ -40,6 +43,8 @@ export default function RegisterScreen(props) {
   const userData = useStoreState(state => state.auth.user)
   const local_verification_code = useStoreActions(state => state.auth.verification_code)
   const storeVerCode = useStoreActions(actions => actions.auth.setVerificationCode)
+  const storeLocalPhone = useStoreActions(actions => actions.auth.setPhone)
+  const localPhone = useStoreState(state => state.auth.phone)
 
   const [alerVisible, setAlertVisible] = useState(false)
   const [verify, setVerify] = useState(false)
@@ -48,6 +53,7 @@ export default function RegisterScreen(props) {
   const [password, setPass] = useState('')
   const [confirmPassword, setConfirmPass] = useState('')
   const [countdown, setCountDown] = useState(10)
+  const [hideHeader, setHideHeader] = useState(false)
 
   const recaptchaVerifier = useRef(null)
   const [code, setCode] = useState('')
@@ -72,7 +78,7 @@ export default function RegisterScreen(props) {
   const [sendVerificationCode, { data: verCodeData, error: verCodeError }] = useMutation(SEND_VERIFICATION_CODE, {
     variables: {
       input: {
-        phone: phone,
+        phone: phone || localPhone,
       }
     }
   })
@@ -114,7 +120,32 @@ export default function RegisterScreen(props) {
       // onSendVerification()
     }
     console.log('stored', local_verification_code)
+
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+
   }, [])
+
+  const _keyboardDidShow = () => {
+    // alert('Keyboard Shown');
+    if (Platform.OS === 'android') {
+      setHideHeader(true)
+    }
+  };
+
+  const _keyboardDidHide = () => {
+    // alert('Keyboard Hidden');
+    if (Platform.OS === 'android') {
+      setHideHeader(false)
+    }
+  };
+
 
   useEffect(() => {
     if (verError) {
@@ -136,8 +167,10 @@ export default function RegisterScreen(props) {
   }
 
   if (data) {
-    console.log(data)
+    // console.log(data)
     AsyncStorage.setItem('token', data.registerUser.token)
+    storeLocalPhone(phone)
+    // AsyncStorage.setItem('phone', phone)
     // navigate('Home')
     // setAlertVisible(true)
   }
@@ -199,6 +232,7 @@ export default function RegisterScreen(props) {
       return
     }
 
+
     registerUser({
       variables: {
         "input": {
@@ -241,7 +275,7 @@ export default function RegisterScreen(props) {
         <Input onChangeText={setPhone} placeholder={`رقم الجوال`} style={{ marginBottom: 30 }} rightIcon={'phone'} maxLength={10} keyboardType={'numeric'} />
         <Input onChangeText={setPass} password placeholder={`كلمة المرور`} style={{ marginBottom: 30 }} rightIcon={'lock'} />
         <Input onChangeText={setConfirmPass} password placeholder={`تأكيد كلمة المرور`} style={{ marginBottom: 25 }} rightIcon={'lock'} />
-        <Button disabled={(!name || !password || !phone || !confirmPassword)} onPress={() => {
+        <Button disabled={(!name || !password || !phone || !confirmPassword || loading)} onPress={() => {
           onPressRegister()
         }} text={`تسجيل`} style={{ width: 177 }} />
         {/* {onPressRegister()} */}
@@ -275,9 +309,9 @@ export default function RegisterScreen(props) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView keyboardVerticalOffset={100} style={{ flex: 1 }} behavior={"padding"}>
-        <Header onPressBack={onPressBack} />
-        <ActionComponent success={true} isVisible={alerVisible} onClose={() => navigate('Home')} />
+      <KeyboardAvoidingView keyboardVerticalOffset={60} style={{ flex: 1 }} behavior={"padding"}>
+        {!hideHeader && <Header onPressBack={onPressBack} />}
+        <ActionComponent success={true} isVisible={alerVisible} onClose={() => navigate('Home', { restart: true })} />
         {!verify && renderRegister()}
         {verify && renderVerify()}
       </KeyboardAvoidingView>

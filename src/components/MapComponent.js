@@ -123,8 +123,10 @@ export default function MapComponent(props) {
           alignItems: 'center',
           justifyContent: 'center'
         }} onPress={() => {
-          console.log(initialValue)
-          setRegion(initialValue)
+          console.log('@INITIAL', initialValue)
+          if (initialValue && initialValue?.latitude && initialValue?.longitude) {
+            setRegion(initialValue)
+          }
         }
         }>
           <MaterialIcons name={'my-location'} size={25} color={Colors.primaryBlue} />

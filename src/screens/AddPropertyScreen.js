@@ -884,12 +884,12 @@ export default function AddPropertyScreen(props) {
         {types[1].selected && <TouchableOpacity onPress={() => setShowAvailability(true)} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
           <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  الأوقات المتاحة `}</Text>
         </TouchableOpacity>}
-        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12, textAlign: global.isAndroid ? 'left' : 'right' }}>{`عدد الأقسام`}</Text>
-        <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} />
+        <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12, textAlign: global.isAndroid ? 'left' : 'right' }}>{`عدد وحدات النزل`}</Text>
+        <Input placeholder={'عدد وحدات النزل المتوفرة بهذه المواصفات'} />
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12, textAlign: global.isAndroid ? 'left' : 'right' }}>{`الصور`}</Text>
         {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
         <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} />
-        <Input style={{ marginVertical: 12 }} value={photos} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
+        <Input style={{ marginVertical: 12 }} photo value={photos} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
         {renderFooterButton()}
       </View >
     )

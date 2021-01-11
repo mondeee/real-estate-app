@@ -106,6 +106,11 @@ export default function EditProfileScreen(props) {
     //   Alert.alert('Error', `كلمة المرور غير متطابقة`)
     //   return
     // }
+    // if (!location || !gender) {
+    //   Alert.alert('', `الرجاء إضافة بعض المرافق   .`);
+    // }
+
+
     if (password) {
       // Alert.alert("Error", `كلمة المرور مطلوبة`);
       // return;
@@ -128,8 +133,8 @@ export default function EditProfileScreen(props) {
           "name": name,
           // "email": email,
           "phone": phone,
-          "city_id": location.id,
-          "gender_id": gender.id,
+          "city_id": location?.id || 1,
+          "gender_id": gender?.id || 1,
         }
       }
     }
@@ -218,7 +223,7 @@ export default function EditProfileScreen(props) {
           <View style={{ height: 150, }} />
         </ScrollView>
       </KeyboardAvoidingView>
-      <ActionComponent success={true} isVisible={message} onClose={() => setMessage(false)} />
+      <ActionComponent success={true} msg={'تم تحديث حسابك بنجاح'} isVisible={message} onClose={() => setMessage(false)} />
     </View>
   );
 }

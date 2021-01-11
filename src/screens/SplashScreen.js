@@ -26,6 +26,7 @@ import * as Notifications from 'expo-notifications';
 import * as Updates from "expo-updates";
 import * as ImagePicker from 'expo-image-picker';
 import { CONFIG } from '../services/config';
+import { useRef } from 'react';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 global.isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
@@ -46,9 +47,12 @@ export default function SplashScreen(props) {
   // var isTokenValid = false
   const [isTokenValid, setTokenValid] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [verified, setVerified] = useState(false)
   const { error, data } = useQuery(GET_DISTRICT)
   const { data: settings_data } = useQuery(GET_SETTINGS)
   const [fetchUser, { data: userdata, error: userError, loading: userLoading }] = useLazyQuery(GET_USER_DETAILS)
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   // const toggleRTL = async () => {
   //   setLoading(true)
@@ -88,6 +92,7 @@ export default function SplashScreen(props) {
 
     if (userdata) {
       // isTokenValid = true
+      setVerified(userdata?.me?.is_verified)
       setTokenValid(true)
     }
   }, [userdata, userError])
@@ -101,15 +106,23 @@ export default function SplashScreen(props) {
   }
 
   const setUpNotif = async () => {
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    if (status !== 'granted') {
-      console.log('NOTIF ERROR PERMISSION', status)
-      return;
+    try {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      if (status !== 'granted') {
+        console.log('NOTIF ERROR PERMISSION', status)
+        return;
+      }
+      const token = await Notifications.getExpoPushTokenAsync();
+      console.log('@token', token)
+      storeNotifToken(token)
+      notifsub = Notifications.addListener(onReceiveNotif)
+    } catch (e) {
+      console.log('@NOTIF ERROR ===> \n', e.message)
     }
-    const token = await Notifications.getExpoPushTokenAsync();
-    console.log('@token', token)
-    storeNotifToken(token)
-    notifsub = Notifications.addListener(onReceiveNotif)
+  }
+
+  const onReceiveNotif = notification => {
+    console.log('ONRECEIVENOTIF', notification)
   }
 
   const setupCameraPermission = async () => {
@@ -151,7 +164,7 @@ export default function SplashScreen(props) {
 
   useEffect(() => {
     setUpLocation()
-    setUpNotif()
+    // setUpNotif()
     // setupCameraPermission()
     fetchToken()
     // fetchToken()
@@ -191,7 +204,11 @@ export default function SplashScreen(props) {
         onPress={async () => {
           setupCameraPermission()
           if (isTokenValid) {
-            navigate('Home')
+            if (verified) {
+              navigate('Home')
+              return
+            }
+            navigate('Register', { varify_user: true })
           } else {
             navigate('Login')
           }

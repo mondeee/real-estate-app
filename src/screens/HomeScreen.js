@@ -21,7 +21,7 @@ import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from
 import { IMAGE_URL } from '../services/api/url'
 import gql from 'graphql-tag';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, StackActions, NavigationActions } from 'react-navigation';
 import { GET_CITIES, GET_GENDER, GET_USER_DETAILS, GET_TYPE, GET_CATEGORIES, GET_ALL_PROPERTIES, GET_OWNED_PROPERTIES, SEND_NOTIF_TOKEN, onError } from '../services/graphql/queries';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Toast } from 'native-base';
@@ -177,12 +177,20 @@ export default function HomeScreen(props) {
 
   useEffect(() => {
     console.log('@userdata', userdata, userError)
+    if (params?.restart) {
+      return
+    }
     if (userdata && userdata.me) {
       storeUser(userdata.me)
-      if (!userdata.me.is_verified) {
-        navigate('Register', { varify_user: true, phone: userdata.me.phone })
-        return
-      }
+      // if (!userdata.me.is_verified) {
+      //   navigate('Register', { varify_user: true, phone: userdata.me.phone })
+      //   // const resetAction = StackActions.reset({
+      //   //   index: 0,
+      //   //   actions: [NavigationActions.navigate({ routeName: 'Register', params: { varify_user: true, phone: userdata.me.phone } })],
+      //   // });
+      //   // props.navigation.dispatch(resetAction);
+      //   return
+      // }
       fetchProperties()
       addExpoToken()
     }

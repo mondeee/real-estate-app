@@ -26,7 +26,8 @@ export default function ActionComponent(props) {
     msg,
     success,
     isVisible,
-    onClose
+    onClose,
+    profile,
   } = props
 
   if (!isVisible) return false
@@ -37,9 +38,9 @@ export default function ActionComponent(props) {
         <View style={{ ...styles.container }}>
           <Image source={require('../../assets/inverted_curve_bg.png')} style={styles.imageBg} />
           <Image style={{ position: 'absolute', left: '20%', top: '20%', height: '60%', width: '60%', resizeMode: 'contain', }} source={require('../../assets/success.png')} />
-          <View style={{ marginTop: 150, }} >
+          <View style={{ marginTop: 150, alignItems: 'center' }} >
             <Text style={styles.text}>{msg || `تم تسجيلك بنجاح`}</Text>
-            <Button onPress={() => onClose()} text={`حسنا`} />
+            <Button style={{ minWidth: 100 }} onPress={() => onClose()} text={`حسنا`} />
           </View>
         </View>
       )
@@ -48,9 +49,9 @@ export default function ActionComponent(props) {
       <View style={{ ...styles.container }}>
         <Image source={require('../../assets/inverted_curve_bg.png')} style={styles.imageBg} />
         <Image style={{ position: 'absolute', left: '20%', top: '20%', height: '60%', width: '60%', resizeMode: 'contain', }} source={require('../../assets/failed.png')} />
-        <View style={{ marginTop: 150, }} >
+        <View style={{ marginTop: 150, alignItems: 'center' }} >
           <Text style={styles.text}>{msg || `نعتذر حدث خطأ  \n نرجوا المحاولة مرة أخرى `}</Text>
-          <Button onPress={() => onClose()} text={`حسنا`} />
+          <Button style={{ minWidth: 100 }} onPress={() => onClose()} text={`حسنا`} />
         </View>
       </View>
     )

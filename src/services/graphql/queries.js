@@ -19,7 +19,7 @@ export const onError = async (error, pass) => {
     }
   })
 
-  console.log(JSON.stringify(error_msg))
+  console.log('@ERROR MESSAGE STRINGIFY ====\n', JSON.stringify(error_msg))
   Alert.alert('', error_msg, [
     {
       text: 'OK', onPress: async () => {
@@ -441,7 +441,7 @@ export const GET_DISTRICT = gql(
 )
 
 export const GET_CITIES = gql(`
-{
+query{
   allCities {
     id,
     en,

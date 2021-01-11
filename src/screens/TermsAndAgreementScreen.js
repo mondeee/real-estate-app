@@ -30,7 +30,7 @@ export default function TermsAndAgreementScreen(props) {
         <View style={{ flex: 1 }}>
           <Text style={{ ...Fonts.FontMed, marginVertical: 20, textAlign: 'center' }}>{`ﻣﻦ نحن`}</Text>
           <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 22, }}>
-            <Text style={{ ...Fonts.fontLight }}>{settings.about_us}</Text>
+            <Text style={{ ...Fonts.fontLight, color: Colors.primaryBlue }}>{settings.about_us}</Text>
             <View style={{ height: 300 }} />
           </ScrollView>
         </View>
@@ -45,7 +45,7 @@ export default function TermsAndAgreementScreen(props) {
         {/* <Text style={{ ...Fonts.FontMed, marginTop: 20, textAlign: 'center' }}>{`الشروط والأحكام و سياسة الخصوصية`}</Text> */}
         <Text style={{ ...Fonts.FontMed, marginVertical: 20, textAlign: 'center' }}>{`الشروط والأحكام و سياسة الخصوصية`}</Text>
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 22, }}>
-          <Text style={{ ...Fonts.fontLight }}>{settings.owner_terms_and_conditions}</Text>
+          <Text style={{ ...Fonts.fontLight, color: Colors.primaryBlue, }}>{settings.owner_terms_and_conditions}</Text>
           <View style={{ height: 300 }} />
         </ScrollView>
         {params?.show && <View style={{ height: '10%', flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: '15%' }}>

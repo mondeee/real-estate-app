@@ -9,7 +9,8 @@ import {
   FlatList,
   TouchableOpacity,
   Platform,
-  I18nManager
+  I18nManager,
+  Alert
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -73,13 +74,11 @@ export default function ImageBrowser(props) {
 
   useEffect(() => {
     console.log('@SELECTED', selected, finalPhotos)
-    if (selected) {
+    processSelectedPhotos()
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
       processSelectedPhotos()
-      if (timer) clearTimeout(timer)
-      timer = setTimeout(() => {
-        processSelectedPhotos()
-      }, 1500)
-    }
+    }, 1500)
   }, [selected])
 
   const closeModal = () => {
@@ -95,27 +94,51 @@ export default function ImageBrowser(props) {
 
   const _requestPermission = async () => {
     // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
-    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (status === 'granted') {
-      setAllowMedia(true)
-    } else {
-      setAllowMedia(false)
+    try {
+      const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+      if (status === 'granted') {
+        setAllowMedia(true)
+      } else {
+        setAllowMedia(false)
+      }
+    } catch (e) {
+      Alert.alert('Error', e?.message, [
+        {
+          text: 'OK',
+          onPress: e => {
+            setLoading(false)
+            onClose()
+          }
+        }
+      ])
     }
   }
 
   const _fetchGallery = () => {
     // console.log('@fetching gallery')
-    const params = {
-      first: 50,
-      mediaType: [MediaLibrary.MediaType.photo],
-      sortBy: [MediaLibrary.SortBy.creationTime]
-    };
-    if (after) params.after = after;
-    if (!hasNextPage) return;
-    MediaLibrary
-      .getAssetsAsync(params)
-      .then(data => processPhotos(data))
-      .catch(e => console.log(e))
+    try {
+      const params = {
+        first: 50,
+        mediaType: [MediaLibrary.MediaType.photo],
+        sortBy: [MediaLibrary.SortBy.creationTime]
+      };
+      if (after) params.after = after;
+      if (!hasNextPage) return;
+      MediaLibrary
+        .getAssetsAsync(params)
+        .then(data => processPhotos(data))
+        .catch(e => console.log(e))
+    } catch (e) {
+      Alert.alert('Error', e?.message, [
+        {
+          text: 'OK',
+          onPress: e => {
+            setLoading(false)
+            onClose()
+          }
+        }
+      ])
+    }
   }
 
   const processPhotos = (data) => {
@@ -160,6 +183,9 @@ export default function ImageBrowser(props) {
   const processSelectedPhotos = async () => {
     const items = []
     const resizedPhotos = []
+    if (!selected || selected.length == 0) {
+      setFinalPhotos([])
+    }
     selected.forEach(i => items.push(photos[i]))
     await items.forEach(async i => {
       const resizedPhoto = await ImageManipulator.manipulateAsync(
@@ -184,6 +210,9 @@ export default function ImageBrowser(props) {
       await processSelectedPhotos()
       // console.log('@IMAGES', finalPhotos)
       await props.setPhotos(finalPhotos)
+      setTimeout(() => {
+
+      }, 1000)
       setLoading(false)
       onClose()
       // setTimeout(() => {

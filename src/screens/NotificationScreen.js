@@ -25,7 +25,7 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 const isAndroid = Platform.OS === 'android'
 export default function NotificationScreen() {
-  const [items, setItems] = useState(SAMPLE_LIST)
+  const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
   const userData = useStoreState(state => state.auth.user)
 
@@ -36,7 +36,7 @@ export default function NotificationScreen() {
   }
 
   useEffect(() => {
-    // console.log('@userData', userData)
+    console.log('@userData', userData?.notifications?.length)
     setItems(userData.notifications)
   }, [])
 

@@ -29,13 +29,14 @@ export default function Header(props) {
     name,
     openDrawer,
     MapHeader,
+    hideIcon,
   } = props
 
 
   renderMainHeader = () => {
     return (
       <SafeAreaView elevation={5} style={{ ...styles.headerContainer }}>
-        <Image style={{ height: 99, width: 68, alignSelf: 'center', }} source={require(`../../assets/headericon.png`)} />
+        {!hideIcon && <Image style={{ height: 99, width: 68, alignSelf: 'center', }} source={require(`../../assets/headericon.png`)} />}
         {onPressBack && <TouchableOpacity onPress={() => onPressBack()} style={global.isAndroid ? styles.leftButton : styles.backButton}>
           <MaterialIcons size={40} color={Colors.primaryBlue} name={'chevron-right'} />
         </TouchableOpacity>}

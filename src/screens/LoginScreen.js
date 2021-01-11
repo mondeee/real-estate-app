@@ -28,7 +28,7 @@ import {
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function LoginScreen(props) {
-  const { navigate, goBack } = props.navigation
+  const { navigate, goBack, state: { params } } = props.navigation
   const storeToken = useStoreActions(actions => actions.auth.setToken)
 
   const [agree, setAgree] = useState(false)
@@ -54,6 +54,13 @@ export default function LoginScreen(props) {
       deleteToken()
     }
   }, [data, error])
+
+  useEffect(() => {
+
+    // if (params?.isTokenValid) {
+    //   navigate('Home')
+    // }
+  }, [])
 
   const saveToken = async () => {
     const save = await AsyncStorage.setItem('token', data.loginViaPhone.token)
@@ -101,7 +108,7 @@ export default function LoginScreen(props) {
         <TouchableOpacity style={{ width: '75%', marginBottom: 10 }}>
           <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: global.isAndroid ? 'left' : 'right', textDecorationLine: 'underline' }}>{`نسيت كلمة المرور؟`}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: global.isAndroid ? 'row-reverse' : 'row' }}>
+        {/* <TouchableOpacity onPress={() => setAgree(!agree)} style={{ width: '65%', marginBottom: 10, flexDirection: global.isAndroid ? 'row-reverse' : 'row' }}>
           <Text style={{ ...Fonts.fontRegular, width: '100%', textAlign: global.isAndroid ? 'left' : 'right' }}>{`أوافق على الشروط و الأحكام`}</Text>
           <View style={{
             borderRadius: 30,
@@ -116,8 +123,8 @@ export default function LoginScreen(props) {
           }}>
             {agree && <View style={{ borderRadius: 30, height: 10, width: 10, backgroundColor: Colors.primaryBlue }} />}
           </View>
-        </TouchableOpacity>
-        {/* {loginButton()} */}
+        </TouchableOpacity> */}
+        {loginButton()}
         {!loading ? <Button onPress={() => {
           if (!phone || !password) return
           if (phone && phone?.length <= 6) {

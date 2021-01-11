@@ -9,11 +9,14 @@ import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import LoginScreen from '../screens/LoginScreen'
 import TermsAndAgreementScreen from '../screens/TermsAndAgreementScreen';
+import MainStack from './MainStack'
+import { createStackNavigator } from 'react-navigation-stack';
 
 
 const AppNavigator = createAppContainer(
-  createSwitchNavigator(
+  createStackNavigator(
     {
+      // Home: MainStack,
       Login: LoginScreen,
       Register: RegisterScreen,
       Terms_: TermsAndAgreementScreen,

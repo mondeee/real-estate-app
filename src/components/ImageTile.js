@@ -16,7 +16,7 @@ export default function ImageTile(props) {
   if (!item) return null;
   return (
     <TouchableHighlight
-      style={{ opacity: selected ? 0.5 : 1, margin: 4 }}
+      style={{ opacity: selected ? 0.5 : 1, margin: 4, }}
       underlayColor='transparent'
       onPress={() => selectImage(index)}
     >
