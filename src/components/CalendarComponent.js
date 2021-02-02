@@ -448,6 +448,7 @@ export default function CalendarComponent(props) {
         <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: 'white', borderRadius: 20, paddingTop: 40, justifyContent: 'space-between' }}>
           <Calendar
             // Collection of dates that have to be marked. Default = {}
+            minDate={moment().format("YYYY-MM-DD")}
             onDayPress={(day) => {
               console.log('selected day', moment(day.dateString).format("YYYY-MM-DD"))
               const selectedDay = moment(day.dateString).format("YYYY-MM-DD")
@@ -705,6 +706,7 @@ export default function CalendarComponent(props) {
           </TouchableOpacity>
           <Calendar
             // Collection of dates that have to be marked. Default = {}
+            minDate={moment().format("YYYY-MM-DD")}
             onDayPress={(day) => {
               const selectedDay = moment(day.dateString).format("YYYY-MM-DD")
               if (!final) {

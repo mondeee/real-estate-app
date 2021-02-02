@@ -238,7 +238,7 @@ export default function UpdatePropertyScreen(props) {
 
   useEffect(() => {
     // _requestPermission()
-    console.log('@@@ ITEM', item)
+    console.log('@@@ ITEM\n', item)
     setData()
   }, [])
 
@@ -420,7 +420,8 @@ export default function UpdatePropertyScreen(props) {
 
     if (!facilities || !finalFac) {
       Toast.show({
-        text: 'الرجاء إضافة بعض المرافق   .',
+        text: 'الرجاء إضافة بعض المرافق',
+        // text: 'إضافة مرافق النزل',
         type: 'danger'
       })
       validate = false
@@ -832,7 +833,7 @@ export default function UpdatePropertyScreen(props) {
     if (types[0].selected == true) {
       return (
         <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <Button style={{ alignSelf: 'center', marginVertical: 12, }} onPress={() => {
+          <Button style={{ alignSelf: 'center', marginVertical: 12 }} textStyle={{ textAlign: 'center' }} onPress={() => {
             navigate('SectionList', { items: item.sections, item, update: true })
             // if (commercial_data) {
             //   // console.log(commercial_data.addCommercialPropety.property_id)
@@ -843,7 +844,7 @@ export default function UpdatePropertyScreen(props) {
             //     type: 'danger'
             //   })
             // }
-          }} text={`ﺇإﺿﺎﻓﺔ ﻣﺮاﻓﻖ اﻟﻨﺰل`} />
+          }} text={`إضافة مرافق النزل`} />
           <View style={{ width: 30 }} />
           <Button onPress={() => {
             console.log('@facis', selectedFac)
@@ -875,12 +876,12 @@ export default function UpdatePropertyScreen(props) {
           const i = { ...payload }
           i.description = e
           setPayload(i)
-        }} style={{ height: 120 }} multiline value={payload.description} placeholder={'وصف'} />
-        {/* {types[1].selected && <Input onChangeText={e => {
+        }} style={{ height: 120, marginBottom: 8, }} multiline value={payload.description} placeholder={'وصف'} />
+        {types[1].selected && <Input value={payload.contact_name} onChangeText={e => {
           const i = { ...payload }
           i.contact_name = e
           setPayload(i)
-        }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />} */}
+        }} style={{ marginVertical: 12 }} placeholder={'اسم المالك'} />}
         <Input value={payload.contact_no} onChangeText={e => {
           const i = { ...payload }
           i.contact_no = e
@@ -904,7 +905,7 @@ export default function UpdatePropertyScreen(props) {
         </View>}
         {types[1].selected && <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`ﺗﺤﺪﻳﺪ اﻷيام `}</Text>}
         {types[1].selected && <TouchableOpacity onPress={() => setShowAvailability(true)} style={{ borderRadius: 100, maxWidth: 132, backgroundColor: '#E7E9EF', padding: 10, paddingHorizontal: 12, alignSelf: 'flex-end' }}>
-          <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  اﻷﺳﻌﺎر العامة `}</Text>
+          <Text style={{ ...Fonts.fontRegular, textAlign: 'center' }}>{`  الأوقات المتاحة `}</Text>
         </TouchableOpacity>}
         {/* <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`عدد القسم`}</Text>
         <Input placeholder={'عدد الأقسام  المتوفرة بهذه المواصفات  '} /> */}
@@ -934,9 +935,9 @@ export default function UpdatePropertyScreen(props) {
       <ScrollView contentContainerStyle={{}} style={{ flex: 1, width: '100%', paddingHorizontal: 24, }}>
         {/* <KeyboardAvoidingView style={{ flex: 1, width: '100%' }} */}
         {/* keyboardVerticalOffset={40} behavior={"position"}> */}
-        <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
+        {/* <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 12, flexWrap: 'wrap', }}>
           {!!types && types.map((i, index) => renderSelection(i, index))}
-        </View>
+        </View> */}
         {/* <Dropdown onChangeText={e => {
           const item = { ...payload }
           item.type_id = e.id
@@ -965,7 +966,7 @@ export default function UpdatePropertyScreen(props) {
           }} data={cities} style={{ width: 140 }} placeholder={`المدينة`} />
         </View>
         <Input value={location} clickable={() => setMap(true)} style={{ marginVertical: 12 }} placeholder={`الموقع على الخريطة `} />
-        {types[1].selected == true && renderDetails()}
+        {renderDetails()}
         {renderDescription()}
         <View style={{ height: 400 }} />
         {/* </KeyboardAvoidingView> */}

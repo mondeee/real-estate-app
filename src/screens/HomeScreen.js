@@ -123,7 +123,7 @@ export default function HomeScreen(props) {
   }, [storedUserState])
 
   useEffect(() => {
-    console.log('properties', propertiesdata, properyError)
+    // console.log('properties', propertiesdata, properyError)
     if (propertiesdata) {
       // const filterdata = propertiesdata.allProperties.data.filter(i => i.owner.id == userdata.me.id)
       // setItems(filterdata.reverse())e
@@ -176,7 +176,7 @@ export default function HomeScreen(props) {
   }, [tokenError, tokenData])
 
   useEffect(() => {
-    console.log('@userdata', userdata, userError)
+    // console.log('@userdata', userdata, userError)
     if (params?.restart) {
       return
     }
@@ -391,7 +391,7 @@ export default function HomeScreen(props) {
             {item.category.id == 2 ?
               <TouchableOpacity
                 onPress={() => {
-                  console.log(item.category)
+                  // console.log(item.category)
                   if (item?.category.id == 2) {
                     console.log('ONPRESS SET DATA', item.general_price, item.availablities, seasonalPrice)
                     // return

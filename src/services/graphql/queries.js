@@ -114,6 +114,8 @@ query($first: Int!, $page: Int!){
         name,
         latitude,
         longitude
+        contact_name
+        contact_no
         sections {
           id,
           name,

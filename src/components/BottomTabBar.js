@@ -14,8 +14,12 @@ import Colors from '../styles/Colors';
 import { MaterialIcons, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Fonts from '../styles/Fonts';
 import { Toast } from 'native-base';
+import { SafeAreaView, StackActions, NavigationActions } from 'react-navigation';
+
+import { createBottomTabNavigator, BottomTabBar as Tabbar } from 'react-navigation-tabs';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
+const TabBarComponent = (props) => <Tabbar {...props} />;
 
 export default function BottomTabBar(props) {
   const { navigate } = props.navigation
@@ -39,20 +43,28 @@ export default function BottomTabBar(props) {
   }
 
   useEffect(() => {
-    switch (selectedTab) {
-      case 0:
-        navigate('Home', { refresh: false })
-        break;
-      case 1:
-        navigate('Favorites')
-        break;
-      case 2:
-        navigate('Messages')
-        break;
-      case 3:
-        navigate('Profile')
-        break;
-    }
+    console.log(props.navigation.state?.route)
+    // switch (selectedTab) {
+    //   case 0:
+    //     console.log(props.navigation.state)
+    //     navigate('Home', { refresh: false })
+    //     // props.jumpToIndex()
+    //     // const resetAction = StackActions.reset({
+    //     //   index: 0,
+    //     //   actions: [NavigationActions.navigate({ routeName: 'Home' })],
+    //     // });
+    //     // props.navigation.dispatch(resetAction);
+    //     break;
+    //   case 1:
+    //     navigate('Favorites')
+    //     break;
+    //   case 2:
+    //     navigate('Messages')
+    //     break;
+    //   case 3:
+    //     navigate('Profile')
+    //     break;
+    // }
   }, [selectedTab])
 
   const tabs = [
@@ -71,6 +83,9 @@ export default function BottomTabBar(props) {
   ]
 
   tabColor = (index = 0) => selectedTab == index ? Colors.primaryYellow : Colors.primaryBlue
+  return (
+    <TabBarComponent {...props} style={{ borderTopColor: '#605F60', marginBottom: '5%' }} />
+  )
 
   return (
     <View style={styles.container}>

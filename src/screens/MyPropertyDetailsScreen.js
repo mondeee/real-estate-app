@@ -313,7 +313,7 @@ export default function MyPropertyDetailsScreen(props) {
         }
       </ViewPager>
       {renderDetails()}
-      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item })} style={{ alignSelf: 'center', width: '50%', marginBottom: 30, position: 'absolute', bottom: '10%' }} text={`الأقسام`} />}
+      {item.sections && item.sections.length > 0 && <Button onPress={() => navigate('SectionList', { items: item.sections, item })} style={{ alignSelf: 'center', width: '50%', position: 'absolute', bottom: 35 }} text={`الأقسام`} />}
     </SafeAreaView>
   );
 }

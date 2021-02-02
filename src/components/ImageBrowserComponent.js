@@ -270,17 +270,17 @@ export default function ImageBrowser(props) {
     <Modal ref={container} isVisible={isVisible}>
       <View style={{ maxHeight: '65%', width: '100%', backgroundColor: 'white', borderRadius: 15, paddingVertical: 8, }}>
         <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', wdith: '100%', justifyContent: 'space-between' }}>
-          <Text style={{ ...Fonts.FontMed, marginLeft: global.isAndroid ? 0 : 10, marginRight: global.isAndroid ? 10 : 0 }}>{`Gallery`}</Text>
+          <Text style={{ ...Fonts.FontMed, marginLeft: global.isAndroid ? 0 : 10, marginRight: global.isAndroid ? 10 : 0 }}>{`الصور`}</Text>
           <TouchableOpacity style={{
             alignSelf: 'flex-end',
             marginRight: global.isAndroid ? 0 : 10,
             marginLeft: global.isAndroid ? 10 : 0
           }} onPress={() => closeModal()}>
-            <Text>Close</Text>
+            <Text>{'اغلاق'}</Text>
           </TouchableOpacity>
         </View>
         {_renderGallery()}
-        {!loading ? <Button onPress={() => onSubmitPhotos()} style={{ alignSelf: 'center', marginVertical: 10 }} text={`Next`} /> : <ActivityIndicator />}
+        {!loading ? <Button onPress={() => onSubmitPhotos()} style={{ alignSelf: 'center', marginVertical: 10 }} text={`حفظ`} /> : <ActivityIndicator />}
       </View>
     </Modal>
   )

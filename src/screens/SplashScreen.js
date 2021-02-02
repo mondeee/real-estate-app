@@ -76,7 +76,7 @@ export default function SplashScreen(props) {
   // }
 
   useEffect(() => {
-    console.log('@GETSETTINGS', settings_data)
+    // console.log('@GETSETTINGS', settings_data)
     if (settings_data) {
       storeSettings(settings_data.allSettings)
     }
@@ -84,7 +84,7 @@ export default function SplashScreen(props) {
   }, [settings_data])
 
   useEffect(() => {
-    console.log(userError, '\n', userdata)
+    // console.log(userError, '\n', userdata)
     if (userError) {
       // isTokenValid = false
       setTokenValid(false)
