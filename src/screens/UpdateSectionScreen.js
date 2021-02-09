@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   StatusBar,
   StyleSheet,
@@ -16,7 +17,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_SECTION_PROPERTY, onError, UPDATE_SECTION_PROPERTY } from '../services/graphql/queries'
+import { REGISTER, ADD_SECTION_PROPERTY, onError, UPDATE_SECTION_PROPERTY, DELETE_IMAGES } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
@@ -125,6 +126,7 @@ export default function UpdateSectionScreen(props) {
   const COMMERCIAL = COMMERCIAL_FACILITIES
   // console.log(item)
   const [types, setTypes] = useState(TYPES)
+  const [varitem, setVarItem] = useState(item)
   const [location, setLocation] = useState(null)
   const [selectedType, setType] = useState(null)
   const [city, setCity] = useState(null)
@@ -138,6 +140,9 @@ export default function UpdateSectionScreen(props) {
   const [license, setLicense] = useState(null)
   const [registration, setRegistration] = useState(null)
   const [photos, setSelectedPhotos] = useState([])
+
+  const [deleteImages, setShowDeleteImages] = useState(false)
+  const [todeleteImages, setDeleteImages] = useState(null)
 
   //CALENDARS
   const [general, setGeneral] = useState(false)
@@ -181,6 +186,21 @@ export default function UpdateSectionScreen(props) {
     }
   })
 
+  const [deleteMultipleImage, { data: deleteData, error: deleteError }] = useMutation(DELETE_IMAGES, {
+    onCompleted: e => {
+      console.log('@Complete DELETE IMAGES', e)
+      Toast.show({
+        text: 'تم اضافة القسم بنجاح',
+        type: 'success'
+      })
+      // navigate('Home', { refresh: true })
+      refresh()
+      setTimeout(() => {
+        goBack()
+      }, 1500)
+    }
+  })
+
   useEffect(() => {
     if (data || error)
       setLoading(false)
@@ -190,6 +210,27 @@ export default function UpdateSectionScreen(props) {
     console.log('EDITSECTION', availabilityDates)
   }, [availabilityDates])
 
+  useEffect(() => {
+    console.log('MainScreen', todeleteImages)
+    if (todeleteImages && todeleteImages.selected.length > 0) {
+      const payload = {
+        // type: types[1].selected ? 'private' : 'commercial',
+        type: 'section',
+        ids: todeleteImages.selected
+      }
+
+      console.log('@@DELETE_PAylOAD', payload)
+
+      deleteMultipleImage({
+        variables: {
+          "input": payload
+        }
+      }).catch(e => {
+        onError(e)
+      })
+    }
+
+  }, [todeleteImages])
 
   useEffect(() => {
     // _requestPermission()
@@ -550,7 +591,29 @@ export default function UpdateSectionScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {/* {types[0].selected && <Input style={{ marginTop: 12 }} upload clickable={() => setShowImages(true)} placeholder={'السجل التجاري)اختياري('} />} */}
         {/* <Input style={{ marginTop: 12 }} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
-        <Input style={{ marginVertical: 12 }} value={photos.concat(item.images)} upload clickable={() => setShowImages(true)} placeholder={`صور النزل`} />
+        <Input style={{ marginVertical: 12 }} value={photos?.length > 0 ? photos.concat(varitem.images) : varitem.images} upload clickable={() => {
+          Alert.alert('', 'هل تريد ؟', [
+            {
+              text: 'اضافة صور جديدة وحذف القديمة', onPress: async () => {
+                setShowImages(true)
+                // await Updates.reloadAsync()
+                // pass()
+              }
+            },
+            {
+              text: 'حذف صورة', onPress: async () => {
+                setShowDeleteImages(true)
+                // await Updates.reloadAsync()
+                // pass()
+              }
+            },
+            {
+              text: 'إلغاء',
+              style: 'cancel'
+            }
+          ])
+        }
+        } placeholder={`صور النزل`} />
         {renderFooterButton()}
       </View >
     )
@@ -599,6 +662,7 @@ export default function UpdateSectionScreen(props) {
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} setPhotos={registration} key={`Commercial Registration`} isVisible={showRegistration} /> */}
       {/* <ImageBrowser onClose={() => setShowLicense(false)} setPhotos={license} key={'Operating License'} isVisible={showLicense} /> */}
       <ImageBrowser requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
+      <ImageBrowser delete_ photos={varitem.images} requestPermission multiple onClose={() => setShowDeleteImages(false)} setPhotos={setDeleteImages} key={'Delete Photos'} isVisible={deleteImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
       <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSelectedFac} isVisible={isFaciVisible} />
     </View>

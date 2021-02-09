@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Image,
   StatusBar,
@@ -16,7 +17,7 @@ import { SafeAreaView } from 'react-navigation';
 import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
-import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError, UPDATE_PRIVATE_PROPERTY, UPDATE_COMMERCIAL_PROPERTY } from '../services/graphql/queries'
+import { REGISTER, ADD_PRIVATE_PROPERY, ADD_COMMERCIAL_PROPERTY, onError, UPDATE_PRIVATE_PROPERTY, UPDATE_COMMERCIAL_PROPERTY, DELETE_IMAGES } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
@@ -195,6 +196,8 @@ export default function UpdatePropertyScreen(props) {
   const [city, setCity] = useState(null)
   const [showMap, setMap] = useState(false)
   const [showImages, setShowImages] = useState(false)
+  const [deleteImages, setShowDeleteImages] = useState(false)
+  const [todeleteImages, setDeleteImages] = useState(null)
   const [showRegistration, setShowRegistration] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
   const [showSeasonal, setShowSeasonal] = useState(false)
@@ -241,6 +244,29 @@ export default function UpdatePropertyScreen(props) {
     console.log('@@@ ITEM\n', item)
     setData()
   }, [])
+
+  useEffect(() => {
+    console.log('MainScreen', todeleteImages)
+    if (todeleteImages && todeleteImages.selected.length > 0) {
+      const payload = {
+        // type: types[1].selected ? 'private' : 'commercial',
+        type: 'private',
+        ids: todeleteImages.selected
+      }
+
+      console.log('@@DELETE_PAylOAD', payload)
+
+      deleteMultipleImage({
+        variables: {
+          "input" : payload
+        }
+      }).catch(e => {
+        onError(e)
+      })
+
+    }
+
+  }, [todeleteImages])
 
   const setData = async () => {
     const items = [...categories]
@@ -333,6 +359,19 @@ export default function UpdatePropertyScreen(props) {
       navigate('Home', { refresh: true })
     }
   })
+
+  const [deleteMultipleImage, { data: deleteData, error: deleteError }] = useMutation(DELETE_IMAGES, {
+    onCompleted: e => {
+      console.log('@Complete DELETE IMAGES', e)
+      Toast.show({
+        text: 'تم اضافة القسم بنجاح',
+        type: 'success'
+      })
+      navigate('Home', { refresh: true })
+    }
+  })
+
+
   const [updateCommercialProperty, { data: commercial_data, error: commercial_error, loading: commercial_loading }] = useMutation(UPDATE_COMMERCIAL_PROPERTY, {
     onCompleted: e => {
       console.log('@Complete ADD COMMERCIAL', commercial_data)
@@ -732,6 +771,9 @@ export default function UpdatePropertyScreen(props) {
     }
   }, [types])
 
+  const _deleteImages = () => {
+
+  }
 
   const renderMapSelection = () => {
     return (
@@ -912,7 +954,29 @@ export default function UpdatePropertyScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {/* {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
         <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
-        <Input style={{ marginVertical: 12 }} value={photos.concat(item.images)} upload clickable={() => setShowImages(true)} placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
+        <Input style={{ marginVertical: 12 }} value={photos.concat(item.images)} upload clickable={() => {
+          Alert.alert('', 'هل تريد ؟', [
+            {
+              text: 'اضافة صور جديدة وحذف القديمة', onPress: async () => {
+                setShowImages(true)
+                // await Updates.reloadAsync()
+                // pass()
+              }
+            },
+            {
+              text: 'حذف صورة', onPress: async () => {
+                setShowDeleteImages(true)
+                // await Updates.reloadAsync()
+                // pass()
+              }
+            },
+            {
+              text: 'إلغاء',
+              style: 'cancel'
+            }
+          ])
+        }
+        } placeholder={types[0].selected ? 'صور النزل)اختياري(' : `صور النزل`} />
         {renderFooterButton()}
       </View >
     )
@@ -983,6 +1047,7 @@ export default function UpdatePropertyScreen(props) {
       {/* <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />
       <ImageBrowser onClose={() => setShowLicense(false)} photos={license} setPhotos={setLicense} key={'Operating License'} isVisible={showLicense} /> */}
       <ImageBrowser photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
+      <ImageBrowser delete_ photos={item.images} requestPermission multiple onClose={() => setShowDeleteImages(false)} setPhotos={setDeleteImages} key={'Delete Photos'} isVisible={deleteImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
       {isFaciVisible && <FacilitiesSelectionComponent update onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} setFinal={setFinalFac} isVisible={isFaciVisible} />}
     </View>

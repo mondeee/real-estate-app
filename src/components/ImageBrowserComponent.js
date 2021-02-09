@@ -46,6 +46,7 @@ export default function ImageBrowser(props) {
     onClose,
     multiple,
     isVisible,
+    delete_,
     photos: propPhotos,
     requestPermission,
   } = props
@@ -73,6 +74,9 @@ export default function ImageBrowser(props) {
   }, [])
 
   useEffect(() => {
+    if (delete_) {
+      return
+    }
     console.log('@SELECTED', selected, finalPhotos)
     processSelectedPhotos()
     if (timer) clearTimeout(timer)
@@ -226,6 +230,23 @@ export default function ImageBrowser(props) {
     }
   }
 
+  const onSubmitDeletePhotos = async () => {
+    // console.log(selected)
+    if (!selected || selected?.length == 0) {
+      onClose()
+    }
+    const items = []
+    const _photos = [...propPhotos]
+    selected.forEach(i => {
+      items.push(parseInt(propPhotos[i].id))
+      _photos.splice(i, 1)
+    })
+
+    console.log('TODELETE', selected, _photos)
+    props.setPhotos({ photos: _photos, selected: items })
+    onClose()
+  }
+
   const renderImageTile = ({ item, index }) => {
     const selectedItems = selected.indexOf(index) !== -1;
     const selectedItemNumber = selected.indexOf(index) + 1;
@@ -234,6 +255,23 @@ export default function ImageBrowser(props) {
         selectedItemNumber={selectedItemNumber}
         item={item}
         index={index}
+        selected={selectedItems}
+        selectImage={selectImage}
+        renderSelectedComponent={props.renderSelectedComponent}
+      />
+    )
+  }
+
+  const renderDeleteImageTile = ({ item, index }) => {
+    const selectedItems = selected.indexOf(index) !== -1;
+    const selectedItemNumber = selected.indexOf(index) + 1;
+    console.log(item)
+    return (
+      <ImageTile
+        selectedItemNumber={selectedItemNumber}
+        item={item}
+        index={index}
+        delete
         selected={selectedItems}
         selectImage={selectImage}
         renderSelectedComponent={props.renderSelectedComponent}
@@ -258,6 +296,23 @@ export default function ImageBrowser(props) {
     )
   }
 
+  const _renderDeleteGallery = () => {
+    return (
+      <FlatList
+        data={propPhotos}
+        numColumns={3}
+        renderItem={(data => renderDeleteImageTile(data))}
+        keyExtractor={(_, index) => index}
+        // onEndReached={() => { _fetchGallery() }}
+        // onEndReachedThreshold={0.5}
+        ListEmptyComponent={isEmpty ? renderEmptyStay() : renderPreloader()}
+        initialNumToRender={24}
+        style={{ alignSelf: 'center' }}
+        getItemLayout={getItemLayout}
+      />
+    )
+  }
+
   const renderPreloader = () => {
     return <ActivityIndicator size="large" />
   }
@@ -265,6 +320,26 @@ export default function ImageBrowser(props) {
   const renderEmptyStay = () => {
     return <Text style={{ textAlign: 'center' }}>Empty =(</Text>
   }
+
+  if (delete_)
+    return (
+      <Modal ref={container} isVisible={isVisible}>
+        <View style={{ maxHeight: '65%', width: '100%', backgroundColor: 'white', borderRadius: 15, paddingVertical: 8, }}>
+          <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignItems: 'center', wdith: '100%', justifyContent: 'space-between' }}>
+            <Text style={{ ...Fonts.FontMed, marginLeft: global.isAndroid ? 0 : 10, marginRight: global.isAndroid ? 10 : 0 }}>{`حذف صورة`}</Text>
+            <TouchableOpacity style={{
+              alignSelf: 'flex-end',
+              marginRight: global.isAndroid ? 0 : 10,
+              marginLeft: global.isAndroid ? 10 : 0
+            }} onPress={() => closeModal()}>
+              <Text>{'اغلاق'}</Text>
+            </TouchableOpacity>
+          </View>
+          {_renderDeleteGallery()}
+          {!loading ? <Button onPress={() => onSubmitDeletePhotos()} style={{ alignSelf: 'center', marginVertical: 10 }} text={`حفظ`} /> : <ActivityIndicator />}
+        </View>
+      </Modal>
+    )
 
   return (
     <Modal ref={container} isVisible={isVisible}>

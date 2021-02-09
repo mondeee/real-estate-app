@@ -39,6 +39,15 @@ mutation($input: AddFeedbackInput!) {
 }
 `)
 
+export const DELETE_IMAGES = gql(`
+mutation($input: DeleteMultipleImageInput!) {
+  deleteMultipleImage(input:$input) {
+    status
+    message
+  }
+}
+`)
+
 
 export const CREATE_ROOM = gql(`
 query($id:ID!){
@@ -126,6 +135,7 @@ query($first: Int!, $page: Int!){
           }
           description
           images {
+            id
             avatar
           }
           facilities {
@@ -153,6 +163,7 @@ query($first: Int!, $page: Int!){
             }
           }
           images {
+            id
             avatar
           }
         }
@@ -173,6 +184,7 @@ query($first: Int!, $page: Int!){
           ar,
         }
         images{
+          id
           avatar
         }
         category{
@@ -501,6 +513,7 @@ query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
         }
         description
         images {
+          id
           avatar
         }
         facilities {
@@ -538,6 +551,7 @@ query($property_id: Int!, $page: Int, $orderBy: [OrderByClause!]){
           }
         }
         images {
+          id
           avatar
         }
     }
@@ -655,6 +669,7 @@ mutation($input: UpdateUserInput!){
           }
         }
         images {
+          id
           avatar
         }
       }
@@ -675,6 +690,7 @@ mutation($input: UpdateUserInput!){
         avatar
       }
       images{
+        id
         avatar
       }
       category{
