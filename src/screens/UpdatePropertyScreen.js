@@ -954,7 +954,7 @@ export default function UpdatePropertyScreen(props) {
         <Text style={{ ...Fonts.FontMed, width: '100%', marginVertical: 12 }}>{`الصور`}</Text>
         {/* {types[0].selected && <Input style={{ marginTop: 12 }} value={registration} upload clickable={() => setShowRegistration(true)} placeholder={'السجل التجاري)اختياري('} />}
         <Input style={{ marginTop: 12 }} value={license} upload clickable={() => setShowLicense(true)} placeholder={types[0].selected ? 'رخصة التشغيل)اختياري(' : ` إثبات ملكية النزل )اختياري(`} /> */}
-        <Input style={{ marginVertical: 12 }} value={photos.concat(item.images)} upload clickable={() => {
+        <Input style={{ marginVertical: 12 }} value={photos.length < 1 ? photos.concat(item.images) : photos} upload clickable={() => {
           Alert.alert('', 'هل تريد ؟', [
             {
               text: 'اضافة صور جديدة وحذف القديمة', onPress: async () => {

@@ -165,11 +165,31 @@ export default function ImageBrowser(props) {
 
   const selectImage = (index) => {
     let newSelected = []
-    console.log(index)
+    console.log('onselect', index)
     if (multiple) {
       newSelected = Array.from(selected);
     }
-    let chosenPhotos = []
+
+    if (delete_) {
+      // console.log('@SELECT', newSelected.length, propPhotos.length)
+      if (newSelected.indexOf(index) === -1) {
+        newSelected.push(index)
+      } else {
+        const deleteIndex = newSelected.indexOf(index)
+        console.log(selected, deleteIndex)
+        newSelected.splice(deleteIndex, 1)
+      }
+      if (newSelected.length > props.max) return;
+      if (!newSelected) newSelected = [];
+      if (newSelected.length == propPhotos.length) {
+        // newSelected = []
+        Alert.alert('Error', 'لا يمكنك حذف جميع الصور ، يجب ان تبقى صورة واحدة على الأقل')
+        return
+      }
+
+      setSelected(newSelected)
+      return
+    }
     if (newSelected.indexOf(index) === -1) {
       newSelected.push(index)
     } else {
@@ -181,7 +201,6 @@ export default function ImageBrowser(props) {
     if (!newSelected) newSelected = [];
 
     setSelected(newSelected)
-
   }
 
   const processSelectedPhotos = async () => {
