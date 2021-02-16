@@ -88,6 +88,24 @@ query($id:ID!){
 }
 `)
 
+export const FORGET_PASSWORD = gql(`
+mutation($input: ForgotViaPhoneInput!){
+  forgotViaPhone(input: $input){
+    code
+    token
+  }
+}
+`)
+
+export const CHANGE_PASS = gql(`
+mutation($input: ChangePasswordInput!){
+  changePassword(input: $input){
+    status
+    message
+  }
+}
+`)
+
 export const GET_SETTINGS = gql(`
 query{
   allSettings {
