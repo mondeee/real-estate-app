@@ -256,7 +256,7 @@ export default function SubscriptionScreen(props) {
           <Text style={styles.mainText}>{i.duration}</Text>
           <Image style={{ height: 50, width: 50, }} source={require('../../assets/subiconlarge.png')} />
         </View>
-        <Text style={styles.textlabel}>{`ًايونس /س.ر ${i.price}`}</Text>
+        <Text style={styles.textlabel}>{`${i.price} ريال`}</Text>
         <Text style={{ ...styles.textlabel, fontSize: 19, marginVertical: 8, marginHorizontal: '10%', textAlign: 'center' }}>{i.description}</Text>
         {renderIndicator()}
         <Button onPress={() => {

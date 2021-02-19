@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.13",
+    "version": "0.0.14",
     "orientation": "portrait",
     "icon": "./assets/images/nozol_logo_white.png",
     "splash": {
@@ -38,7 +38,7 @@
     "android": {
       "userInterfaceStyle": "light",
       "package": "owner.nozol.app",
-      "versionCode": 7,
+      "versionCode": 8,
       "permissions": [
         "READ_INTERNAL_STORAGE",
         "ACCESS_COARSE_LOCATION",

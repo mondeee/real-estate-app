@@ -34,6 +34,7 @@ import {
   useStoreActions,
 } from 'easy-peasy'
 import { Toast } from 'native-base';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 
 export default function RegisterScreen(props) {
@@ -257,7 +258,27 @@ export default function RegisterScreen(props) {
         <FontAwesome size={50} color={Colors.primaryBlue} name={'lock'} />
         <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, fontSize: 20, margin: 12, }}>{`رمز التفعيل`}</Text>
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 18 }} >{`تم إرسال رمز التفعيل لجوالك`}</Text>
-        <Input maxLength={5} onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24 }} />
+        {/* <Input maxLength={5} onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24 }} /> */}
+        <OTPInputView
+            style={{ width: "80%", maxHeight: 100, }}
+            pinCount={4}
+            onCodeChanged={e => setCode(e)}
+            autoFocusOnLoad
+            codeInputFieldStyle={{
+              borderColor: Colors.primaryBlue,
+              fontSize: 18,
+              color: Colors.primaryBlue,
+            }}
+            codeInputHighlightStyle={{
+              color: Colors.primaryBlue,
+            }}
+            onCodeFilled={code => {
+              console.log(`Code is ${code}, you are good to go!`);
+              // setCountDown(10)
+              // sendVerificationCode()
+              onVerifyCode()
+            }}
+          />
         <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 13 }}>{`إعادة الإرسال`}</Text>
         <Button style={{ marginTop: 20, width: 177 }} onPress={() => onVerifyCode()} text={`التالي`} />
         <Button disabled={countdown > 0} style={{ marginTop: 12, width: 177, backGroundColor: countdown == 0 ? Colors.primaryYellow : Colors.gray }} onPress={() => {

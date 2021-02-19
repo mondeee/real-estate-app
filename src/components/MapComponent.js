@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   StyleSheet,
+  Dimensions,
   Text,
   View,
   TouchableOpacity,
-  Alert,
-  Dimensions,
+  Linking,
   Platform,
-  I18nManager
 } from 'react-native';
 
 import Modal from 'react-native-modal';
@@ -18,19 +18,17 @@ import Fonts from '../styles/Fonts';
 import Styles from '../styles/Styles';
 import Header from '../components/Header';
 import Button from '../components/Button'
-import { REGISTER } from '../services/graphql/queries'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import MapView from 'react-native-maps';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
-import { Toast } from 'native-base';
-import { ActivityIndicator } from 'react-native';
+import { getLocation } from 'graphql';
+import { getLocationName } from '../utils/functions';
 
 const { height, width } = Dimensions.get('window');
 const LATITUDE_DELTA = 0.04
 const LONGITUDE_DELTA = LATITUDE_DELTA * (width / height);
-const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
 export default function MapComponent(props) {
   const {
@@ -39,24 +37,19 @@ export default function MapComponent(props) {
     onPress,
     child,
     text,
+    determine,
+    initialValue,
     isVisible,
     onClose,
+    viewonly,
   } = props
   const [region, setRegion] = useState(null)
   const [fetching, setFetching] = useState(true)
-  const [initialValue, setInitialValue] = useState({
-    latitude: props.initialValue.latitude,
-    longitude: props.initialValue.longitude,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA
-  })
   const [location_name, setLocationName] = useState(null)
+  const [ready, setReady] = useState(false)
   var timer = null
 
   //يرجى السماح لتطبيق نزل بالوصول إلى الموقع حتى تتمكن من إضافة موقع نزلك.
-  useEffect(() => {
-    console.log('LOC', initialValue)
-  }, [])
 
   useEffect(() => {
     setFetching(true)
@@ -84,59 +77,165 @@ export default function MapComponent(props) {
     return location
   }
 
+  if (viewonly) {
+    return (
+      <Modal style={styles.container} isVisible={isVisible}>
+        <View style={styles.viewContainer}>
+          <MapView
+            // region={{
+            //   ...initialValue,
+            //   latitudeDelta: LATITUDE_DELTA,
+            //   longitudeDelta: LONGITUDE_DELTA
+            // }}
+            onMapReady={ready => {
+              console.log(ready)
+              if (ready) {
+                setReady(ready)
+              }
+            }}
+            showsMyLocationButton={true}
+            initialRegion={{
+              // ...initialValue,
+              latitude: parseFloat(initialValue?.latitude),
+              longitude: parseFloat(initialValue?.longitude),
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
+            }}
+            style={{ flex: 1, borderRadius: 15 }} >
+            <MapView.Marker
+              coordinate={{
+                latitude: Number(initialValue?.latitude) || 0,
+                longitude: Number(initialValue?.longitude) || 0,
+              }}
+              pinColor="#253c7b"
+            />
+          </MapView>
+          <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
+            <Button onPress={() => {
+              const daddr = `${Number(initialValue.latitude)},${Number(initialValue.longitude)}`
+              const company = "google"//Platform.OS === "ios" ? "google" : "google";
+              Linking.openURL(`http://maps.${company}.com/maps?daddr=${daddr}`);
+              onClose()
+            }}
+              style={{ maxWidth: 200 }}
+              textStyle={{ color: Colors.primaryBlue }} text={`عرض في خرائط قوقل`} />
+          </View>
+          <TouchableOpacity style={global.isAndroid ? {
+            height: 30,
+            width: 30,
+            position: 'absolute',
+            top: 10,
+            left: 10,
+          } : {
+              height: 30,
+              width: 30,
+              position: 'absolute',
+              top: 10,
+              right: 10
+            }} onPress={() => {
+              console.log('@CLOSE')
+              onClose()
+            }
+            }>
+            <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
+          </TouchableOpacity>
+          <Text style={global.isAndroid ? { position: 'absolute', top: 10, right: 10 } : { position: 'absolute', top: 10, left: 10 }}>{location_name}</Text>
+          {/* <View style={{ position: 'absolute', top: '47%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+            <MaterialIcons name={'location-on'} size={35} color={Colors.primaryBlue} />
+          </View> */}
+        </View>
+      </Modal>
+    )
+  }
+
+  if (determine)
+    return (
+      <Modal style={styles.container} isVisible={isVisible}>
+        <View style={styles.viewContainer}>
+          <MapView
+            initialRegion={{
+              // ...initialValue,
+              latitude: parseFloat(initialValue?.latitude),
+              longitude: parseFloat(initialValue?.longitude),
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
+            }}
+            onRegionChange={e => {
+              if (timer) clearTimeout(timer)
+              timer = setTimeout(() => {
+                setRegion(e)
+              }, 1500)
+            }} style={{ flex: 1, borderRadius: 15 }} />
+          <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
+            {fetching ? <ActivityIndicator /> : <Button onPress={() => {
+              const item = { ...region }
+              item.location = location_name
+              onPress(item)
+              onClose()
+            }} textStyle={{ color: Colors.primaryBlue }} text={`تحديد`} />}
+          </View>
+          <TouchableOpacity style={global.isAndroid ? {
+            height: 30,
+            width: 30,
+            position: 'absolute',
+            top: 10,
+            left: 10,
+          } : {
+              height: 30,
+              width: 30,
+              position: 'absolute',
+              top: 10,
+              right: 10
+            }} onPress={() => {
+              console.log('@CLOSE')
+              onClose()
+            }
+            }>
+            <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
+          </TouchableOpacity>
+          <Text style={global.isAndroid ? { position: 'absolute', top: 10, right: 10 } : { position: 'absolute', top: 10, left: 10 }}>{location_name}</Text>
+          <View style={{ position: 'absolute', top: '47%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+            <MaterialIcons name={'location-on'} size={35} color={Colors.primaryBlue} />
+          </View>
+        </View>
+      </Modal>
+    )
+
   return (
     <Modal style={styles.container} isVisible={isVisible}>
       <View style={styles.viewContainer}>
         <MapView
-          initialRegion={initialValue}
-          region={region}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
           onRegionChange={e => {
-            setRegion(null)
-            // if (timer) clearTimeout(timer)
-            // timer = setTimeout(() => {
-            setRegion(e)
-            // }, 1500)
+            if (timer) clearTimeout(timer)
+            timer = setTimeout(() => {
+              setRegion(e)
+            }, 1500)
           }} style={{ flex: 1, borderRadius: 15 }} />
         <View style={{ position: 'absolute', bottom: 10, width: '100%', padding: 10, alignItems: 'center', justifyContent: 'center' }}>
-          {fetching || !region ? <ActivityIndicator /> : <Button onPress={() => {
+          {fetching ? <ActivityIndicator /> : <Button onPress={() => {
             const item = { ...region }
-            console.log(item)
-            if (!item || !item.latitude || !item.longitude) {
-              return
-            }
             item.location = location_name
             onPress(item)
             onClose()
-          }} style={{ backgroundColor: Colors.primaryBlue, }} textStyle={{ color: Colors.primaryBlue }} text={`تحديد`} />}
+          }} textStyle={{ color: Colors.primaryBlue }} text={`تحديد`} />}
         </View>
-        <TouchableOpacity style={{
+        <TouchableOpacity style={global.isAndroid ? {
+          height: 30,
+          width: 30,
           position: 'absolute',
-          bottom: 50,
-          right: global.isAndroid ? 0 : 10,
-          left: global.isAndroid ? 10 : 0,
-          backgroundColor: Colors.primaryYellow,
-          width: 40,
-          height: 40,
-          borderRadius: 20,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }} onPress={() => {
-          console.log('@INITIAL', initialValue)
-          if (initialValue && initialValue?.latitude && initialValue?.longitude) {
-            setRegion(initialValue)
-          }
-        }
-        }>
-          <MaterialIcons name={'my-location'} size={25} color={Colors.primaryBlue} />
-        </TouchableOpacity>
-        <TouchableOpacity style={global.isAndroid ? { position: 'absolute', top: 10, left: 10 } : { position: 'absolute', top: 10, right: 10 }} onPress={() => {
-          if (region && location_name) {
+          top: 10,
+          left: 10,
+        } : {
+            height: 30,
+            width: 30,
+            position: 'absolute',
+            top: 10,
+            right: 10
+          }} onPress={() => {
+            console.log('@CLOSE')
             onClose()
           }
-        }
-        }>
+          }>
           <MaterialIcons name={'close'} size={25} color={Colors.primaryBlue} />
         </TouchableOpacity>
         <Text style={global.isAndroid ? { position: 'absolute', top: 10, right: 10 } : { position: 'absolute', top: 10, left: 10 }}>{location_name}</Text>

@@ -426,7 +426,7 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (photos?.length > 6) {
+    if (photos?.length > 11) {
       Toast.show({
         text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
@@ -569,7 +569,7 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (photos?.length > 6) {
+    if (photos?.length > 11) {
       Toast.show({
         text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'

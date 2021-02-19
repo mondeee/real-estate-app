@@ -25,6 +25,7 @@ import {
   useStoreState,
   useStoreActions,
 } from 'easy-peasy'
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
@@ -72,6 +73,10 @@ export default function LoginScreen(props) {
   //   AsyncStorage.setItem('token', data.loginViaPhone.token)
   //   navigate('Home')
   // }
+
+  useEffect(() => {
+    console.log('Changepass', cpdata, cperror)
+  }, [cpdata, cperror])
 
 
   useEffect(() => {
@@ -241,8 +246,26 @@ export default function LoginScreen(props) {
         }}>
           <Text style={{ ...Fonts.FontMed, color: Colors.primaryBlue, fontSize: 20, margin: 12, }}>{`رمز التفعيل`}</Text>
           <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 16 }} >{"تم إرسال رمز التفعيل لجوالك"}</Text>
-          <Input onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24, height: 45 }} />
+          {/* <Input onChangeText={setCode} textStyle={{ textAlign: 'center' }} style={{ margin: 15, marginTop: 24, height: 45 }} /> */}
           {/* التالي */}
+          <OTPInputView
+            style={{ width: "80%", maxHeight: 100, }}
+            pinCount={4}
+            onCodeChanged={e => setCode(e)}
+            autoFocusOnLoad
+            codeInputFieldStyle={{
+              borderColor: Colors.primaryBlue,
+              fontSize: 18,
+              color: Colors.primaryBlue,
+            }}
+            codeInputHighlightStyle={{
+              color: Colors.primaryBlue,
+            }}
+            onCodeFilled={code => {
+              console.log(`Code is ${code}, you are good to go!`);
+              _verifyCode()
+            }}
+          />
           <View style={{ flexDirection: 'row', marginTop: 20, }}>
             <Button style={{ width: '40%' }} onPress={() => _onCloseModal(false)} text={'إلغاء'} />
             <View style={{ width: '5%' }} />
