@@ -120,6 +120,8 @@ export default function App() {
         require('./assets/bathub.png'),
         require('./assets/sofa.png'),
         require('./assets/dining.png'),
+        require('./assets/visa-icon.png'),
+        require('./assets/mada-icon.png'),
       ]),
       Font.loadAsync({
         tajawal: require('./assets/fonts/tajawal_regular.ttf'),

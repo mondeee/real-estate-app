@@ -235,7 +235,7 @@ export default function ImageBrowser(props) {
       await props.setPhotos(finalPhotos)
       setTimeout(() => {
 
-      }, 1000)
+      }, selected.length > 5 ? 3000 : 1500)
       setLoading(false)
       onClose()
       // setTimeout(() => {

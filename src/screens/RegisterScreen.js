@@ -53,7 +53,7 @@ export default function RegisterScreen(props) {
   const [phone, setPhone] = useState('')
   const [password, setPass] = useState('')
   const [confirmPassword, setConfirmPass] = useState('')
-  const [countdown, setCountDown] = useState(10)
+  const [countdown, setCountDown] = useState(25)
   const [hideHeader, setHideHeader] = useState(false)
 
   const recaptchaVerifier = useRef(null)
@@ -274,15 +274,15 @@ export default function RegisterScreen(props) {
             }}
             onCodeFilled={code => {
               console.log(`Code is ${code}, you are good to go!`);
-              // setCountDown(10)
+              // setCountDown(25)
               // sendVerificationCode()
-              onVerifyCode()
+              // onVerifyCode()
             }}
           />
-        <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 13 }}>{`إعادة الإرسال`}</Text>
+        {/* <Text style={{ ...Fonts.fontRegular, color: Colors.primaryBlue, fontSize: 13 }}>{`إعادة الإرسال`}</Text> */}
         <Button style={{ marginTop: 20, width: 177 }} onPress={() => onVerifyCode()} text={`التالي`} />
         <Button disabled={countdown > 0} style={{ marginTop: 12, width: 177, backGroundColor: countdown == 0 ? Colors.primaryYellow : Colors.gray }} onPress={() => {
-          setCountDown(10)
+          setCountDown(25)
           sendVerificationCode()
         }} text={`إعادة إرسال (${countdown})`} />
       </View>

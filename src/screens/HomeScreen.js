@@ -38,7 +38,7 @@ export default function HomeScreen(props) {
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(false)
   const storedUserState = useStoreState(state => state.auth.user)
-  const notifToken = useStoreState(state => state.auth.usnotifTokener)
+  const notifToken = useStoreState(state => state.auth.notifToken)
   const storeCity = useStoreActions(actions => actions.auth.setCities)
   const storeGender = useStoreActions(actions => actions.auth.setGenders)
   const storeUser = useStoreActions(actions => actions.auth.setUser)
@@ -68,7 +68,7 @@ export default function HomeScreen(props) {
   const [addExpoToken, { error: tokenError, data: tokenData }] = useMutation(SEND_NOTIF_TOKEN, {
     variables: {
       input: {
-        token: "asd"
+        token: notifToken
       }
     }
   })
@@ -192,7 +192,9 @@ export default function HomeScreen(props) {
       //   return
       // }
       fetchProperties()
-      addExpoToken()
+      if (notifToken) {
+        addExpoToken()
+      }
     }
 
     if (userError) {

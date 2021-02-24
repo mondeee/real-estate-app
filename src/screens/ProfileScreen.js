@@ -16,7 +16,7 @@ import Colors from '../styles/Colors';
 import Fonts from '../styles/Fonts';
 import { SafeAreaView } from 'react-navigation';
 import { CONFIG } from '../services/config';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 const isAndroid = Platform.OS === 'android' && I18nManager?.isRTL;
 
@@ -25,6 +25,7 @@ export default function ProfileScreen(props) {
   const [isLogin, setLogin] = useState(false)
   const userData = useStoreState(state => state.auth.user)
   const settings = useStoreState(state => state.auth.settings)
+  const storeUser = useStoreActions(actions => actions.auth.setUser)
 
   useEffect(() => {
     console.log('@settings', settings)

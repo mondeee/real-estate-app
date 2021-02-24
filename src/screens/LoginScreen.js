@@ -263,7 +263,7 @@ export default function LoginScreen(props) {
             }}
             onCodeFilled={code => {
               console.log(`Code is ${code}, you are good to go!`);
-              _verifyCode()
+              // _verifyCode()
             }}
           />
           <View style={{ flexDirection: 'row', marginTop: 20, }}>

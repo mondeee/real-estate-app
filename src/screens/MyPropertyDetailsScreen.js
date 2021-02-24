@@ -196,7 +196,7 @@ export default function MyPropertyDetailsScreen(props) {
           <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', marginHorizontal: 24, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {item.facilities.map(i => renderFeatureItem(i))}
           </View>
-          <View style={{ alignItems: 'flex-end', margin: 24 }}>
+          <View style={{ alignItems: global.isAndroid ? 'flex-start' : 'flex-end', margin: 24 }}>
             <Text style={{ ...Fonts.FontMed, fontSize: 17, marginBottom: 12 }}>
               {`الوصف`}
             </Text>

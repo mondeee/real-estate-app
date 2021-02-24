@@ -11,7 +11,8 @@ import {
   ScrollView,
   Platform,
   I18nManager,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 
 import Colors from '../styles/Colors';
@@ -230,6 +231,7 @@ export default function AddPropertyScreen(props) {
   const cities = useStoreState(state => state.auth.cities)
   const storedDistricts = useStoreState(state => state.auth.districts)
   const storedLocation = useStoreState(state => state.auth.location)
+  const storedUser = useStoreState(state => state.auth.user)
 
   const [getAllDistricts, { data: disQuery, loading: dist_loading, error: disError }] = useLazyQuery(GET_DISTRICT)
 
@@ -260,7 +262,7 @@ export default function AddPropertyScreen(props) {
 
   useEffect(() => {
     if (storedLocation) {
-      console.log('storedLoc', storedLocation)
+      // console.log('storedLoc', storedLocation)
       setLocation(storedLocation)
     }
   }, [storedLocation])
@@ -426,7 +428,7 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (photos?.length > 11) {
+    if (photos?.length > 10) {
       Toast.show({
         text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
@@ -569,7 +571,7 @@ export default function AddPropertyScreen(props) {
       return validate
     }
 
-    if (photos?.length > 11) {
+    if (photos?.length > 10) {
       Toast.show({
         text: 'الحد الاعلى لرفع الصور ٦ صور ',
         type: 'danger'
@@ -674,6 +676,18 @@ export default function AddPropertyScreen(props) {
       onError(e)
     })
   }
+
+  useEffect(() => {
+    console.log('@USER\n', storedUser)
+    // if (!storedUser?.is_subscription) {
+    //   Alert.alert('Error', 'User has no subscription', [
+    //     {
+    //       text: 'OK',
+    //       onPress: () => navigate('Subs')
+    //     }
+    //   ])
+    // }
+  }, [props])
 
   useEffect(() => {
     const items = [...categories]
@@ -895,6 +909,22 @@ export default function AddPropertyScreen(props) {
     )
   }
 
+  if (!storedUser?.is_subscription) {
+    return (
+      <View style={{ flex: 1 }}>
+        <Header Add onPressBack={() => {
+          initialState()
+          navigate('Home')
+        }} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {/* <ActivityIndicator size={'small'} color={Colors.primaryBlue} /> */}
+          <Text style={{ ...Fonts.FontMed, fontSize: 20, width: '80%', textAlign: 'center' }}>{`يجب عليك الإشتراك لتتمكن من إضافة نزلك`}</Text>
+          <Button onPress={() => navigate('Subs')} text={`الاشتراك الان`} style={{ marginTop: 20 }} />
+        </View>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <Header Add onPressBack={() => {
@@ -958,7 +988,7 @@ export default function AddPropertyScreen(props) {
       }} isVisible={showAvailability} />
       <ImageBrowser onClose={() => setShowRegistration(false)} photos={registration} setPhotos={setRegistration} key={`Commercial Registration`} isVisible={showRegistration} />
       <ImageBrowser onClose={() => setShowLicense(false)} photos={license} setPhotos={setLicense} key={'Operating License'} isVisible={showLicense} />
-      <ImageBrowser max={6} photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
+      <ImageBrowser max={10} photos={photos} requestPermission multiple onClose={() => setShowImages(false)} setPhotos={setSelectedPhotos} key={'Hostel Photos'} isVisible={showImages} />
       {showMap && <MapComponent initialValue={location} onPress={setLocation} onClose={() => setMap(false)} isVisible={showMap} />}
       {isFaciVisible && <FacilitiesSelectionComponent onClose={() => setFaciVisible(false)} data={facilities} setSelected={setSeelectedFac} setFinal={setFinalFac} isVisible={isFaciVisible} />}
     </View>

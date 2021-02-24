@@ -164,7 +164,7 @@ export default function SplashScreen(props) {
 
   useEffect(() => {
     setUpLocation()
-    // setUpNotif()
+    setUpNotif()
     // setupCameraPermission()
     fetchToken()
     // fetchToken()
@@ -221,8 +221,17 @@ export default function SplashScreen(props) {
   }
 
   renderIndicator = () => {
+    if (global.isAndroid)
+      return (
+        <View style={{ flexDirection: global.isAndroid ? 'row' : 'row-reverse', alignSelf: 'center', padding: 24, paddingTop: 0, alignContent: 'center', justifyContent: 'center' }}>
+          <View style={{ ...styles.indicatorStyle, backgroundColor: page == 0 ? Colors.primaryYellow : Colors.gray }} />
+          <View style={{ ...styles.indicatorStyle, marginHorizontal: 4, backgroundColor: page == 1 ? Colors.primaryYellow : Colors.gray }} />
+          <View style={{ ...styles.indicatorStyle, backgroundColor: page == 2 ? Colors.primaryYellow : Colors.gray }} />
+        </View>
+      )
+
     return (
-      <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignSelf: 'center', padding: 24, paddingTop: 0, alignContent: 'center', justifyContent: 'center' }}>
+      <View style={{ flexDirection: global.isAndroid ? 'row' : 'row-reverse', alignSelf: 'center', padding: 24, paddingTop: 0, alignContent: 'center', justifyContent: 'center' }}>
         <View style={{ ...styles.indicatorStyle, backgroundColor: page == 2 ? Colors.primaryYellow : Colors.gray }} />
         <View style={{ ...styles.indicatorStyle, marginHorizontal: 4, backgroundColor: page == 1 ? Colors.primaryYellow : Colors.gray }} />
         <View style={{ ...styles.indicatorStyle, backgroundColor: page == 0 ? Colors.primaryYellow : Colors.gray }} />
@@ -230,19 +239,55 @@ export default function SplashScreen(props) {
     )
   }
 
+  if (global.isAndroid) {
+    return (
+      <ViewPager
+
+        style={{ ...styles.container, marginTop: 200 }}
+        onPageSelected={e => setPage(e.nativeEvent.position)}
+      // showPageIndicator={true} initialPage={0}
+      >
+        <SafeAreaView style={{ ...styles.container }} key="1">
+          <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
+          <Image source={require('../../assets/splashicon.png')} />
+          <Text style={styles.textlabel}>{`تصفح النزل بمختلف أنواعها و ميزاتها   و اﺧﺘﺮ ﻣﺎ ﻳﻨﺎﺳﺒﻚ`}</Text>
+          {renderIndicator()}
+          {renderSkipButton()}
+        </SafeAreaView>
+        <SafeAreaView style={styles.container} key="2">
+          <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
+          <Image source={require('../../assets/splashicon.png')} />
+          <Text style={styles.textlabel}>{`أضف نزلك و ﺷﺎركه اﻷﺧﺮﻳﻦ `}</Text>
+          {renderIndicator()}
+          {renderSkipButton()}
+        </SafeAreaView>
+        <SafeAreaView style={styles.container} key="3">
+          <Text style={styles.titleText}>{` مرحبًا بك في نزل  `}</Text>
+          <Image source={require('../../assets/splashicon.png')} />
+          <Text style={styles.textlabel}>{`واستمتع`}</Text>
+          {renderIndicator()}
+          {renderSkipButton()}
+        </SafeAreaView>
+      </ViewPager>
+    );
+
+  }
+
   return (
     <ViewPager
+      initialPage={2}
       style={{ ...styles.container, marginTop: 200 }}
       onPageSelected={e => setPage(e.nativeEvent.position)}
     // showPageIndicator={true} initialPage={0}
     >
-      <SafeAreaView style={{ ...styles.container }} key="1">
-        <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
+      <SafeAreaView style={styles.container} key="3">
+        <Text style={styles.titleText}>{` مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`تصفح النزل بمختلف أنواعها و ميزاتها   و اﺧﺘﺮ ﻣﺎ ﻳﻨﺎﺳﺒﻚ`}</Text>
+        <Text style={styles.textlabel}>{`واستمتع`}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
+      {/*  */}
       <SafeAreaView style={styles.container} key="2">
         <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
@@ -250,10 +295,11 @@ export default function SplashScreen(props) {
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>
-      <SafeAreaView style={styles.container} key="3">
-        <Text style={styles.titleText}>{` مرحبًا بك في نزل  `}</Text>
+      {/*  */}
+      <SafeAreaView style={{ ...styles.container }} key="1">
+        <Text style={styles.titleText}>{`  مرحبًا بك في نزل  `}</Text>
         <Image source={require('../../assets/splashicon.png')} />
-        <Text style={styles.textlabel}>{`واستمتع`}</Text>
+        <Text style={styles.textlabel}>{`تصفح النزل بمختلف أنواعها و ميزاتها   و اﺧﺘﺮ ﻣﺎ ﻳﻨﺎﺳﺒﻚ`}</Text>
         {renderIndicator()}
         {renderSkipButton()}
       </SafeAreaView>

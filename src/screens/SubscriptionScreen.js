@@ -27,12 +27,15 @@ import { onError } from 'apollo-link-error';
 import ImageBrowser from '../components/ImageBrowserComponent'
 import { HYPERPAY_CONFIG } from '../services/config';
 import WebView from 'react-native-webview';
+import Modal from 'react-native-modal'
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { checkoutPayment } from '../services/api/checkout_request';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
-
 export default function SubscriptionScreen(props) {
   const { navigate, goBack } = props.navigation
   const [page, setPage] = useState(0)
@@ -45,6 +48,11 @@ export default function SubscriptionScreen(props) {
   const [receipt, setReceipt] = useState(null)
   const [isGalleryVisible, setGalleryVisible] = useState(false)
   const [paymentDone, setPaymentDone] = useState(false)
+  const [isVisible, setVisible] = useState(false)
+  const [item, setItem] = useState(null)
+
+  const userData = useStoreState(state => state.auth.user)
+  const storeUser = useStoreActions(actions => actions.auth.setUser)
 
   const [addSubscription, { data: subData, error: subError }] = useMutation(ADD_SUBSCRIPTION, {
     onCompleted: e => {
@@ -62,6 +70,11 @@ export default function SubscriptionScreen(props) {
 
   useState(() => {
     console.log(subError, '\n', subData)
+    if (subData) {
+      const usercopy = userData
+      usercopy.is_subscription = true
+      storeUser(usercopy)
+    }
   }, [subError, subData])
 
   const onAddSubsciption = () => {
@@ -88,13 +101,18 @@ export default function SubscriptionScreen(props) {
   useEffect(() => {
     if (data && data.allSubscriptions) {
       console.log('@SUBS', data)
-      setSubs(data.allSubscriptions)
+      if (global.isAndroid) {
+        setSubs(data.allSubscriptions)
+        return
+      }
+      setSubs(data.allSubscriptions.reverse())
     }
   }, [data])
 
   useEffect(() => {
     if (selectedItem) {
-      confirmAlert(selectedItem)
+      // confirmAlert(selectedItem)
+      setVisible(true)
     }
   }, [selectedItem])
 
@@ -152,9 +170,74 @@ export default function SubscriptionScreen(props) {
     )
   }
 
+  const renderPaymentTypeModal = () => {
+    return (
+      <Modal isVisible={isVisible}>
+        <View style={{
+          backgroundColor: 'white',
+          minHeight: '20%',
+          padding: 12,
+          paddingVertical: 42,
+          borderRadius: 5,
+        }}>
+          <TouchableOpacity onPress={() => onCheckOutSub('mada', item)} style={{
+            borderColor: Colors.primaryBlue,
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: 8,
+            justifyContent: 'center',
+            alignItems: 'center'
+            // backgroundColor: 'green'
+          }}>
+            <Image
+              style={{
+                height: 80,
+                width: '80%',
+                resizeMode: 'contain',
+                // backgroundColor: 'green'
+              }}
+              source={require('../../assets/mada-icon.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onCheckOutSub('visa', item)} style={{
+            borderColor: Colors.primaryBlue,
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: 8,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 12,
+            // backgroundColor: 'green'
+          }}>
+            <Image
+              style={{
+                height: 80,
+                width: '80%',
+                resizeMode: 'contain',
+                // backgroundColor: 'green'
+              }}
+              source={require('../../assets/visa-icon.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            setVisible(false)
+            setSelectedItem(null)
+          }} style={{
+            position: 'absolute',
+            top: 5,
+            right: 5
+          }}>
+            <MaterialCommunityIcons size={25} color={Colors.primaryBlue} name={'close'} />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    )
+  }
+
   const onCheckOutSub = async (type = 'visa', item) => {
     console.log(selectedItem)
     if (!selectedItem) return
+    setVisible(false)
     const { price } = selectedItem
     var payload = {
       entityId: HYPERPAY_CONFIG.PAYMENT_TYPE.VISA.entityId,
@@ -198,7 +281,7 @@ export default function SubscriptionScreen(props) {
 
   const renderIndicator = () => {
     return (
-      <View style={{ flexDirection: global.isAndroid ? 'row' : 'row-reverse', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', }}>
+      <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', alignSelf: 'center', padding: 8, paddingTop: 0, alignItems: 'center', justifyContent: 'center', }}>
         {subs && subs.map((i, index) => <View key={index} style={{ ...styles.indicatorStyle, backgroundColor: page == index ? Colors.primaryYellow : Colors.gray }} />)}
       </View>
     )
@@ -250,6 +333,7 @@ export default function SubscriptionScreen(props) {
     return (
       <View style={{
         ...styles.viewPager,
+        // backgroundColor: 'green',
       }} key={index}>
         <Text style={styles.titleText}>{i.name}</Text>
         <View style={{ flexDirection: global.isAndroid ? 'row-reverse' : 'row', height: '40%', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
@@ -269,9 +353,21 @@ export default function SubscriptionScreen(props) {
   }
 
   const renderChoices = () => {
+    // if (global.isAndroid) {
+    // return (
+    //   <ViewPager
+    //     initialPage={subs.length - 1}
+    //     style={{ flex: 1, width: '100%' }}
+    //     onPageSelected={e => setPage(e.nativeEvent.position)}>
+    //     {subs && subs.map((i, index) => renderPage(i, index))}
+    //   </ViewPager>
+    // )
+    // 
+
     return (
       // <View style={{ flex: 1, paddingTop: 20, alignItems: 'center', backgroundColor: 'cyan', width: '100%' }}>
       <ViewPager
+        initialPage={subs.length - 1}
         style={{ flex: 1, width: '100%' }}
         onPageSelected={e => setPage(e.nativeEvent.position)}>
         {subs && subs.map((i, index) => renderPage(i, index))}
@@ -284,10 +380,12 @@ export default function SubscriptionScreen(props) {
     <SafeAreaView style={styles.container}>
       <Header onPressBack={() => {
         setUpload(false)
-        goBack()
+        navigate('Profile')
+        // goBack()
       }} />
       {!upload && renderChoices()}
       {upload && renderInitial()}
+      {renderPaymentTypeModal()}
       <ImageBrowser onClose={() => setGalleryVisible(false)} photos={receipt} setPhotos={setReceipt} key={`Upload Receipt `} isVisible={isGalleryVisible} />
     </SafeAreaView>
   );
