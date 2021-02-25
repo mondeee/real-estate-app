@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   RefreshControl,
@@ -173,6 +174,7 @@ export default function HomeScreen(props) {
 
   useEffect(() => {
     console.log('@TOKEN RESP\n', tokenError, '\n', tokenData)
+    // Alert.alert(tokenError, JSON.stringify(tokenData))
   }, [tokenError, tokenData])
 
   useEffect(() => {

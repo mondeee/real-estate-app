@@ -107,15 +107,16 @@ export default function SplashScreen(props) {
 
   const setUpNotif = async () => {
     try {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      const { status } = await Notifications.getPermissionsAsync()
       if (status !== 'granted') {
         console.log('NOTIF ERROR PERMISSION', status)
         return;
       }
       const token = await Notifications.getExpoPushTokenAsync();
       console.log('@token', token)
-      storeNotifToken(token)
-      notifsub = Notifications.addListener(onReceiveNotif)
+      Alert.alert('', token.data)
+      storeNotifToken(token.data)
+      notifsub = Notifications.addNotificationReceivedListener(onReceiveNotif)
     } catch (e) {
       console.log('@NOTIF ERROR ===> \n', e.message)
     }
@@ -163,8 +164,8 @@ export default function SplashScreen(props) {
   }
 
   useEffect(() => {
-    setUpLocation()
     setUpNotif()
+    setUpLocation()
     // setupCameraPermission()
     fetchToken()
     // fetchToken()

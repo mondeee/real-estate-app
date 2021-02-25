@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "222529626196",
+    "firebase_url": "https://nozol-test.firebaseio.com",
+    "project_id": "nozol-test",
+    "storage_bucket": "nozol-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222529626196:android:4039056d542a02807f0dc1",
+        "android_client_info": {
+          "package_name": "owner.nozol.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222529626196-f6nnl6b8qgg17lv6649eq05beb4a97ad.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "owner.nozol.app",
+            "certificate_hash": "28143b26c2a699474f4a576f9fc2fe74bb226890"
+          }
+        },
+        {
+          "client_id": "222529626196-5bu1mo5cbppu09lco4ioompvcde40lci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjwM5gjiZLYKnFsCb6-YY-2PSsHoDUMSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222529626196-5bu1mo5cbppu09lco4ioompvcde40lci.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
