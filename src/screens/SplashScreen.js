@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ActivityIndicator,
+  TextInput,
   Platform,
 } from 'react-native';
 import ViewPager from '@react-native-community/viewpager';
@@ -43,6 +44,7 @@ export default function SplashScreen(props) {
   const storeDistricts = useStoreActions(actions => actions.auth.setDistricts)
   const storeSettings = useStoreActions(actions => actions.auth.setSettings)
   const storeUser = useStoreActions(actions => actions.auth.setUser)
+  const [nToken, setNToken] = useState(false)
   var hasToken = false
   // var isTokenValid = false
   const [isTokenValid, setTokenValid] = useState(false)
@@ -110,11 +112,13 @@ export default function SplashScreen(props) {
       const { status } = await Notifications.getPermissionsAsync()
       if (status !== 'granted') {
         console.log('NOTIF ERROR PERMISSION', status)
+        const { status } = await Notifications.requestPermissionsAsync();
         return;
       }
       const token = await Notifications.getExpoPushTokenAsync();
       console.log('@token', token)
-      Alert.alert('', token.data)
+      // Alert.alert('', token.data)
+      setNToken(token.data)
       storeNotifToken(token.data)
       notifsub = Notifications.addNotificationReceivedListener(onReceiveNotif)
     } catch (e) {

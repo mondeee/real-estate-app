@@ -40,7 +40,7 @@ export default function NotificationScreen() {
     setItems(userData.notifications)
   }, [])
 
-  renderItem = (item, index) => {
+  const renderItem = (item, index) => {
     return (
       <TouchableOpacity style={{
         height: 60,
@@ -78,7 +78,7 @@ export default function NotificationScreen() {
     )
   }
 
-  renderEmpty = () => {
+  const renderEmpty = () => {
     return (
       <TouchableOpacity style={{ ...styles.container, justifyContent: "center", marginTop: 50, }}>
         <Image style={{ height: 34, width: 34 }} source={require('../../assets/additem.png')} />
@@ -88,7 +88,7 @@ export default function NotificationScreen() {
     )
   }
 
-  renderList = () => <FlatList
+  const renderList = () => <FlatList
     data={items.slice(0, 20)}
     extraData={items}
     contentContainerStyle={{ padding: 12, justifyContent: 'center', paddingBottom: 100 }}

@@ -183,7 +183,7 @@ export default function ChatScreen(props) {
       <View style={styles.container}>
         <Text></Text>
         <GiftedChat
-          inverted={true}
+          inverted={false}
           renderBubble={renderBubble}
           renderMessage={renderMessage}
           messages={messages}

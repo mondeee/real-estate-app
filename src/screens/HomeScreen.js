@@ -423,7 +423,7 @@ export default function HomeScreen(props) {
           item.images && item.images.length > 0 ?
             <Image
               style={{ alignSelf: 'flex-end', height: '100%', width: '30%' }}
-              source={{ uri: IMAGE_URL + item.images[0].avatar }}
+              source={{ uri: IMAGE_URL + item.images[0]?.avatar }}
             />
             :
             <Image

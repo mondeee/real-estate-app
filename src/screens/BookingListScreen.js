@@ -86,7 +86,7 @@ export default function BookingListScreen(props) {
   }, [data, loading])
 
   const renderItem = ({ item }) => {
-    console.log(IMAGE_URL + item?.detail?.property?.images[0].avatar)
+    // console.log(IMAGE_URL + item?.detail?.property?.images[0]?.avatar)
     return (
       <TouchableOpacity style={{
         minHeight: 125,
@@ -179,7 +179,7 @@ export default function BookingListScreen(props) {
             </TouchableOpacity>
           </View>
         </View>
-        {item?.detail?.property?.images ?
+        {item?.detail?.property?.images && item?.detail.property?.images.length > 0 ?
           <Image style={{
             alignSelf: 'flex-end',
             width: '35%',
@@ -187,7 +187,7 @@ export default function BookingListScreen(props) {
             resizeMode: 'cover',
             borderTopRightRadius: 11,
             borderBottomRightRadius: 11
-          }} source={{ uri: IMAGE_URL + item?.detail?.property?.images[0].avatar }} />
+          }} source={{ uri: IMAGE_URL + item?.detail?.property?.images[0]?.avatar }} />
           : <Image style={{
             alignSelf: 'flex-end',
             width: '35%',
@@ -195,7 +195,9 @@ export default function BookingListScreen(props) {
             resizeMode: 'cover',
             borderTopRightRadius: 11,
             borderBottomRightRadius: 11
-          }} source={require('../../assets/itemimage.png')} />
+          }}
+          // source={require('../../assets/itemimage.png')}
+          />
         }
       </TouchableOpacity>
     )
@@ -208,7 +210,7 @@ export default function BookingListScreen(props) {
         extraData={bookingList}
         keyExtractor={(item, index) => String(index)}
         renderItem={(item, index) => renderItem(item)}
-        ListFooterComponent={<View style={{height: 150}}/>}
+        ListFooterComponent={<View style={{ height: 150 }} />}
         onRefresh={() => {
           // setPage(page + 1)
           refetch()
