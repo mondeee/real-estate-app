@@ -347,6 +347,16 @@ export default function AddPropertyScreen(props) {
   const validatePrivate = () => {
     let validate = false
     // console.log('@PAYlOAD', payload)
+
+    if (!storedUser?.is_subscription) {
+      validate = false
+      Toast.show({
+        text: 'يجب عليك الإشتراك لتتمكن من إضافة نزلك ',
+        type: 'danger'
+      })
+      return validate
+    }
+
     if (!payload) {
       validate = false
       Toast.show({
@@ -481,6 +491,15 @@ export default function AddPropertyScreen(props) {
   const validateCommercial = () => {
     let validate = false
     // console.log('@PAYlOAD', payload)
+    if (!storedUser?.is_subscription) {
+      validate = false
+      Toast.show({
+        text: 'يجب عليك الإشتراك لتتمكن من إضافة نزلك ',
+        type: 'danger'
+      })
+      return validate
+    }
+
     if (!payload) {
       validate = false
       Toast.show({
@@ -909,21 +928,21 @@ export default function AddPropertyScreen(props) {
     )
   }
 
-  if (!storedUser?.is_subscription) {
-    return (
-      <View style={{ flex: 1 }}>
-        <Header Add onPressBack={() => {
-          initialState()
-          navigate('Home')
-        }} />
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          {/* <ActivityIndicator size={'small'} color={Colors.primaryBlue} /> */}
-          <Text style={{ ...Fonts.FontMed, fontSize: 20, width: '80%', textAlign: 'center' }}>{`يجب عليك الإشتراك لتتمكن من إضافة نزلك`}</Text>
-          <Button onPress={() => navigate('Subs')} text={`الاشتراك الان`} style={{ marginTop: 20 }} />
-        </View>
-      </View>
-    )
-  }
+  // if (!storedUser?.is_subscription) {
+  //   return (
+  //     <View style={{ flex: 1 }}>
+  //       <Header Add onPressBack={() => {
+  //         initialState()
+  //         navigate('Home')
+  //       }} />
+  //       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  //         {/* <ActivityIndicator size={'small'} color={Colors.primaryBlue} /> */}
+  //         <Text style={{ ...Fonts.FontMed, fontSize: 20, width: '80%', textAlign: 'center' }}>{`يجب عليك الإشتراك لتتمكن من إضافة نزلك`}</Text>
+  //         <Button onPress={() => navigate('Subs')} text={`الاشتراك الان`} style={{ marginTop: 20 }} />
+  //       </View>
+  //     </View>
+  //   )
+  // }
 
   return (
     <View style={styles.container}>
